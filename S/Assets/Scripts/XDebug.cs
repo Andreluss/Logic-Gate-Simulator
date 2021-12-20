@@ -17,7 +17,7 @@ public class XDebug : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F))
+        if(Input.GetKeyDown(KeyCode.F)) 
         {
             RenderProperties renderProperties = Helpers.LoadClass<RenderProperties>(Application.dataPath + "/myass.bin");
             Debug.Log(renderProperties);
