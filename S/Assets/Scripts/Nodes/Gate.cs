@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -66,7 +67,7 @@ public class GateTemplate
         }
         else
         {
-            node = new Gate(inCnt, outCnt, defaultName, hidden);
+            var gate = new Gate(inCnt, outCnt, defaultName, hidden);
             //tu sie dzieje główna rekurencyjna część:
             Node[] IDtoNode = new Node[N];
             for (int i = 0; i < N; i++)
@@ -75,6 +76,18 @@ public class GateTemplate
                 int id = TemplateIDsForEachNode[i];
                 GateTemplate template = AppSaveData.GateTemplates[id];
                 IDtoNode[i] = template.BuildNodeFromTemplate(); //lessgo
+                //TODO: save internal input/output sockets
+                if(IDtoNode[i] is InputNode)
+                {
+                    var inputNode = (InputNode)IDtoNode[i];
+                    gate.internalIns.Add(inputNode);
+                }
+                else if(IDtoNode[i] is OutputNode)
+                {
+                    var outputNode = (OutputNode)IDtoNode[i];
+                    gate.internalOuts.Add(outputNode);
+
+                }
             }
 
             foreach (var edge in edges)
@@ -87,6 +100,8 @@ public class GateTemplate
 
                 A.ConnectTo(outIdx, B, inpIdx);
             }
+
+            node = gate;
         }
 
         if(where != null)
@@ -98,8 +113,16 @@ public class GateTemplate
 
 public class Gate : Node
 {
+    public List<InputNode> internalIns;
+    public List<OutputNode> internalOuts;
+
     public Gate(int inputCount, int outputCount, string name, bool hidden)
          : base(inputCount, outputCount, name, hidden)
     {
+    }
+
+    public override void Calculate()
+    {
+        
     }
 }
