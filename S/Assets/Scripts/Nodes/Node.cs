@@ -8,8 +8,12 @@ public abstract class Node
     protected int inCnt, outCnt;
     public Tuple<Node, int>[] ins;
     public List<Tuple<Node, int>>[] outs; //wsm takie listy sasiedztwa
-    public bool[] inVals, outVals; // -> xbfs
-    public GateTemplate template;
+    
+    // NodeNet Search Data, troche syf ale niech na razie bedzie
+    public int lastSearchId = -1, processedInCurrentSearch = 0;
+    public int totalInputEdgesCount = 0;
+    public bool[] inVals, outVals; 
+
     public Node(int inputCount, int outputCount, string name, bool hidden = false)
     {
         inCnt = inputCount;
@@ -23,20 +27,16 @@ public abstract class Node
         Name = name;
         Hidden = hidden;//name conflict?
     }
-    //protected void Init(int inputCount, int outputCount, string name)
-    //{
 
-    //}
-    //public virtual void Build() 
-    //{
-    //    throw new Exception("??");
-    //}
     public bool IsFree(int inIdx)
     {
         //TODO: checks for inIdx
         return ins[inIdx].Item1 == null;
     }
-    public virtual void HandleNewInputConnection(int inIdx) { }
+    public virtual void HandleNewInputConnection(int inIdx)
+    {
+        totalInputEdgesCount += 1;
+    }
     public virtual void ConnectTo(int outIdx, Node to, int inIdx)
     {
         if (!to.IsFree(inIdx))
@@ -47,10 +47,12 @@ public abstract class Node
         outs[outIdx].Add(new Tuple<Node, int>(to, inIdx));
         to.HandleNewInputConnection(inIdx);
     }
+
     public virtual void Calculate()
     {
         //Same here
     }
+
     public bool Hidden { get => hidden; set => hidden = value; }
     public Vector2 Position { get => position; set => position = value; }
     public string Name { get => name; set => name = value; }

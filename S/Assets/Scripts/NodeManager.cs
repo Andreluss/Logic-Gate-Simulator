@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeManager : Singleton<NodeManager>
+public class NodeManager //: Singleton<NodeManager>
 {
     HashSet<Node> nodes;
 
@@ -14,5 +14,6 @@ public class NodeManager : Singleton<NodeManager>
 
         nodes.Add(node);
     }
+    
     
 }

@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Pamietac, że kolejnosc inputu i outputu
+// jest wazna bo sie laczy z internalnymi
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+using UnityEngine;
 
 public static class AppSaveData
 {

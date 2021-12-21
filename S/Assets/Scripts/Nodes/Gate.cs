@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class RenderProperties
+[Serializable] public class RenderProperties
 {
     private float[] color = new float[] { 0.1f, 0.8f, 0.0f, 1 };
     public float[] size = new float[] { 1, 2 };
@@ -21,8 +20,8 @@ public class RenderProperties
     } 
     //...
 }
-[Serializable]
-public enum NodeType
+
+[Serializable] public enum NodeType
 {
     Input, Output, AND, NOT, Split, ComplexGate
 }
@@ -77,12 +76,13 @@ public class GateTemplate
                 GateTemplate template = AppSaveData.GateTemplates[id];
                 IDtoNode[i] = template.BuildNodeFromTemplate(); //lessgo
                 //TODO: save internal input/output sockets
-                if(IDtoNode[i] is InputNode)
+                
+                if(template.NodeType == NodeType.Input)
                 {
                     var inputNode = (InputNode)IDtoNode[i];
                     gate.internalIns.Add(inputNode);
                 }
-                else if(IDtoNode[i] is OutputNode)
+                else if(template.NodeType == NodeType.Output)
                 {
                     var outputNode = (OutputNode)IDtoNode[i];
                     gate.internalOuts.Add(outputNode);
@@ -123,6 +123,61 @@ public class Gate : Node
 
     public override void Calculate()
     {
+        // Wymagania: wyliczona tablica inVals
+        // Wynik: wyliczone outVals
         
+        inVals
+        NodeSearch.RunSearchAndCalculateAllNodes(internalIns, internalOuts);
+    }
+}
+
+public static class NodeSearch
+{
+    private static int CurrentSearchId = 0;
+    public static void RunSearchAndCalculateAllNodes(List<InputNode> inputs, List<OutputNode> outputs)
+    {  
+        Queue<Node> queue = new Queue<Node>();
+        foreach (var inputNode in inputs)
+        {
+            queue.Enqueue(inputNode);
+        }
+        while (queue.Count > 0)
+        {
+            var A = queue.Dequeue();
+            //assuming the A.inVals is calculated:
+            A.Calculate();
+
+            for (int outIdx = 0; outIdx < A.outs.Length; outIdx++)
+            {
+                bool value = A.outVals[outIdx];
+                foreach (var edge in A.outs[outIdx])
+                {
+                    var B = edge.Item1;
+                    var inIdx = edge.Item2;
+
+                    //Updatujemy liczbe obliczonych inputów w sąsiednim nodzie
+                    if(B.lastSearchId != CurrentSearchId)
+                    {
+                        B.lastSearchId = CurrentSearchId;
+                        B.processedInCurrentSearch = 0;
+                        B.inVals.Fill(false); //by default everything is 0(disconn.)
+                    }
+                    B.processedInCurrentSearch++;
+                    //no i ten nowy input
+                    B.inVals[inIdx] = value;
+                    
+                    //now it's time to check if it's READY
+                    if(B.processedInCurrentSearch == B.totalInputEdgesCount)
+                    {
+                        //invariant (all inVals calculated) is maintained
+                        queue.Enqueue(B);
+                    }
+                }
+            }
+
+        }
+
+        //zeby nastepnym razem inputy sie tez zerowaly
+        CurrentSearchId += 1;
     }
 }
