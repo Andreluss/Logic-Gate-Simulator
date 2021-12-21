@@ -46,7 +46,7 @@ public class GateTemplate
             switch (NodeType)
             {
                 case NodeType.Input:
-                    node = new InputNode(hidden);
+                    node = new InputNode(hidden); // #### tutaj dodac wiecej typow inputu
                     break;
                 case NodeType.Output:
                     node = new OutputNode(hidden);
@@ -121,13 +121,26 @@ public class Gate : Node
     {
     }
 
-    public override void Calculate()
+    public override void Calculate() // ? set value 
     {
         // Wymagania: wyliczona tablica inVals
         // Wynik: wyliczone outVals
         
-        inVals
+        if(inVals.Length != internalIns.Count)
+            throw new Exception("invals and internalIns have incompatible sizes");
+        for (int i = 0; i < inVals.Length; i++)
+        {
+            internalIns[i].SetValue(inVals[i]); // ####
+        }
+        
         NodeSearch.RunSearchAndCalculateAllNodes(internalIns, internalOuts);
+
+        if(outVals.Length != internalOuts.Count) 
+            throw new Exception("invals and internalOuts have different sizes");
+        for (int i = 0; i < outVals.Length; i++)
+        {
+            outVals[i] = internalOuts[i].GetValue();
+        }
     }
 }
 

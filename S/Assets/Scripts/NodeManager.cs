@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NodeManager //: Singleton<NodeManager>
 {
-    HashSet<Node> nodes;
+    //HashSet<Node> nodes;
 
     public void CreateNode(GateTemplate template, Vector2? where = null)
     {
@@ -12,7 +12,7 @@ public class NodeManager //: Singleton<NodeManager>
         node.Position = (Vector2)where;
         node.Hidden = false;
 
-        nodes.Add(node);
+        //nodes.Add(node);
     }
     
     
