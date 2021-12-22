@@ -1,0 +1,6 @@
+﻿# Important conventions and notes
+
+1. Multi-bit inputs and outputs 
+		will be handled like normal inputs 
+		but with external controllers overriding them
+2. ...
