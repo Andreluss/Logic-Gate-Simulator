@@ -5,8 +5,8 @@ using System;
 
 public abstract class Node
 {
-    protected int inCnt, outCnt;
-    public Tuple<Node, int>[] ins;
+    public int inCnt, outCnt;
+    public Pair<Node, int>[] ins;
     public List<Tuple<Node, int>>[] outs; //wsm takie listy sasiedztwa
     
     // NodeNet Search Data, troche syf ale niech na razie bedzie
@@ -17,7 +17,7 @@ public abstract class Node
     public Node(int inputCount, int outputCount, string name, bool hidden = false)
     {
         inCnt = inputCount;
-        ins = new Tuple<Node, int>[inCnt];
+        ins = new Pair<Node, int>[inCnt];
         inVals = new bool[inCnt];
 
         outCnt = outputCount;
@@ -27,15 +27,19 @@ public abstract class Node
         Name = name;
         Hidden = hidden;//name conflict?
     }
-
+    public virtual int GetTemplateID()
+    {
+        return -1;
+    }
     public bool IsFree(int inIdx)
     {
         //TODO: checks for inIdx
-        return ins[inIdx].Item1 == null;
+        return ins[inIdx].st == null;
     }
-    public virtual void HandleNewInputConnection(int inIdx)
+    public virtual void HandleNewInputConnection(int inIdx, Node from, int fromOutIdx)
     {
         totalInputEdgesCount += 1;
+        ins[inIdx] = new Pair<Node, int>(from, fromOutIdx);
     }
     public virtual void ConnectTo(int outIdx, Node to, int inIdx)
     {
@@ -45,7 +49,7 @@ public abstract class Node
         }
         //TODO: GUI - create edge and make a new edgeRenderer if not Hidden
         outs[outIdx].Add(new Tuple<Node, int>(to, inIdx));
-        to.HandleNewInputConnection(inIdx);
+        to.HandleNewInputConnection(inIdx, this, outIdx);
     }
 
     public virtual void Calculate()

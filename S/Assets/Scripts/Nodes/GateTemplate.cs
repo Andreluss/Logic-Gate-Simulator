@@ -4,7 +4,7 @@ using System;
 [Serializable]
 public enum NodeType
 {
-    Input, Output, AND, NOT, Split, ComplexGate
+    Input, Output, Split, AND, NOT, ComplexGate
 }
 
 //This class requires AppSaveData.gateTemplates
@@ -14,9 +14,10 @@ public class GateTemplate
     public NodeType NodeType;
     public int inCnt, outCnt;
     public string defaultName;
-    public int N, M;//number of verticies(nodes) and edges
+    public int N;//, M;//number of verticies(nodes) and edges
     public RenderProperties renderProperties;
     public int[] TemplateIDsForEachNode;
+    public int templateId;
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
     public Node BuildNodeFromTemplate(bool hidden = true, Vector2? where = null)
@@ -32,14 +33,14 @@ public class GateTemplate
                 case NodeType.Output:
                     node = new OutputNode(hidden);
                     break;
+                case NodeType.Split:
+                    node = new Split(hidden);
+                    break;
                 case NodeType.AND:
                     node = new GateAND(hidden);
                     break;
                 case NodeType.NOT:
                     node = new GateNOT(hidden);
-                    break;
-                case NodeType.Split:
-                    node = new Split(hidden);
                     break;
                 default:
                     throw new Exception("unrecognized gate type");
@@ -47,7 +48,7 @@ public class GateTemplate
         }
         else
         {
-            var gate = new Gate(inCnt, outCnt, defaultName, hidden);
+            var gate = new Gate(inCnt, outCnt, defaultName, hidden, templateId);
             //tu sie dzieje główna rekurencyjna część:
             Node[] IDtoNode = new Node[N];
             for (int i = 0; i < N; i++)

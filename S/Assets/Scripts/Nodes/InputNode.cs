@@ -6,6 +6,12 @@ public class InputNode : Node
     {
     }
 
+    //Overrides
+    public override int GetTemplateID()
+    {
+        return 0;
+    }
+
     //Special functions of this type of node
     public void SetValue(bool value)
     {

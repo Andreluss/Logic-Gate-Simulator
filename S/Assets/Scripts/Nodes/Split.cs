@@ -9,6 +9,11 @@ public class Split : Node
         
     }
 
+    //Overrides
+    public override int GetTemplateID()
+    {
+        return 2;
+    }
     public override void Calculate()
     {
         outVals[0] = inVals[0];

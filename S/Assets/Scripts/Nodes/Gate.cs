@@ -22,14 +22,21 @@ using UnityEngine;
 }
 
 
+//requires AppSaveData
 public class Gate : Node
 {
     public List<InputNode> internalIns;
     public List<OutputNode> internalOuts;
-
-    public Gate(int inputCount, int outputCount, string name, bool hidden)
+    private int templateID;
+    public Gate(int inputCount, int outputCount, string name, bool hidden, int templ)
          : base(inputCount, outputCount, name, hidden)
     {
+        templateID = templ;
+    }
+
+    public override int GetTemplateID()
+    {
+        return templateID;
     }
 
     public override void Calculate() // ? set value 
