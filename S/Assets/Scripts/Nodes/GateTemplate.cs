@@ -55,7 +55,7 @@ public class GateTemplate
             {
                 //TODO: add cheks for size
                 int id = TemplateIDsForEachNode[i];
-                GateTemplate template = AppSaveData.GateTemplates[id];
+                GateTemplate template = AppSaveData.GetTemplate(id);
                 IDtoNode[i] = template.BuildNodeFromTemplate(); //lessgo
                                                                 //TODO: save internal input/output sockets
 

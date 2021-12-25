@@ -10,9 +10,6 @@ public class XDebug : MonoBehaviour
         Debug.Log(Application.dataPath);
         RenderProperties renderProperties = new();
         renderProperties.SaveClass<RenderProperties>(Application.dataPath + "/myass.bin");
-        AppSaveData.GateTemplates = new GateTemplate[] { new GateTemplate(), new GateTemplate() };
-        if(AppSaveData.GateTemplates != null)
-            AppSaveData.GateTemplates.SaveClass(Application.dataPath + "/GateTemplates.bin");
     }
 
     void Update()
@@ -26,6 +23,22 @@ public class XDebug : MonoBehaviour
         {
             GateTemplate[] gateTemplates = Helpers.LoadClass<GateTemplate[]>(Application.dataPath + "/GateTemplates.bin");
             Debug.Log(gateTemplates);
+        }
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("my ass");
+            List<GateTemplate> templates = new();
+            templates.Add(new GateTemplate());
+            templates.Add(new GateTemplate());
+            templates.Add(new GateTemplate());
+            templates.Add(new GateTemplate());
+            templates.SaveClass(Application.dataPath + "/asdasdasdasd.bin");
+            Debug.Log("my ass 2");
+        }
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            var list = Helpers.LoadClass<List<GateTemplate>>(Application.dataPath + "/asdasdasdasd.bin");
+            Debug.Log(list.Count);
         }
     }
 
