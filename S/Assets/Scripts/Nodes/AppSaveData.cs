@@ -36,5 +36,4 @@ public static class AppSaveData
             Debug.LogError("my ass");
         }
     }
-    //TODO: load this at the start
 }

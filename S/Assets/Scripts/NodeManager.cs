@@ -6,8 +6,7 @@ using UnityEngine;
 // - AppSaveData
 public class NodeManager //: Singleton<NodeManager>
 {
-    static HashSet<Node> nodes;
-
+    static HashSet<Node> nodes = new HashSet<Node>();
     public static void CreateNode(GateTemplate template, Vector2? where = null)
     {
         Node node = template.BuildNodeFromTemplate();
@@ -15,6 +14,11 @@ public class NodeManager //: Singleton<NodeManager>
         node.Hidden = false;
 
         nodes.Add(node);
+    }
+
+    public static void DeleteNode(Node node)
+    {
+        
     }
     
     public static GateTemplate SaveAllAsTemplate(string newName)
@@ -62,12 +66,12 @@ public class NodeManager //: Singleton<NodeManager>
         }
         template.edges = edges.ToArray();
 
-        //!!!! save AppSaveData.GateTemplates;
+        AppSaveData.AddTemplate(template);
 
         return template;
     }
 
-    public static GateTemplate SaveNodesAsTemplateALPHA(List<Node> nodes)
+    public static GateTemplate SaveNodesAsTemplateALPHA(List<Node> nodes, string templateName)
     {
         Dictionary<Node, int> ID = new Dictionary<Node, int>(); 
         List<Pair<Pair<int, int>, Pair<int, int>>> edges = new();
@@ -120,4 +124,55 @@ public class NodeManager //: Singleton<NodeManager>
         return template;
     }
     
+}
+
+public static class NodeSearch
+{
+    private static int CurrentSearchId = 0;
+    public static void RunSearchAndCalculateAllNodes(List<InputNode> inputs, List<OutputNode> outputs)
+    {
+        Queue<Node> queue = new Queue<Node>();
+        foreach (var inputNode in inputs)
+        {
+            queue.Enqueue(inputNode);
+        }
+        while (queue.Count > 0)
+        {
+            var A = queue.Dequeue();
+            //assuming the A.inVals is calculated:
+            A.Calculate();
+
+            for (int outIdx = 0; outIdx < A.outs.Length; outIdx++)
+            {
+                bool value = A.outVals[outIdx];
+                foreach (var edge in A.outs[outIdx])
+                {
+                    var B = edge.Item1;
+                    var inIdx = edge.Item2;
+
+                    //Updatujemy liczbe obliczonych inputów w s¹siednim nodzie
+                    if (B.lastSearchId != CurrentSearchId)
+                    {
+                        B.lastSearchId = CurrentSearchId;
+                        B.processedInCurrentSearch = 0;
+                        B.inVals.Fill(false); //by default everything is 0(disconn.)
+                    }
+                    B.processedInCurrentSearch++;
+                    //no i ten nowy input
+                    B.inVals[inIdx] = value;
+
+                    //now it's time to check if it's READY
+                    if (B.processedInCurrentSearch == B.totalInputEdgesCount)
+                    {
+                        //invariant (all inVals calculated) is maintained
+                        queue.Enqueue(B);
+                    }
+                }
+            }
+
+        }
+
+        //zeby nastepnym razem inputy sie tez zerowaly
+        CurrentSearchId += 1;
+    }
 }
