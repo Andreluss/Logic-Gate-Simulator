@@ -1,27 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 //Dependencies:
 // - AppSaveData
-public class NodeManager //: Singleton<NodeManager>
+public static class NodeManager //: Singleton<NodeManager>
 {
     static HashSet<Node> nodes = new HashSet<Node>();
-    public static void CreateNode(GateTemplate template, Vector2? where = null)
+    static HashSet<InputNode> inputNodes = new();
+    static HashSet<OutputNode> outputNodes = new();
+    public static Node CreateNode(GateTemplate template, Vector2? where = null)
     {
         Node node = template.BuildNodeFromTemplate();
-        node.Position = (Vector2)where;
+        if(where != null) 
+            node.Position = (Vector2)where;
         node.Hidden = false;
 
         nodes.Add(node);
+        if (node is InputNode)
+        {
+            inputNodes.Add(node as InputNode); // hmm
+        }
+        else if (node is OutputNode)
+        {
+            outputNodes.Add((OutputNode)node); // hmm
+        }
+        return node;
     }
 
     public static void DeleteNode(Node node)
     {
-        
+        throw new NotImplementedException();
     }
     
-    public static GateTemplate SaveAllAsTemplate(string newName)
+    public static void Connect(Node A, int outIdx, Node B, int inIdx)
+    {
+        // ### Assuming the B.ins[inIdx] is free ###
+        A.ConnectTo(outIdx, B, inIdx);
+        // some extra actions itp. itd. 
+        // update renderers and shit
+    }
+    public static void CalculateAll()
+    {
+        NodeSearch.RunSearchAndCalculateAllNodes(inputNodes, outputNodes);
+    }
+
+    public static void ClearAll()
+    {
+        throw new NotImplementedException();
+    }
+    public static GateTemplate SaveAllAsTemplate(string newName) // TODO: ### jeszcze color i size !!!
     {
         GateTemplate template = new();
         template.defaultName = newName;
@@ -129,7 +158,7 @@ public class NodeManager //: Singleton<NodeManager>
 public static class NodeSearch
 {
     private static int CurrentSearchId = 0;
-    public static void RunSearchAndCalculateAllNodes(List<InputNode> inputs, List<OutputNode> outputs)
+    public static void RunSearchAndCalculateAllNodes(IEnumerable<InputNode> inputs, IEnumerable<OutputNode> outputs)
     {
         Queue<Node> queue = new Queue<Node>();
         foreach (var inputNode in inputs)

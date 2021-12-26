@@ -9,5 +9,5 @@
         return 1;
     }
 
-    public bool GetValue() => outVals[0];
+    public bool GetValue() => inVals[0];
 }

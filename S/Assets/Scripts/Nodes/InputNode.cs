@@ -21,4 +21,9 @@ public class InputNode : Node
     {
         outVals[0] = !outVals[0];
     }
+
+    public bool GetValue()
+    {
+        return outVals[0];
+    }
 }

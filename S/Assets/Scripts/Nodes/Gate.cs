@@ -32,6 +32,8 @@ public class Gate : Node
          : base(inputCount, outputCount, name, hidden)
     {
         templateID = templ;
+        internalIns = new();
+        internalOuts = new();
     }
 
     public override int GetTemplateID()

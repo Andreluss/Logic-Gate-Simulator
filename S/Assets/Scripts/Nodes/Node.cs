@@ -7,7 +7,7 @@ public abstract class Node
 {
     public int inCnt, outCnt;
     public Pair<Node, int>[] ins;
-    public List<Tuple<Node, int>>[] outs; //wsm takie listy sasiedztwa
+    public List<ValueTuple<Node, int>>[] outs; //wsm takie listy sasiedztwa
     
     // NodeNet Search Data, troche syf ale niech na razie bedzie
     public int lastSearchId = -1, processedInCurrentSearch = 0;
@@ -21,7 +21,11 @@ public abstract class Node
         inVals = new bool[inCnt];
 
         outCnt = outputCount;
-        outs = new List<Tuple<Node, int>>[outCnt];//tablica list wyjsc
+        outs = new List<ValueTuple<Node, int>>[outCnt];//tablica list wyjsc
+        for (int i = 0; i < outCnt; i++)
+        {
+            outs[i] = new();
+        }
         outVals = new bool[outCnt];
 
         Name = name;
@@ -43,12 +47,17 @@ public abstract class Node
     }
     public virtual void ConnectTo(int outIdx, Node to, int inIdx)
     {
+        if(!Helper.InRange(outIdx, 0, outCnt) || !Helper.InRange(inIdx, 0, to.inCnt))
+        {
+            throw new Exception("In/out socket idx out of range");
+        }
         if (!to.IsFree(inIdx))
         {
             throw new Exception("Dest. node input is already full");
         }
         //TODO: GUI - create edge and make a new edgeRenderer if not Hidden
-        outs[outIdx].Add(new Tuple<Node, int>(to, inIdx));
+        //( ## or do that in NodeManager???)
+        outs[outIdx].Add(new ValueTuple<Node, int>(to, inIdx));
         to.HandleNewInputConnection(inIdx, this, outIdx);
     }
 

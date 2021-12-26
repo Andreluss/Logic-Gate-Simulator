@@ -5,8 +5,13 @@ using System.IO;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public static class Helpers
+public static class Helper
 {
+    public static bool InRange(int x, int a, int b) 
+    {
+        //czy x jest w przedziale [a, b)
+        return a <= x && x < b;
+    }
     public static void Fill<T>(this T[] array, T value)
     {
         for (int i = 0; i < array.Length; i++)
@@ -44,7 +49,7 @@ public static class Helpers
 }
 
 [Serializable]
-public class Pair<T, U>
+public struct Pair<T, U>
 {
     public T st { get; set; }
     public U nd { get; set; }
