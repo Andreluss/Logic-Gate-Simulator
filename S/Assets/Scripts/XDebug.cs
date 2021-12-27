@@ -63,6 +63,15 @@ public class XDebug : MonoBehaviour
         {
             NodeManager.SaveAllAsTemplate("NAND");
         }
+        if(Input.GetMouseButtonDown(0))
+        {
+            //Debug.Log(Input.mousePosition);
+            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //Debug.Log(mousePos);
+            var hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            if(hit.collider != null)
+                Debug.Log(hit.collider.gameObject);
+        }
     }
 
     void Recalc()
