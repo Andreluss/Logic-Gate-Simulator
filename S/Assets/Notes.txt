@@ -1,0 +1,6 @@
+﻿# Important conventions and notes
+
+1. Multi-bit inputs and outputs 
+		will be handled like normal inputs 
+		but with external controllers overriding them (-> MultibitController) 
+2. No w sumie NodeManager może jednak nie być statyczny damnn [TODO]
