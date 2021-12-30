@@ -20,8 +20,9 @@ public class XDebug : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.T))
         {
-            var t = (1, new InputNode());
+            var t = (1, 23);
             t.Item1 = 2;//beka no to pair jest niepotrzebne
+            t.SaveClass(Application.dataPath + "/niggaaaa.bin");
         }
         if(Input.GetKeyDown(KeyCode.E)) 
         {
@@ -59,10 +60,10 @@ public class XDebug : MonoBehaviour
             var list = Helper.LoadClass<List<GateTemplate>>(Application.dataPath + "/asdasdasdasd.bin");
             Debug.Log(list.Count);
         }
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            NodeManager.SaveAllAsTemplate("NAND");
-        }
+        //if(Input.GetKeyDown(KeyCode.P))
+        //{
+        //    NodeManager.SaveAllAsTemplate("NAND");
+        //}
         if(Input.GetMouseButtonDown(0))
         {
             //Debug.Log(Input.mousePosition);

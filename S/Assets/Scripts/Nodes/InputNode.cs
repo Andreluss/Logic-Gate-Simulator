@@ -2,7 +2,7 @@
 
 public class InputNode : Node
 {
-    public InputNode(bool hidden=false) : base(0, 1, "Input", hidden)
+    public InputNode(bool hidden=true) : base(0, 1, "Input", hidden)
     {
     }
 
@@ -10,6 +10,14 @@ public class InputNode : Node
     public override int GetTemplateID()
     {
         return 0;
+    }
+    protected override void CreateRenderer()
+    {
+        
+    }
+    protected override void DestroyRenderer()
+    {
+        
     }
 
     //Special functions of this type of node

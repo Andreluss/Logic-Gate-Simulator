@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Split : Node
 {
-    public Split(bool hidden = false) : base(1, 1, "Edge Split", hidden)
+    public Split(bool hidden) : base(1, 1, "Edge Split", hidden)
     {
         
     }
@@ -17,5 +17,13 @@ public class Split : Node
     public override void Calculate()
     {
         outVals[0] = inVals[0];
+    }
+    protected override void CreateRenderer()
+    {
+
+    }
+    protected override void DestroyRenderer()
+    {
+
     }
 }

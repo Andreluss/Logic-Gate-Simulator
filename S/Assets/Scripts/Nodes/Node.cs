@@ -14,7 +14,7 @@ public abstract class Node
     public int totalInputEdgesCount = 0;
     public bool[] inVals, outVals; 
 
-    public Node(int inputCount, int outputCount, string name, bool hidden = false)
+    public Node(int inputCount, int outputCount, string name, bool hidden)
     {
         inCnt = inputCount;
         ins = new Pair<Node, int>[inCnt];
@@ -66,14 +66,37 @@ public abstract class Node
         //Same here
     }
 
-    public bool Hidden { get => hidden; set => hidden = value; }
+    protected virtual void CreateRenderer()
+    {
+        throw new Exception("your ass");
+    }
+
+    protected virtual void DestroyRenderer()
+    {
+        throw new Exception("calling this method makes no sense");
+    }
+
+    public bool Hidden
+    {
+        get => hidden;
+        set
+        {
+            if (hidden == value) return;
+            hidden = value;
+            if(hidden == true)
+                this.DestroyRenderer();
+            else
+                this.CreateRenderer();
+        }
+    }
     public Vector2 Position { get => position; set => position = value; }
     public string Name { get => name; set => name = value; }
 
-    public GameObject[] edgeRenderer;
+    public List<EdgeRenderer>[] outEdgeRenderers;
+    public EdgeRenderer[] inEdgeRenderers;
     public GameObject nodeRenderer = null;
 
-    private bool hidden;
+    private bool hidden = true;
     private Vector2 position;
     private string name;
 }
