@@ -24,7 +24,7 @@ using UnityEngine;
 
 
 //requires AppSaveData
-public class GateComplex : Node
+public class GateComplex : Gate
 {
     public List<InputNode> internalIns;
     public List<OutputNode> internalOuts;
@@ -63,12 +63,12 @@ public class GateComplex : Node
             outVals[i] = internalOuts[i].GetValue();
         }
     }
-    protected override void CreateRenderer()
-    {
-        Debug.Log("yeah nigggaaaa");
-    }
-    protected override void DestroyRenderer()
-    {
-        Debug.Log("nigggaaaa");
-    }
+    //protected override void CreateRenderer()
+    //{
+    //    Debug.Log("yeah nigggaaaa");
+    //}
+    //protected override void DestroyRenderer()
+    //{
+    //    Debug.Log("nigggaaaa");
+    //}
 }
