@@ -76,6 +76,8 @@ public abstract class Node
         throw new Exception("calling this method makes no sense");
     }
 
+    public virtual BaseRenderer GetRenderer() => null;
+
     public bool Hidden
     {
         get => hidden;
@@ -85,11 +87,23 @@ public abstract class Node
             hidden = value;
             if(hidden == true)
                 this.DestroyRenderer();
-            else
+            else {  
                 this.CreateRenderer();
+                GetRenderer().
+            }
         }
     }
-    public Vector2 Position { get => position; set => position = value; }
+    public Vector2 Position
+    {
+        get => position;
+        set
+        {
+            position = value;
+            var rend = GetRenderer();
+            if (rend)
+                rend.UpdatePosition(position);
+        }
+    }
     public string Name { get => name; set => name = value; }
 
     public List<EdgeRenderer>[] outEdgeRenderers;

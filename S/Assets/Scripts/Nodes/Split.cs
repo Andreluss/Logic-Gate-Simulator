@@ -8,7 +8,7 @@ public class Split : Node
     {
         
     }
-
+    public SplitRenderer renderer;
     //Overrides
     public override int GetTemplateID()
     {
@@ -20,10 +20,14 @@ public class Split : Node
     }
     protected override void CreateRenderer()
     {
-
+        renderer = SplitRenderer.Make(this);
     }
     protected override void DestroyRenderer()
     {
-
+        Object.Destroy(renderer.transform.parent);
+    }
+    public override BaseRenderer GetRenderer()
+    {
+        return renderer;
     }
 }

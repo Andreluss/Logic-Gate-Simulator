@@ -9,15 +9,19 @@ public class Gate : Node
     {
     }
 
-    public GateRenderer gateRenderer;
+    public GateRenderer renderer;
     protected override void CreateRenderer()
     {
         Debug.Log("yeah nigggaaaa");
-        gateRenderer = GateRenderer.Make(this);
+        renderer = GateRenderer.Make(this);
     }
     protected override void DestroyRenderer()
     {
-        Object.Destroy(gateRenderer.gameObject.transform.parent);
-        Debug.Log($"nigggaaaa gaterend = {gateRenderer}");
+        Object.Destroy(renderer.transform.parent);
+        Debug.Log($"nigggaaaa gaterend = {renderer}");
+    }
+    public override BaseRenderer GetRenderer()
+    {
+        return renderer;
     }
 }
