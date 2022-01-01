@@ -6,6 +6,11 @@ public class OutputNode : Node
     }
     public OutputRenderer renderer;
     //Overrides
+    public override void Calculate()
+    {
+        if (renderer != null)
+            renderer.HandleValue(inVals[0]);
+    }
     public override int GetTemplateID()
     {
         return 1;
@@ -19,7 +24,7 @@ public class OutputNode : Node
     {
         Object.Destroy(renderer.transform.parent);
     }
-    public override BaseRenderer GetRenderer()
+    public override NodeRenderer GetRenderer()
     {
         return renderer;
     }

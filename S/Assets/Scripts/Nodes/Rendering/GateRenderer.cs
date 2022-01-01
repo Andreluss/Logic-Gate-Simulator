@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class GateRenderer : BaseRenderer
+public class GateRenderer : NodeRenderer
 {
     Gate gate;
-    public InSocketRenderer[] inSocketRends;
-    public OutSocketRenderer[] outSocketRends;
     public static GateRenderer Make(Gate forWho)
     {
         Vector2 dim = new Vector2(2, 1.7f);//TODO: calculate this/get from templateID
@@ -16,10 +14,6 @@ public class GateRenderer : BaseRenderer
         var gateGO = gateRootGO.transform.GetChild(0).gameObject;
         gateGO.transform.localScale = dim;
         var gateRend = gateGO.GetComponent<GateRenderer>();
-
-        // TODO
-        // + parametry rend
-        // + Socket Renderers
 
         //root (with TMP component)
         //--gate (scaled acc. to calculated DIMENSIONS (or from render props))

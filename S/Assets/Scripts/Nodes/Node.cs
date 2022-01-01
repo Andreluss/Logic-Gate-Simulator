@@ -58,6 +58,16 @@ public abstract class Node
         //TODO: GUI - create edge and make a new edgeRenderer if not Hidden
         //( ## or do that in NodeManager???)
         outs[outIdx].Add(new ValueTuple<Node, int>(to, inIdx));
+        if(!hidden)
+        {
+            if (this.GetRenderer() == null || to.GetRenderer() == null)
+                throw new Exception("connected nodes don't have renderers");
+
+            var newEdge = EdgeRenderer.Make(this, outIdx, to, inIdx);
+            outEdgeRenderers[outIdx].Add(newEdge);
+            to.inEdgeRenderers[inIdx] = newEdge;
+            //asdasdaslkahlkjhwqiuryw
+        }
         to.HandleNewInputConnection(inIdx, this, outIdx);
     }
 
@@ -76,7 +86,7 @@ public abstract class Node
         throw new Exception("calling this method makes no sense");
     }
 
-    public virtual BaseRenderer GetRenderer() => null;
+    public virtual NodeRenderer GetRenderer() => null;
 
     public bool Hidden
     {
@@ -85,11 +95,31 @@ public abstract class Node
         {
             if (hidden == value) return;
             hidden = value;
-            if(hidden == true)
-                this.DestroyRenderer();
-            else {  
+            if (hidden == true)
+            {
+                this.DestroyRenderer();//[TODO] destroy all
+                outEdgeRenderers = null;
+                foreach (var outRendList in outEdgeRenderers)
+                {
+                    foreach (var outRend in outRendList)
+                    {
+                        UnityEngine.Object.Destroy(outRend.gameObject);
+                    }
+                }
+                inEdgeRenderers = null;
+                foreach (var inRend in inEdgeRenderers)
+                {
+                    UnityEngine.Object.Destroy(inRend.gameObject);
+                }
+            }
+            else
+            {
                 this.CreateRenderer();
-                GetRenderer().
+                GetRenderer().UpdatePosition(position);
+                outEdgeRenderers = new List<EdgeRenderer>[outCnt];
+                for (int i = 0; i < outCnt; i++)
+                    outEdgeRenderers[i] = new List<EdgeRenderer>();
+                inEdgeRenderers = new EdgeRenderer[inCnt];
             }
         }
     }

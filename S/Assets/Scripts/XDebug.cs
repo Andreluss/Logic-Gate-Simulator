@@ -18,12 +18,6 @@ public class XDebug : MonoBehaviour
     OutputNode out0;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            var t = (1, 23);
-            t.Item1 = 2;//beka no to pair jest niepotrzebne
-            t.SaveClass(Application.dataPath + "/niggaaaa.bin");
-        }
         if(Input.GetKeyDown(KeyCode.E)) 
         {
             in0 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, -2));
@@ -55,11 +49,11 @@ public class XDebug : MonoBehaviour
             in1.FlipValue();
             Recalc();
         }
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            var list = Helper.LoadClass<List<GateTemplate>>(Application.dataPath + "/asdasdasdasd.bin");
-            Debug.Log(list.Count);
-        }
+        //if(Input.GetKeyDown(KeyCode.F))
+        //{
+        //    var list = Helper.LoadClass<List<GateTemplate>>(Application.dataPath + "/asdasdasdasd.bin");
+        //    Debug.Log(list.Count);
+        //}
         //if(Input.GetKeyDown(KeyCode.P))
         //{
         //    NodeManager.SaveAllAsTemplate("NAND");

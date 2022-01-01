@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class InputRenderer : BaseRenderer
+public class InputRenderer : NodeRenderer
 {
-    public OutSocketRenderer outSocketRend;
+    private TextMeshPro text;
     public static InputRenderer Make(InputNode forWho)
     {
         var inputRootGO = Instantiate(Resources.Load<GameObject>
@@ -20,7 +21,9 @@ public class InputRenderer : BaseRenderer
         socket.transform.localPosition = new Vector3(+dim.x / 2,
                                                      0,
                                                      zIndex);
-        inputRend.outSocketRend = socket;
+        inputRend.outSocketRends = new OutSocketRenderer[] { socket };
+
+        inputRend.text = inputRootGO.GetComponentInChildren<TextMeshPro>();
 
         var coll = inputGO.GetComponent<InputCollision>();
         coll.inputNode = forWho;
@@ -30,6 +33,6 @@ public class InputRenderer : BaseRenderer
 
     internal void HandleValue(bool value)
     {
-        throw new NotImplementedException();
+        text.text = value ? "1" : "0";
     }
 }

@@ -19,7 +19,7 @@ public class InputNode : Node
     {
         Object.Destroy(renderer.transform.parent);//destroy even the root
     }
-    public override BaseRenderer GetRenderer()
+    public override NodeRenderer GetRenderer()
     {
         return renderer;
     }

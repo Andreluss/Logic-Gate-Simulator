@@ -20,7 +20,7 @@ public class Gate : Node
         Object.Destroy(renderer.transform.parent);
         Debug.Log($"nigggaaaa gaterend = {renderer}");
     }
-    public override BaseRenderer GetRenderer()
+    public override NodeRenderer GetRenderer()
     {
         return renderer;
     }

@@ -127,8 +127,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7
-  m_fontSizeBase: 7
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 7004462336591632231}
   - component: {fileID: 8298369170871302306}
   m_Layer: 0
-  m_Name: Input
+  m_Name: Output
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,4 +342,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61fd74f4fff795542b5ac04db9919937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outSocketRends: []
+  inSocketRends: []
   inSocketRenderer: {fileID: 0}

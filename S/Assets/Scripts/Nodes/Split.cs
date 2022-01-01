@@ -26,7 +26,7 @@ public class Split : Node
     {
         Object.Destroy(renderer.transform.parent);
     }
-    public override BaseRenderer GetRenderer()
+    public override NodeRenderer GetRenderer()
     {
         return renderer;
     }
