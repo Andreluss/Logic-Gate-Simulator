@@ -13,9 +13,9 @@ public static class NodeManager //: Singleton<NodeManager>
     public static Node CreateNode(GateTemplate template, Vector2? where = null)
     {
         Node node = template.BuildNodeFromTemplate();
+        node.Hidden = false;
         if(where != null) 
             node.Position = (Vector2)where;
-        node.Hidden = false;
 
         nodes.Add(node);
         if (node is InputNode)

@@ -1,6 +1,6 @@
-﻿public class GateNOT : Node
+﻿public class GateNOT : Gate
 {
-    public GateNOT(bool hidden = false) : base(1, 1, "NOT", hidden)
+    public GateNOT(bool hidden) : base(1, 1, "NOT", hidden)
     {
 
     }
@@ -14,4 +14,12 @@
     {
         outVals[0] = !inVals[0];
     }
+    //protected override void CreateRenderer()
+    //{
+        
+    //}
+    //protected override void DestroyRenderer()
+    //{
+
+    //}
 }

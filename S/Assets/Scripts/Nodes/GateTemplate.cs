@@ -20,7 +20,7 @@ public class GateTemplate
     public int templateId;
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
-    public Node BuildNodeFromTemplate(bool hidden = true, Vector2? where = null)
+    public Node BuildNodeFromTemplate(bool hidden = false, Vector2? where = null)
     {
         Node node;
         if (NodeType != NodeType.ComplexGate)
@@ -48,7 +48,7 @@ public class GateTemplate
         }
         else
         {
-            var gate = new Gate(inCnt, outCnt, defaultName, hidden, templateId);
+            var gate = new GateComplex(inCnt, outCnt, defaultName, hidden, templateId);
             //tu sie dzieje główna rekurencyjna część:
             Node[] IDtoNode = new Node[N];
             for (int i = 0; i < N; i++)
@@ -56,7 +56,7 @@ public class GateTemplate
                 //TODO: add cheks for size
                 int id = TemplateIDsForEachNode[i];
                 GateTemplate template = AppSaveData.GetTemplate(id);
-                IDtoNode[i] = template.BuildNodeFromTemplate(); //lessgo
+                IDtoNode[i] = template.BuildNodeFromTemplate(true); //lessgo
                                                                 //TODO: save internal input/output sockets
 
                 if (template.NodeType == NodeType.Input)

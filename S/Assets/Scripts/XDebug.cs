@@ -18,19 +18,14 @@ public class XDebug : MonoBehaviour
     OutputNode out0;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            var t = (1, new InputNode());
-            t.Item1 = 2;//beka no to pair jest niepotrzebne
-        }
         if(Input.GetKeyDown(KeyCode.E)) 
         {
-            in0 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate);
-            in1 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate);
-            nand0 = NodeManager.CreateNode(AppSaveData.GetTemplate(5));
+            in0 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, -2));
+            in1 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, 2));
+            nand0 = NodeManager.CreateNode(AppSaveData.GetTemplate(5), new Vector2(0, 0));
             //and0 = NodeManager.CreateNode(AppSaveData.AndTemplate);
             //not0 = NodeManager.CreateNode(AppSaveData.NotTemplate);
-            out0 = (OutputNode) NodeManager.CreateNode(AppSaveData.OutputTemplate);
+            out0 = (OutputNode) NodeManager.CreateNode(AppSaveData.OutputTemplate, new Vector2(4, 0));
 
             //NodeManager.Connect(in0, 0, and0, 0);
             //NodeManager.Connect(in1, 0, and0, 1);
@@ -54,15 +49,15 @@ public class XDebug : MonoBehaviour
             in1.FlipValue();
             Recalc();
         }
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            var list = Helper.LoadClass<List<GateTemplate>>(Application.dataPath + "/asdasdasdasd.bin");
-            Debug.Log(list.Count);
-        }
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            NodeManager.SaveAllAsTemplate("NAND");
-        }
+        //if(Input.GetKeyDown(KeyCode.F))
+        //{
+        //    var list = Helper.LoadClass<List<GateTemplate>>(Application.dataPath + "/asdasdasdasd.bin");
+        //    Debug.Log(list.Count);
+        //}
+        //if(Input.GetKeyDown(KeyCode.P))
+        //{
+        //    NodeManager.SaveAllAsTemplate("NAND");
+        //}
         if(Input.GetMouseButtonDown(0))
         {
             //Debug.Log(Input.mousePosition);

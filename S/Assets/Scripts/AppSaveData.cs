@@ -29,8 +29,8 @@ public static class AppSaveData
         GateTemplates.SaveClass(Application.dataPath + "/GateTemplates.bin");
     }
 
-    public static int InputTemplateID = new InputNode().GetTemplateID();
-    public static int OutputTemplateID = new OutputNode().GetTemplateID();
+    public static int InputTemplateID = new InputNode(true).GetTemplateID();
+    public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
 
     private static List<GateTemplate> GateTemplates;
     private static string gatePath = Application.dataPath + "/GateTemplates.bin";
