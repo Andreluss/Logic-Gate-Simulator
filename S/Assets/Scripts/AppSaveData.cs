@@ -40,7 +40,7 @@ public static class AppSaveData
     }
     public static void Load()
     {
-        Debug.Log("constr");
+        Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
         if (!File.Exists(gatePath))
         {
             List<GateTemplate> gateTemplates = new();

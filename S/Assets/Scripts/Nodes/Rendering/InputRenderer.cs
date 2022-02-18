@@ -13,6 +13,7 @@ public class InputRenderer : NodeRenderer
                                      ("Sprites/InputRoot"));
         var inputGO = inputRootGO.transform.GetChild(0).gameObject;
         var inputRend = inputGO.GetComponent<InputRenderer>();
+        inputRend.Node = forWho;
         Vector2 dim = inputGO.GetComponent<SpriteRenderer>().size;
 
         var socket = OutSocketRenderer.Make(forWho, 0);

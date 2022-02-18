@@ -53,7 +53,7 @@ public class GateTemplate
             Node[] IDtoNode = new Node[N];
             for (int i = 0; i < N; i++)
             {
-                //TODO: add cheks for size
+                //TODO: add checks for size
                 int id = TemplateIDsForEachNode[i];
                 GateTemplate template = AppSaveData.GetTemplate(id);
                 IDtoNode[i] = template.BuildNodeFromTemplate(true); //lessgo

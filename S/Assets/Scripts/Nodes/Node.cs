@@ -35,12 +35,12 @@ public abstract class Node
     {
         return -1;
     }
-    public bool IsFree(int inIdx)
+    private bool IsFree(int inIdx)
     {
         //TODO: checks for inIdx
         return ins[inIdx].st == null;
     }
-    public virtual void HandleNewInputConnection(int inIdx, Node from, int fromOutIdx)
+    protected virtual void HandleNewInputConnection(int inIdx, Node from, int fromOutIdx)
     {
         totalInputEdgesCount += 1;
         ins[inIdx] = new Pair<Node, int>(from, fromOutIdx);
@@ -62,11 +62,10 @@ public abstract class Node
         {
             if (this.GetRenderer() == null || to.GetRenderer() == null)
                 throw new Exception("connected nodes don't have renderers");
-
-            var newEdge = EdgeRenderer.Make(this, outIdx, to, inIdx);
-            outEdgeRenderers[outIdx].Add(newEdge);
-            to.inEdgeRenderers[inIdx] = newEdge;
-            //asdasdaslkahlkjhwqiuryw
+            GetRenderer().MakeEdgeTo(outIdx, to, inIdx);
+            //var newEdge = EdgeRenderer.Make(this, outIdx, to, inIdx);
+            //outEdgeRenderers[outIdx].Add(newEdge);
+            //to.inEdgeRenderers[inIdx] = newEdge;
         }
         to.HandleNewInputConnection(inIdx, this, outIdx);
     }
@@ -98,28 +97,30 @@ public abstract class Node
             if (hidden == true)
             {
                 this.DestroyRenderer();//[TODO] destroy all
-                outEdgeRenderers = null;
-                foreach (var outRendList in outEdgeRenderers)
-                {
-                    foreach (var outRend in outRendList)
-                    {
-                        UnityEngine.Object.Destroy(outRend.gameObject);
-                    }
-                }
-                inEdgeRenderers = null;
-                foreach (var inRend in inEdgeRenderers)
-                {
-                    UnityEngine.Object.Destroy(inRend.gameObject);
-                }
+                //[CHYBA] to nie jest potrzebne wgl
+
+                //outEdgeRenderers = null;
+                //foreach (var outRendList in outEdgeRenderers)
+                //{
+                //    foreach (var outRend in outRendList)
+                //    {
+                //        UnityEngine.Object.Destroy(outRend.gameObject);
+                //    }
+                //}
+                //inEdgeRenderers = null;
+                //foreach (var inRend in inEdgeRenderers)
+                //{
+                //    UnityEngine.Object.Destroy(inRend.gameObject);
+                //}
             }
             else
             {
                 this.CreateRenderer();
                 GetRenderer().UpdatePosition(position);
-                outEdgeRenderers = new List<EdgeRenderer>[outCnt];
-                for (int i = 0; i < outCnt; i++)
-                    outEdgeRenderers[i] = new List<EdgeRenderer>();
-                inEdgeRenderers = new EdgeRenderer[inCnt];
+                //outEdgeRenderers = new List<EdgeRenderer>[outCnt];
+                //for (int i = 0; i < outCnt; i++)
+                //    outEdgeRenderers[i] = new List<EdgeRenderer>();
+                //inEdgeRenderers = new EdgeRenderer[inCnt];
             }
         }
     }
@@ -136,9 +137,9 @@ public abstract class Node
     }
     public string Name { get => name; set => name = value; }
 
-    public List<EdgeRenderer>[] outEdgeRenderers;
-    public EdgeRenderer[] inEdgeRenderers;
-    public GameObject nodeRenderer = null;
+    //public List<EdgeRenderer>[] outEdgeRenderers;
+    //public EdgeRenderer[] inEdgeRenderers;
+    //public GameObject nodeRenderer = null;
 
     private bool hidden = true;
     private Vector2 position;

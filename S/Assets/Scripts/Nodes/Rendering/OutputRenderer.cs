@@ -12,6 +12,7 @@ public class OutputRenderer : NodeRenderer
                                         ("Sprites/OutputRoot"));
         var outputGO = outputRootGO.transform.GetChild(0);
         var outputRend = outputGO.GetComponent<OutputRenderer>();
+        outputRend.Node = forWho;
         Vector2 dim = outputGO.GetComponent<SpriteRenderer>().size;
 
         var socket = InSocketRenderer.Make(forWho, 0);

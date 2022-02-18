@@ -5,7 +5,6 @@ using TMPro;
 
 public class GateRenderer : NodeRenderer
 {
-    Gate gate;
     public static GateRenderer Make(Gate forWho)
     {
         Vector2 dim = new Vector2(2, 1.7f);//TODO: calculate this/get from templateID
@@ -31,8 +30,9 @@ public class GateRenderer : NodeRenderer
         float height = dim.y;
         float distIn = height / (forWho.inCnt + 1);//odleglosc miedzy kolejnych socketami (OY)
         float distOut = height / (forWho.outCnt + 1);
-        
-        gateRend.gate = forWho;
+
+        //gateRend.gate = forWho;
+        gateRend.Node = forWho;
         gateRend.inSocketRends = new InSocketRenderer[forWho.inCnt];
         for (int i = 0; i < gateRend.inSocketRends.Length; i++)
         {

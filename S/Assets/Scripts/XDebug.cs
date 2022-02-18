@@ -8,7 +8,6 @@ public class XDebug : MonoBehaviour
     void Start()
     {
         AppSaveData.Load();
-        Debug.Log(Application.dataPath);
     }
     InputNode in0;
     InputNode in1;
@@ -38,6 +37,10 @@ public class XDebug : MonoBehaviour
 
             Debug.Log("NANDx is set up");
             Recalc();
+        }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            in0.Position -= new Vector2(1, 2);
         }
         if(Input.GetKeyDown(KeyCode.Q))
         {

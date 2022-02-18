@@ -12,7 +12,6 @@ public class Gate : Node
     public GateRenderer renderer;
     protected override void CreateRenderer()
     {
-        Debug.Log("yeah nigggaaaa");
         renderer = GateRenderer.Make(this);
     }
     protected override void DestroyRenderer()
