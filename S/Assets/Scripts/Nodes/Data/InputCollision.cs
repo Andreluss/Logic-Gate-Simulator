@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class InputCollision : NodeCollision
 {
-    public InputNode inputNode;
+    public InputNode InputNode { get => (InputNode)node; }
 }

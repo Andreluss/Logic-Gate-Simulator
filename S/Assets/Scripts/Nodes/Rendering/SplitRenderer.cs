@@ -28,7 +28,7 @@ public class SplitRenderer : NodeRenderer
         rend.outSocketRends = new OutSocketRenderer[] { outSocket };
 
         var coll = splitGO.GetComponent<SplitCollision>();
-        coll.split = forWho;
+        coll.node = forWho;
 
         return rend;
     }

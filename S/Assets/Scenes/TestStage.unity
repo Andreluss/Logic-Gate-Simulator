@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &224149447
 Transform:
   m_ObjectHideFlags: 0
@@ -1188,6 +1188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outSocketRends: []
   inSocketRends: []
+  inEdgeRenderers: []
 --- !u!23 &6717048620995831453
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1262,6 +1263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outSocketRends: []
   inSocketRends: []
+  inEdgeRenderers: []
 --- !u!23 &7476500522727643100
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1418,6 +1420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outSocketRends: []
   inSocketRends: []
+  inEdgeRenderers: []
 --- !u!1 &8471129807143587941
 GameObject:
   m_ObjectHideFlags: 0

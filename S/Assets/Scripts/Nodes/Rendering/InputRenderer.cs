@@ -27,7 +27,7 @@ public class InputRenderer : NodeRenderer
         inputRend.text = inputRootGO.GetComponentInChildren<TextMeshPro>();
 
         var coll = inputGO.GetComponent<InputCollision>();
-        coll.inputNode = forWho;
+        coll.node = forWho;
 
         return inputRend;
     }

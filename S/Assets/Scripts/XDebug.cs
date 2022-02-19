@@ -40,7 +40,7 @@ public class XDebug : MonoBehaviour
         {
             if(selectedObject is InputCollision)
             {
-                (selectedObject as InputCollision).inputNode.FlipValue();
+                (selectedObject as InputCollision).InputNode.FlipValue();
             }
             else if(selectedObject is GateCollision)
             {
@@ -55,7 +55,7 @@ public class XDebug : MonoBehaviour
             }
             else if (selectedObject is InputCollision)
             {
-                (selectedObject as InputCollision).inputNode.Destroy();
+                (selectedObject as InputCollision).InputNode.Destroy();
             }
         }
         if(Input.GetKeyDown(KeyCode.Q))

@@ -59,7 +59,7 @@ public class GateRenderer : NodeRenderer
         }
 
         var coll = gateGO.GetComponent<GateCollision>();
-        coll.Gate = forWho;
+        coll.node = forWho;
         return gateRend;
     }
 }

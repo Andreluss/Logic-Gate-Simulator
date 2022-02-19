@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class SplitCollision : NodeCollision
 {
-    public Split split;
+    public Split Split { get => (Split)node; }
 }

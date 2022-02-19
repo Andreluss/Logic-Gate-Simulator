@@ -25,7 +25,7 @@ public class OutputRenderer : NodeRenderer
         outputRend.text = outputRootGO.GetComponentInChildren<TextMeshPro>();
 
         var coll = outputGO.GetComponent<OutputCollision>();
-        coll.outputNode = forWho;
+        coll.node = forWho;
 
         return outputRend;
     }
