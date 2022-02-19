@@ -46,23 +46,32 @@ public static class NodeManager //: Singleton<NodeManager>
         Debug.Log($"Node {node} deleted");//msdlkjl
 
         CalculateAll();
-        //throw new NotImplementedException();
     }
     
     public static void Connect(Node A, int outIdx, Node B, int inIdx)
     {
         // ### Assuming the B.ins[inIdx] is free ###
+        // ??? [DESIGN] ???
+        // UPDATE: jesli socket B.ins[inIdx] jest wolny, to nic nie robimy....
+        //  ........ALBO usuwamy poprzedni¹ krawêdŸ i tworzymy t¹ now¹??? 
         A.ConnectTo(outIdx, B, inIdx);
         // some extra actions itp. itd. 
         // update renderers and shit
+        
+        CalculateAll();
     }
     public static void Disconnect(Node A, int outIdx, Node B, int inIdx)
     {
         A.DisconnectWith(outIdx, B, inIdx);
+
+        CalculateAll();
     }
 
     private static void CalculateAll()
     {
+        //[DESIGN]
+        //jako input mozna tez wzi¹æ wszystkie wiecho³ki ktore maja totalInputEdgesCount == 0
+        // ?? 
         NodeSearch.RunSearchAndCalculateAllNodes(inputNodes, outputNodes);
     }
 
@@ -122,6 +131,8 @@ public static class NodeManager //: Singleton<NodeManager>
 
     public static GateTemplate SaveNodesAsTemplateALPHA(List<Node> nodes, string templateName)
     {
+        throw new Exception("do not try this at home");
+        /*
         Dictionary<Node, int> ID = new Dictionary<Node, int>(); 
         List<Pair<Pair<int, int>, Pair<int, int>>> edges = new();
         List<int> TemplateIDsForEachNode = new();
@@ -171,8 +182,8 @@ public static class NodeManager //: Singleton<NodeManager>
         }
         GateTemplate template = new();
         return template;
-    }
-    
+        */
+    }   
 }
 
 public static class NodeSearch

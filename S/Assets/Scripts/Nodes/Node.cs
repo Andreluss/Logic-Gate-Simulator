@@ -58,7 +58,8 @@ public abstract class Node
         }
         if (!to.IsFree(inIdx))
         {
-            throw new Exception("Dest. node input is already full");
+            return;
+            //throw new Exception("Dest. node input is already full");
         }
         //TODO: GUI - create edge and make a new edgeRenderer if not Hidden
         //( ## or do that in NodeManager???)
@@ -67,7 +68,7 @@ public abstract class Node
         {
             if (this.GetRenderer() == null || to.GetRenderer() == null)
                 throw new Exception("connected nodes don't have renderers");
-            GetRenderer().MakeEdgeTo(outIdx, to, inIdx);
+            GetRenderer().ConnectTo(outIdx, to, inIdx);
             //var newEdge = EdgeRenderer.Make(this, outIdx, to, inIdx);
             //outEdgeRenderers[outIdx].Add(newEdge);
             //to.inEdgeRenderers[inIdx] = newEdge;

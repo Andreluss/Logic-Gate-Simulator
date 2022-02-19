@@ -20,9 +20,9 @@ public class XDebug : MonoBehaviour
         //NodeManager.Connect(and0, 0, not0, 0);
         //NodeManager.Connect(not0, 0, out0, 0);
 
-        NodeManager.Connect(in0, 0, nand0, 0);
-        NodeManager.Connect(in1, 0, nand0, 1);
-        NodeManager.Connect(nand0, 0, out0, 0);
+        //NodeManager.Connect(in0, 0, nand0, 0);
+        //NodeManager.Connect(in1, 0, nand0, 1);
+        //NodeManager.Connect(nand0, 0, out0, 0);
 
         Debug.Log("NANDx is set up");
     }

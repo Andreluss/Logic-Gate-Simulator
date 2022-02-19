@@ -4,7 +4,7 @@ public class InputNode : Node
     public InputNode(bool hidden=true) : base(0, 1, "Input", hidden)
     {
     }
-    public InputRenderer renderer;
+    private InputRenderer renderer;
     //Overrides
     public override int GetTemplateID()
     {

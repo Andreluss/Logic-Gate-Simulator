@@ -19,5 +19,14 @@ public class EdgeCollision : CollisionData
         this.to = to;
         this.inIdx = inIdx;
         this.EdgeRenderer = edgeRenderer;
+        //[TODO] [MATH]
+        //edit collider polygons
+    }
+
+    public void Initialize(Node from, int outIdx, Vector2 endpoint, EdgeRenderer edgeRenderer)
+    {
+        this.from = from;
+        this.outIdx = outIdx;
+        this.EdgeRenderer = edgeRenderer;
     }
 }

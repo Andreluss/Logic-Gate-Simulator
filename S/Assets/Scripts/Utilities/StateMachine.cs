@@ -18,6 +18,7 @@ public class StateMachine : MonoBehaviour
         catch
         {
             Debug.LogError("State Machine not initialized with a state, please initialize State Machine on the Awake or Start method with a state.");
+            throw new System.Exception("state machine error");
         }
     }
 
@@ -25,6 +26,7 @@ public class StateMachine : MonoBehaviour
     {
         gameObject.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         playerState = NextState;
+        Debug.Log($"NextPS: {NextState.Method.Name}");
         gameObject.SendMessage(playerState.Method.Name + "Start", SendMessageOptions.DontRequireReceiver);
     }
 

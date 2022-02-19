@@ -52,12 +52,17 @@ public class NodeRenderer : BaseRenderer
             }
         }
     }
-    public void MakeEdgeTo(int outIdx, Node to, int inIdx)
+    public void ConnectTo(int outIdx, Node to, int inIdx)
     {
         var newEdge = EdgeRenderer.Make(node, outIdx, to, inIdx);
         outEdgeRenderers[outIdx].Add(newEdge);
         to.GetRenderer().inEdgeRenderers[inIdx] = newEdge;
     }
+    //public EdgeRenderer MakeEdgeToPoint(int outIdx, Vector2 point)
+    //{
+    //    var newEdge = EdgeRenderer.Make(node, outIdx, point);
+    //    return newEdge;
+    //}
     public void RemoveEdgeWith(int outIdx, Node with, int inIdx)
     {
         //[TODO] zoptymalizowac to troche bo az zal

@@ -1,8 +1,8 @@
 ﻿# Important conventions and notes
 
 1. Multi-bit inputs and outputs 
-		will be handled like normal inputs 
-		but with external controllers overriding them (-> MultibitController) 
+        will be handled like normal inputs 
+        but with external controllers overriding them (-> MultibitController) 
 2. No w sumie NodeManager może jednak nie być statyczny damnn [TODO]
 3. Można dodać LayerMask tylko dla klikalnych na UI obiektów (Gates, Split, Sockets, Edges)
 
@@ -10,5 +10,10 @@
 Do zrobienia : 
 - menu kontekstowe (po przycisnieciu PPM na jakims colliderze) -> sterowane przez NodeManager???
 - GUI:
-  + outline po najechaniu myszką
-  
+  + outline po najechaniu myszką -> F
+  + lepsze zaginanie krawędzi (np. jeśli out jest na prawo od in) -> F
+  + wyskakujące menu -> A  (np. https://github.com/herbou/Unity_DialogUI 
+                                albo https://youtu.be/2liZtyMhIQQ 
+                                albo jeszcze https://youtu.be/guelZvubWFY)
+- zmienić Pair<> na ValueTuple<> wszędzie
+- dodać wykrywanie cykli w połączeniach, albo raczej ich blokowanie
