@@ -11,7 +11,7 @@ public enum NodeType
 [Serializable]
 public class GateTemplate
 {
-    public NodeType NodeType;
+    public NodeType NodeType;//lajhflkajhflkjashdflkj
     public int inCnt, outCnt;
     public string defaultName;
     public int N;//, M;//number of verticies(nodes) and edges
