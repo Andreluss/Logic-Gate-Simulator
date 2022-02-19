@@ -44,14 +44,14 @@ public class XDebug : MonoBehaviour
             }
             else if(selectedObject is GateCollision)
             {
-                (selectedObject as GateCollision).gate.Position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                (selectedObject as GateCollision).Gate.Position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
         if(Input.GetKeyDown(KeyCode.R))
         {
             if (selectedObject is GateCollision)
             {
-                (selectedObject as GateCollision).gate.Destroy();
+                (selectedObject as GateCollision).Gate.Destroy();
             }
             else if (selectedObject is InputCollision)
             {

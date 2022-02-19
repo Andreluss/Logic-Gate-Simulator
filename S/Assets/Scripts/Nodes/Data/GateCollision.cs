@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class GateCollision : NodeCollision
 {
-    public Node gate;
+    private Gate gate;
+
+    public Gate Gate { get => (Gate)node; }
 }
