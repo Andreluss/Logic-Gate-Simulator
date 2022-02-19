@@ -12,7 +12,7 @@ public enum NodeType
 public class GateTemplate
 {
     public NodeType NodeType;//lajhflkajhflkjashdflkj
-    public int inCnt, outCnt;
+    public int inCnt, outCnt;//dskjfyabsdkfjhbsdkjhafbkjasdhfb
     public string defaultName;
     public int N;//, M;//number of verticies(nodes) and edges
     public RenderProperties renderProperties;//sdkjfhhsudfksdjfhksdjhf
