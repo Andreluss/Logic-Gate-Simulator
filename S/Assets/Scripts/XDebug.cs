@@ -95,7 +95,7 @@ public class XDebug : MonoBehaviour
 
     void Recalc()
     {
-        NodeManager.CalculateAll();
+        //NodeManager.CalculateAll();
         Debug.Log($"Input: {in0.GetValue()}, {in1.GetValue()}\nOutput: {out0.GetValue()}");
     }
 

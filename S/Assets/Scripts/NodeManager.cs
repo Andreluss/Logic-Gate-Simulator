@@ -56,7 +56,7 @@ public static class NodeManager //: Singleton<NodeManager>
         // some extra actions itp. itd. 
         // update renderers and shit
     }
-    public static void CalculateAll()
+    private static void CalculateAll()
     {
         NodeSearch.RunSearchAndCalculateAllNodes(inputNodes, outputNodes);
     }
