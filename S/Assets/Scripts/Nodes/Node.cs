@@ -40,10 +40,15 @@ public abstract class Node
         //TODO: checks for inIdx
         return ins[inIdx].st == null;
     }
-    protected virtual void HandleNewInputConnection(int inIdx, Node from, int fromOutIdx)
+    protected virtual void HandleAddedInputConnection(int inIdx, Node from, int fromOutIdx)
     {
         totalInputEdgesCount += 1;
         ins[inIdx] = new Pair<Node, int>(from, fromOutIdx);
+    }
+    protected virtual void HandleDeletedInputConnection(int inIdx, Node from, int fromOutIdx)
+    {
+        totalInputEdgesCount -= 1;
+        ins[inIdx].st = null;
     }
     public virtual void ConnectTo(int outIdx, Node to, int inIdx)
     {
@@ -67,14 +72,64 @@ public abstract class Node
             //outEdgeRenderers[outIdx].Add(newEdge);
             //to.inEdgeRenderers[inIdx] = newEdge;
         }
-        to.HandleNewInputConnection(inIdx, this, outIdx);
+        to.HandleAddedInputConnection(inIdx, this, outIdx);
+    }
+
+    public virtual void DisconnectWith(int outIdx, Node with, int inIdx)
+    {
+
+        if (!Helper.InRange(outIdx, 0, outCnt) || !Helper.InRange(inIdx, 0, with.inCnt))
+        {
+            throw new Exception("In/out socket idx out of range");
+        }
+        if (with.IsFree(inIdx))
+        {
+            throw new Exception("Dest. node input is already empty");
+        }
+
+        outs[outIdx].Remove((with, inIdx));
+        if(!hidden)
+        {
+            Debug.Assert(this.GetRenderer() != null);
+            GetRenderer().RemoveEdgeWith(outIdx, with, inIdx);
+        }
+        with.HandleDeletedInputConnection(inIdx, this, outIdx);
     }
 
     public virtual void Calculate()
     {
         //Same here
     }
-
+    /// <summary>
+    /// Usuwa dany wierzcholek i wszsystkie jego po³¹czenia z innymi
+    /// </summary>
+    public void Destroy()
+    {
+        for (int i = 0; i < inCnt; i++)
+        {
+            if (!IsFree(i))
+            {
+                //jesli wgl jest tu cos pod³¹czone
+                int outidx = ins[i].nd;
+                ins[i].st.DisconnectWith(outidx, this, i);
+            }
+        }
+        for(int i = 0; i < outCnt; i++)
+        {
+            while(outs[i].Count > 0)
+            {
+                var (node, inidx) = outs[i][0];
+                this.DisconnectWith(i, node, inidx);
+            }
+            //foreach(var (node, inidx) in outs[i])
+            //{
+            //    this.DisconnectWith(i, node, inidx);
+            //}
+        }
+        
+        if(this.GetRenderer() != null)
+            DestroyRenderer();
+    }
     protected virtual void CreateRenderer()
     {
         throw new Exception("your ass");

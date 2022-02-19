@@ -8,6 +8,24 @@ public class XDebug : MonoBehaviour
     void Start()
     {
         AppSaveData.Load();
+        in0 = (InputNode)NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, -2));
+        in1 = (InputNode)NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, 2));
+        nand0 = NodeManager.CreateNode(AppSaveData.GetTemplate(5), new Vector2(0, 0));
+        //and0 = NodeManager.CreateNode(AppSaveData.AndTemplate);
+        //not0 = NodeManager.CreateNode(AppSaveData.NotTemplate);
+        out0 = (OutputNode)NodeManager.CreateNode(AppSaveData.OutputTemplate, new Vector2(4, 0));
+
+        //NodeManager.Connect(in0, 0, and0, 0);
+        //NodeManager.Connect(in1, 0, and0, 1);
+        //NodeManager.Connect(and0, 0, not0, 0);
+        //NodeManager.Connect(not0, 0, out0, 0);
+
+        NodeManager.Connect(in0, 0, nand0, 0);
+        NodeManager.Connect(in1, 0, nand0, 1);
+        NodeManager.Connect(nand0, 0, out0, 0);
+
+        Debug.Log("NANDx is set up");
+        Recalc();
     }
     InputNode in0;
     InputNode in1;
@@ -15,32 +33,30 @@ public class XDebug : MonoBehaviour
     Node nand0;
     Node not0;
     OutputNode out0;
+    CollisionData selectedObject;
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.E)) 
         {
-            in0 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, -2));
-            in1 = (InputNode) NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, 2));
-            nand0 = NodeManager.CreateNode(AppSaveData.GetTemplate(5), new Vector2(0, 0));
-            //and0 = NodeManager.CreateNode(AppSaveData.AndTemplate);
-            //not0 = NodeManager.CreateNode(AppSaveData.NotTemplate);
-            out0 = (OutputNode) NodeManager.CreateNode(AppSaveData.OutputTemplate, new Vector2(4, 0));
-
-            //NodeManager.Connect(in0, 0, and0, 0);
-            //NodeManager.Connect(in1, 0, and0, 1);
-            //NodeManager.Connect(and0, 0, not0, 0);
-            //NodeManager.Connect(not0, 0, out0, 0);
-
-            NodeManager.Connect(in0, 0, nand0, 0);
-            NodeManager.Connect(in1, 0, nand0, 1);
-            NodeManager.Connect(nand0, 0, out0, 0);
-
-            Debug.Log("NANDx is set up");
-            Recalc();
+            if(selectedObject is InputCollision)
+            {
+                (selectedObject as InputCollision).inputNode.FlipValue();
+            }
+            else if(selectedObject is GateCollision)
+            {
+                (selectedObject as GateCollision).gate.Position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            }
         }
         if(Input.GetKeyDown(KeyCode.R))
         {
-            in0.Position -= new Vector2(1, 2);
+            if (selectedObject is GateCollision)
+            {
+                (selectedObject as GateCollision).gate.Destroy();
+            }
+            else if (selectedObject is InputCollision)
+            {
+                (selectedObject as InputCollision).inputNode.Destroy();
+            }
         }
         if(Input.GetKeyDown(KeyCode.Q))
         {
@@ -68,7 +84,12 @@ public class XDebug : MonoBehaviour
             //Debug.Log(mousePos);
             var hit = Physics2D.Raycast(mousePos, Vector2.zero);
             if(hit.collider != null)
-                Debug.Log(hit.collider.gameObject);
+            {
+                //Debug.Log(hit.collider.gameObject);
+                selectedObject = hit.collider.gameObject.GetComponentInChildren<CollisionData>();
+                Debug.Assert(selectedObject != null);
+                Debug.Log($"Selected obj is {selectedObject.name}");
+            }
         }
     }
 

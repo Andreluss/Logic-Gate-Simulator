@@ -17,7 +17,7 @@ public class InputNode : Node
     }
     protected override void DestroyRenderer()
     {
-        Object.Destroy(renderer.transform.parent);//destroy even the root
+        Object.Destroy(renderer.transform.parent.gameObject);//destroy even the root
     }
     public override NodeRenderer GetRenderer()
     {

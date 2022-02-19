@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,5 +57,18 @@ public class NodeRenderer : BaseRenderer
         var newEdge = EdgeRenderer.Make(node, outIdx, to, inIdx);
         outEdgeRenderers[outIdx].Add(newEdge);
         to.GetRenderer().inEdgeRenderers[inIdx] = newEdge;
+    }
+    
+    public void RemoveEdgeWith(int outIdx, Node with, int inIdx)
+    {
+        //[TODO] zoptymalizowac to troche bo az zal
+        foreach(EdgeRenderer outEdgeRend in outEdgeRenderers[outIdx])
+        {
+            if(outEdgeRend.to == with && outEdgeRend.inIdx == inIdx)
+            {
+                outEdgeRend.Destroy();
+            }
+        }
+        with.GetRenderer().inEdgeRenderers[inIdx] = null;
     }
 }

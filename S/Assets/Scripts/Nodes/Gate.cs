@@ -16,8 +16,8 @@ public class Gate : Node
     }
     protected override void DestroyRenderer()
     {
-        Object.Destroy(renderer.transform.parent);
-        Debug.Log($"nigggaaaa gaterend = {renderer}");
+        Object.Destroy(renderer.transform.parent.gameObject);
+        Debug.Log($"Gaterend {renderer} destroyed");
     }
     public override NodeRenderer GetRenderer()
     {

@@ -31,7 +31,22 @@ public static class NodeManager //: Singleton<NodeManager>
 
     public static void DeleteNode(Node node)
     {
-        throw new NotImplementedException();
+        nodes.Remove(node);
+        if(node is InputNode)
+        {
+            inputNodes.Remove(node as InputNode);
+        }
+        else if(node is OutputNode)
+        {
+            outputNodes.Remove(node as OutputNode);
+        }
+
+        node.Destroy();
+
+        Debug.Log($"Node {node} deleted");
+
+        CalculateAll();
+        //throw new NotImplementedException();
     }
     
     public static void Connect(Node A, int outIdx, Node B, int inIdx)

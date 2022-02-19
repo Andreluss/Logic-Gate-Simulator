@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EdgeCollision : MonoBehaviour
+public class EdgeCollision : CollisionData
 {
     public Node from; 
     public int outIdx;

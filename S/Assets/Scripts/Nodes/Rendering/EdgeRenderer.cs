@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class EdgeRenderer : BaseRenderer
 {
+    public Node from;
+    public int outIdx;
+    public Node to;
+    public int inIdx;
     public static EdgeRenderer Make(Node A, int outIdx, Node B, int inIdx)
     {
         var edgeGO = Object.Instantiate(
             Resources.Load<GameObject>("Sprites/Edge"));
         var edgeRend = edgeGO.GetComponent<EdgeRenderer>();
+        
+        edgeRend.from = A;
+        edgeRend.outIdx = outIdx;
+        edgeRend.to = B;
+        edgeRend.inIdx = inIdx;
+
         edgeRend.C = edgeGO.GetComponent<PolygonCollider2D>();
         edgeRend.LR = edgeGO.GetComponent<LineRenderer>();
         edgeRend.start = A.GetRenderer().outSocketRends[outIdx].transform.position;
@@ -47,7 +57,10 @@ public class EdgeRenderer : BaseRenderer
     {
         // [TODO]
     }
-
+    public void Destroy()
+    {
+        Object.Destroy(this.gameObject);
+    }
     public bool Value { get; set; }
     public Vector2 Start
     {

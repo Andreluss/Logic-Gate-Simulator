@@ -5,3 +5,10 @@
 		but with external controllers overriding them (-> MultibitController) 
 2. No w sumie NodeManager może jednak nie być statyczny damnn [TODO]
 3. Można dodać LayerMask tylko dla klikalnych na UI obiektów (Gates, Split, Sockets, Edges)
+
+
+Do zrobienia : 
+- menu kontekstowe (po przycisnieciu PPM na jakims colliderze) -> sterowane przez NodeManager???
+- GUI:
+  + outline po najechaniu myszką
+  
