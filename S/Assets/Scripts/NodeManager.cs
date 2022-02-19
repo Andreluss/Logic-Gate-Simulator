@@ -56,6 +56,11 @@ public static class NodeManager //: Singleton<NodeManager>
         // some extra actions itp. itd. 
         // update renderers and shit
     }
+    public static void Disconnect(Node A, int outIdx, Node B, int inIdx)
+    {
+        A.DisconnectWith(outIdx, B, inIdx);
+    }
+
     private static void CalculateAll()
     {
         NodeSearch.RunSearchAndCalculateAllNodes(inputNodes, outputNodes);

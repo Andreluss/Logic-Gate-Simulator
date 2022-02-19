@@ -63,12 +63,4 @@ public class GateComplex : Gate
             outVals[i] = internalOuts[i].GetValue();
         }
     }
-    //protected override void CreateRenderer()
-    //{
-    //    Debug.Log("yeah nigggaaaa");
-    //}
-    //protected override void DestroyRenderer()
-    //{
-    //    Debug.Log("nigggaaaa");
-    //}
 }

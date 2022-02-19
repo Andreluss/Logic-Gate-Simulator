@@ -58,7 +58,6 @@ public class NodeRenderer : BaseRenderer
         outEdgeRenderers[outIdx].Add(newEdge);
         to.GetRenderer().inEdgeRenderers[inIdx] = newEdge;
     }
-    
     public void RemoveEdgeWith(int outIdx, Node with, int inIdx)
     {
         //[TODO] zoptymalizowac to troche bo az zal

@@ -14,12 +14,4 @@
     {
         outVals[0] = inVals[0] && inVals[1];
     }
-    //protected override void CreateRenderer()
-    //{
-
-    //}
-    //protected override void DestroyRenderer()
-    //{
-
-    //}
 }

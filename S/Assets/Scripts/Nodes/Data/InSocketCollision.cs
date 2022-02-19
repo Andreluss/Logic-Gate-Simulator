@@ -6,4 +6,5 @@ public class InSocketCollision : CollisionData
 {
     public Node targetNode;
     public int inIdx;
+    public override BaseRenderer Renderer { get => targetNode?.GetRenderer(); }
 }

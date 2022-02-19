@@ -5,4 +5,6 @@ using UnityEngine;
 public class NodeCollision : CollisionData
 {
     public Node node;
+    public NodeRenderer NodeRenderer { get => node?.GetRenderer(); }
+    public override BaseRenderer Renderer { get => NodeRenderer; }
 }
