@@ -15,9 +15,9 @@ public class GateTemplate
     public int inCnt, outCnt;
     public string defaultName;
     public int N;//, M;//number of verticies(nodes) and edges
-    public RenderProperties renderProperties;
-    public int[] TemplateIDsForEachNode;
-    public int templateId;
+    public RenderProperties renderProperties;//sdkjfhhsudfksdjfhksdjhf
+    public int[] TemplateIDsForEachNode;//wererwerwerwerwerwerwerwerwerwer
+    public int templateId;//qwkuehqowuyobiuyfobiausydoauisd
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
     public Node BuildNodeFromTemplate(bool hidden = false, Vector2? where = null)

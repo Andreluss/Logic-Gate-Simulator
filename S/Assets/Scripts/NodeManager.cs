@@ -43,7 +43,7 @@ public static class NodeManager //: Singleton<NodeManager>
 
         node.Destroy();
 
-        Debug.Log($"Node {node} deleted");
+        Debug.Log($"Node {node} deleted");//msdlkjl
 
         CalculateAll();
         //throw new NotImplementedException();
