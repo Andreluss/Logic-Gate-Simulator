@@ -69,12 +69,28 @@ public class NodeRenderer : BaseRenderer
     public void RemoveEdgeWith(int outIdx, Node with, int inIdx)
     {
         //[TODO] zoptymalizowac to troche bo az zal
-        foreach(EdgeRenderer outEdgeRend in outEdgeRenderers[outIdx])
+        //for (int i = 0; i < outEdgeRenderers[outIdx].Count; i++)
+        //{
+        //    Debug.Assert(outEdgeRenderers[outIdx][i] != null);
+        //    if(outEdgeRenderers[outIdx][i].to == with &&
+        //       outEdgeRenderers[outIdx][i].inIdx == inIdx)
+        //    {
+        //        outEdgeRenderers[outIdx][i].Destroy();
+        //        outEdgeRenderers[outIdx].RemoveAt(i);
+        //        break;
+        //    }
+        //}
+        int rendidx = 0;
+        foreach (EdgeRenderer outEdgeRend in outEdgeRenderers[outIdx])
         {
-            if(outEdgeRend.to == with && outEdgeRend.inIdx == inIdx)
+            Debug.Assert(outEdgeRend != null);
+            if (outEdgeRend.to == with && outEdgeRend.inIdx == inIdx)
             {
                 outEdgeRend.Destroy();
+                outEdgeRenderers[outIdx].RemoveAt(rendidx);
+                break;
             }
+            rendidx++;
         }
         with.GetRenderer().inEdgeRenderers[inIdx] = null;
     }

@@ -154,6 +154,7 @@ public class PlayerController : MonoBehaviour
         if (!Input.GetMouseButton(0))
         {
             StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
+            return;
         }
 
         //[DESIGN] jesli usuniemy ten próg od³¹czenia socketu (0.2f), 
@@ -163,11 +164,17 @@ public class PlayerController : MonoBehaviour
         {
             var (node, inidx) = (inSocket.targetNode, inSocket.inIdx);
             var (from, outidx) = (node.ins[inidx].st, node.ins[inidx].nd);
-            
-            NodeManager.Disconnect(from, outidx, node, inidx);
+            if (from == null)
+            {
+                StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
+            }
+            else
+            {
+                NodeManager.Disconnect(from, outidx, node, inidx);
 
-            edgeNewRend = EdgeRenderer.Make(from, outidx, mpos);
-            StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
+                edgeNewRend = EdgeRenderer.Make(from, outidx, mpos);
+                StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
+            }
         }
     }
     private void StateEdgeOldEnd()
