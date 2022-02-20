@@ -54,7 +54,7 @@ public class GateComplex : Gate
             internalIns[i].SetValue(inVals[i]); 
         }
         
-        NodeSearch.RunSearchAndCalculateAllNodes(internalIns, internalOuts);
+        NodeSearch.RunSearchAndCalculateAllNodes(internalIns);
 
         if(outVals.Length != internalOuts.Count) 
             throw new Exception("invals and internalOuts have different sizes");

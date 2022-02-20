@@ -48,7 +48,10 @@ public class NodeRenderer : BaseRenderer
         {
             foreach (EdgeRenderer outEdgeRend in outEdgeRenderers[i])
             {
-                outEdgeRend.Start = outSocketRends[i].transform.position;
+                if(outEdgeRend != null)
+                {
+                    outEdgeRend.Start = outSocketRends[i].transform.position;
+                }
             }
         }
     }

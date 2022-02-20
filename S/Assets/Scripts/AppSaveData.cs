@@ -38,7 +38,7 @@ public static class AppSaveData
     public struct Settings
     {
         public static bool SnapObjects = false;
-        public static float SnapDistance = 3f;
+        public static float SnapDistance = 0.5f;
     }
 
 

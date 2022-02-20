@@ -69,10 +69,27 @@ public static class NodeManager //: Singleton<NodeManager>
 
     private static void CalculateAll()
     {
-        //[DESIGN]
+        //[DESIGN] ?? ?? 
         //jako input mozna tez wzi¹æ wszystkie wiecho³ki ktore maja totalInputEdgesCount == 0
-        // ?? 
-        NodeSearch.RunSearchAndCalculateAllNodes(inputNodes, outputNodes);
+
+        //(A)
+        //NodeSearch.RunSearchAndCalculateAllNodes(inputNodes);
+
+        //(B)
+        List<Node> readyNodes = new();
+        foreach(var node in nodes)
+        {
+            if(node.totalInputEdgesCount == 0) 
+                readyNodes.Add(node);
+        }
+        NodeSearch.RunSearchAndCalculateAllNodes(readyNodes);
+    }
+
+
+    public static void Flip(InputCollision inputCollision)
+    {
+        inputCollision.InputNode.FlipValue();
+        CalculateAll();
     }
 
     public static void ClearAll()
@@ -183,13 +200,13 @@ public static class NodeManager //: Singleton<NodeManager>
         GateTemplate template = new();
         return template;
         */
-    }   
+    }
 }
 
 public static class NodeSearch
 {
     private static int CurrentSearchId = 0;
-    public static void RunSearchAndCalculateAllNodes(IEnumerable<InputNode> inputs, IEnumerable<OutputNode> outputs)
+    public static void RunSearchAndCalculateAllNodes(IEnumerable<Node> inputs)
     {
         Queue<Node> queue = new Queue<Node>();
         foreach (var inputNode in inputs)

@@ -63,10 +63,11 @@ public class PlayerController : MonoBehaviour
                 selectedObject = obj.GetComponent<CollisionData>();
                 ChangeSelection(selectedObject, selectedObject);
 
+
                 if (selectedObject is NodeCollision)
                 {
                     selectedNode = (selectedObject as NodeCollision).node;
-                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeDrag));
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeInteract));
                 }
                 else if (selectedObject is OutSocketCollision)
                 {
@@ -179,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private void StateNodeDragStart()
+    private void StateNodeInteractStart()
     {
         PlayerState = State.NodeDrag;
         mousePositionLMBDown = GetMousePosition();
@@ -187,12 +188,12 @@ public class PlayerController : MonoBehaviour
         selectedNodePositionLMBDown = selectedNode.Position;
         startedDragging = false;
     }
-    private void StateNodeDrag()
+    private void StateNodeInteract()
     {
         var deltaPosition = GetMousePosition() - mousePositionLMBDown;
         if (startedDragging || deltaPosition.magnitude > 0.2f) //zeby przez przypadek 
         {                                                       //nie przesuwaæ o 0.001mm
-            //Debug.Log("draggin");
+            startedDragging = true; //Debug.Log("draggin"); 
             Vector2 newPos = selectedNodePositionLMBDown + deltaPosition;
             if (AppSaveData.Settings.SnapObjects != Input.GetKey(KeyCode.LeftControl))//albo albo
             {
@@ -203,15 +204,18 @@ public class PlayerController : MonoBehaviour
                 Debug.Log(newPos);
             }
             selectedNode.Position = newPos;
-            startedDragging = true;
         }
 
         if (!Input.GetMouseButton(0)) //jesli juz nie trzymamy LPM
         {
+            if(!startedDragging && selectedObject is InputCollision)
+            {
+                NodeManager.Flip(selectedObject as InputCollision);
+            }
             StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
         }
     }
-    private void StateNodeDragEnd()
+    private void StateNodeInteractEnd()
     {
 
     }

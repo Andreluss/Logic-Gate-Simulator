@@ -11,15 +11,23 @@ public class StateMachine : MonoBehaviour
 
     public void UpdateStateMachine()
     {
-        try
+        if(playerState != null)
         {
             playerState();
         }
-        catch
+        else
         {
             Debug.LogError("State Machine not initialized with a state, please initialize State Machine on the Awake or Start method with a state.");
-            throw new System.Exception("state machine error");
         }
+        //try
+        //{
+        //    playerState();
+        //}
+        //catch (System.Exception e)
+        //{
+        //    Debug.LogError("State Machine not initialized with a state, please initialize State Machine on the Awake or Start method with a state.");
+        //    throw new System.Exception($"state machine error? --> {e}");
+        //}
     }
 
     public void ChangeState(PlayerState NextState)
