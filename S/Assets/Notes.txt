@@ -20,4 +20,5 @@ Do zrobienia :
 - dodać wykrywanie cykli w połączeniach, albo raczej ich blokowanie
 - "klocki i pola przyłączeniowe powinny być rozkładane na wirtualnej siatce" -> JAKIEJ DOKŁADNIE?
 - Collider => Detector
+- edycja bramek -> TYLKO zapisanie jako nowa bramka?
 

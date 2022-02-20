@@ -7,7 +7,7 @@ using System;
 // - AppSaveData
 public static class NodeManager //: Singleton<NodeManager>
 {
-    static HashSet<Node> nodes = new HashSet<Node>();
+    static HashSet<Node> nodes = new HashSet<Node>();//widzialne nody
     static HashSet<InputNode> inputNodes = new();
     static HashSet<OutputNode> outputNodes = new();
     public static Node CreateNode(GateTemplate template, Vector2? where = null)
