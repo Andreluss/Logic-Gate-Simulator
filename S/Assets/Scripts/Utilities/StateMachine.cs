@@ -24,14 +24,23 @@ public class StateMachine : MonoBehaviour
 
     public void ChangeState(PlayerState NextState)
     {
+        if(NextState == null)
+        {
+            throw new System.Exception("kkjaddfkjslksdjf");
+        }
+        Debug.Log($"NextPS: {NextState.Method.Name}");
         gameObject.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         playerState = NextState;
-        Debug.Log($"NextPS: {NextState.Method.Name}");
         gameObject.SendMessage(playerState.Method.Name + "Start", SendMessageOptions.DontRequireReceiver);
     }
 
     public void ChangeState(GameObject Caller, PlayerState NextState)
     {
+        if (NextState == null)
+        {
+            throw new System.Exception("kkjaddfkjslksdjf");
+        }
+        Debug.Log($"NextPS: {NextState.Method.Name}");
         gameObject.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         Caller.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         playerState = NextState;

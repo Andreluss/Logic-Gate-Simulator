@@ -11,15 +11,15 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        m_Camera = Camera.main; 
         StateMachine = GetComponent<StateMachine>();
+        StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
+        PlayerState = State.Idle;
     }
 
     void Start()
     {
-        m_Camera = Camera.main;
-
-        StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
-        PlayerState = State.Idle;
+        
     }
 
     void Update()
@@ -124,8 +124,12 @@ public class PlayerController : MonoBehaviour
             edgeNewRend.Destroy();
             if (currentInputSocket != null)
             {
-                NodeManager.Connect(edgeNewRend.from, edgeNewRend.outIdx,
-                    currentInputSocket.targetNode, currentInputSocket.inIdx);
+                if(edgeNewRend.from != currentInputSocket.targetNode)
+                {
+                    //czy przypadkiem nie ³¹czymy z tym samym
+                    NodeManager.Connect(edgeNewRend.from, edgeNewRend.outIdx,
+                        currentInputSocket.targetNode, currentInputSocket.inIdx);
+                }
             }
             StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
         }
@@ -188,8 +192,17 @@ public class PlayerController : MonoBehaviour
         var deltaPosition = GetMousePosition() - mousePositionLMBDown;
         if (startedDragging || deltaPosition.magnitude > 0.2f) //zeby przez przypadek 
         {                                                       //nie przesuwaæ o 0.001mm
-            Debug.Log("draggin");
-            selectedNode.Position = selectedNodePositionLMBDown + deltaPosition;
+            //Debug.Log("draggin");
+            Vector2 newPos = selectedNodePositionLMBDown + deltaPosition;
+            if (AppSaveData.Settings.SnapObjects != Input.GetKey(KeyCode.LeftControl))//albo albo
+            {
+                //wtedy snapujemy do siatki
+                float dist = AppSaveData.Settings.SnapDistance;
+                newPos.x = Mathf.Round(newPos.x / dist) * dist;
+                newPos.y = Mathf.Round(newPos.y / dist) * dist;
+                Debug.Log(newPos);
+            }
+            selectedNode.Position = newPos;
             startedDragging = true;
         }
 

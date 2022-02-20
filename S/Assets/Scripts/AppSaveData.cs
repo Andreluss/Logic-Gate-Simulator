@@ -34,14 +34,17 @@ public static class AppSaveData
 
     private static List<GateTemplate> GateTemplates;
     private static string gatePath = Application.dataPath + "/GateTemplates.bin";
-    static AppSaveData()
+
+    public struct Settings
     {
-        //to chyba nie dzialalo
+        public static bool SnapObjects = false;
+        public static float SnapDistance = 3f;
     }
+
+
     public static void Load()
     {
-        Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
-        if (!File.Exists(gatePath))
+        if (!File.Exists(gatePath)) // jesli nie istnieje to odtwarzamy 5 podstawowych bramek
         {
             List<GateTemplate> gateTemplates = new();
             for (int i = 0; i < 5; i++)
@@ -56,5 +59,7 @@ public static class AppSaveData
         {
             Debug.LogError("my ass");
         }
+        Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
+
     }
 }
