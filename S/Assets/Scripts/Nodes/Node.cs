@@ -58,8 +58,15 @@ public abstract class Node
         }
         if (!to.IsFree(inIdx))
         {
-            return;
+            //[DESIGN] 
+
+            //(A)
+            var (old_node, old_outidx) = (to.ins[inIdx].st, to.ins[inIdx].nd);
+            old_node.DisconnectWith(old_outidx, to, inIdx);
+
+            //(B)
             //throw new Exception("Dest. node input is already full");
+            //return;
         }
         //TODO: GUI - create edge and make a new edgeRenderer if not Hidden
         //( ## or do that in NodeManager???)

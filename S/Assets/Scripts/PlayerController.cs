@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(StateMachine))]
 public class PlayerController : MonoBehaviour
@@ -25,12 +27,21 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         StateMachine.UpdateStateMachine();
+        if (EventSystem.current.currentSelectedGameObject != null)
+            Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     private void FixedUpdate()
     {
 
     }
+
+    /* Klikniêcia guzików */
+    public void OnSaveAsTemplateClick()
+    {
+        StateMachine.ChangeState(new StateMachine.PlayerState(StateNewTemplate));
+    }
+
 
 
 
@@ -45,8 +56,6 @@ public class PlayerController : MonoBehaviour
         EdgeOld,
     }
 
-
-
     private void StateIdleStart()
     {
         PlayerState = State.Idle;
@@ -56,9 +65,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             var obj = GetObjectUnderMouse();
+            Debug.Log(EventSystem.current.currentSelectedGameObject);
+            Debug.Log("clicked " + GetObjectUnderMouse().name);
             if (obj != null)
             {
-                Debug.Log("clicked " + GetObjectUnderMouse().name);
 
                 selectedObject = obj.GetComponent<CollisionData>();
                 ChangeSelection(selectedObject, selectedObject);
@@ -82,7 +92,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        if(Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
             var obj = GetObjectUnderMouse();
             if(obj != null)
@@ -98,6 +108,62 @@ public class PlayerController : MonoBehaviour
 
     private CollisionData selectedObject;
     private Node selectedNode;
+
+
+
+
+    private void StateNewNodeStart()
+    {
+
+    }
+    private void StateNewNode()
+    {
+
+    }
+    private void StateNewNodeEnd()
+    {
+
+    }
+
+
+
+
+
+    private void StateNewTemplateStart()
+    {
+        //wyswietl to okienko 
+        //zapisz jakas referencje do niego 
+    }
+    private void StateNewTemplate()
+    {
+        
+        if (Input.GetMouseButtonDown(0) && EventSystem.current.currentSelectedGameObject == null)
+        {
+            StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
+            return;
+        }
+        bool clickedOK = false;
+        string selectedName = "NAND";
+        if(clickedOK)
+        {
+            if(AppSaveData.TemplateExists(selectedName))
+            {
+                Debug.Log("blok o takiej nazwie juz istnieje");
+            }
+            else
+            {
+                
+                NodeManager.SaveAllAsTemplate(selectedName, new RenderProperties());
+                Debug.Log("Zapisano now¹ bramkê.");
+                //[TODO] ewentualnie usun¹æ ca³oœæ i zostawiæ tylko inputy i now¹ bramkê
+                StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
+            }
+        }
+    }
+    private void StateNewTemplateEnd()
+    {
+        //zamknij okienko jesli jeszcze sie nie zamknelo
+    }
 
 
 

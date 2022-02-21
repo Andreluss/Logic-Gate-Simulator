@@ -22,3 +22,10 @@ Do zrobienia :
 - Collider => Detector
 - edycja bramek -> TYLKO zapisanie jako nowa bramka?
 
+
+
+
+
+
+
+\[[A-Z]{2,}\]

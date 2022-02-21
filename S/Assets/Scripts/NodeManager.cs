@@ -54,6 +54,7 @@ public static class NodeManager //: Singleton<NodeManager>
         // ??? [DESIGN] ???
         // UPDATE: jesli socket B.ins[inIdx] jest wolny, to nic nie robimy....
         //  ........ALBO usuwamy poprzedni¹ krawêdŸ i tworzymy t¹ now¹??? 
+        
         A.ConnectTo(outIdx, B, inIdx);
         // some extra actions itp. itd. 
         // update renderers and shit
@@ -96,7 +97,7 @@ public static class NodeManager //: Singleton<NodeManager>
     {
         throw new NotImplementedException();
     }
-    public static GateTemplate SaveAllAsTemplate(string newName) // TODO: ### jeszcze color i size !!!
+    public static GateTemplate SaveAllAsTemplate(string newName, RenderProperties renderProperties) // TODO: ### jeszcze color i size !!!
     {
         GateTemplate template = new();
         template.defaultName = newName;

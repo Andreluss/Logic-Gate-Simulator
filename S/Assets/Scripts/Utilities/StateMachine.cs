@@ -36,7 +36,7 @@ public class StateMachine : MonoBehaviour
         {
             throw new System.Exception("kkjaddfkjslksdjf");
         }
-        Debug.Log($"NextPS: {NextState.Method.Name}");
+        //Debug.Log($"NextPS: {NextState.Method.Name}");
         gameObject.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         playerState = NextState;
         gameObject.SendMessage(playerState.Method.Name + "Start", SendMessageOptions.DontRequireReceiver);
@@ -48,7 +48,7 @@ public class StateMachine : MonoBehaviour
         {
             throw new System.Exception("kkjaddfkjslksdjf");
         }
-        Debug.Log($"NextPS: {NextState.Method.Name}");
+        //Debug.Log($"NextPS: {NextState.Method.Name}");
         gameObject.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         Caller.SendMessage(playerState.Method.Name + "End", SendMessageOptions.DontRequireReceiver);
         playerState = NextState;

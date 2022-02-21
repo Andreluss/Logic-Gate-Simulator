@@ -28,6 +28,10 @@ public static class AppSaveData
         GateTemplates.Add(newTemplate);
         GateTemplates.SaveClass(Application.dataPath + "/GateTemplates.bin");
     }
+    public static bool TemplateExists(string name)
+    {
+        return GateTemplates.Find(x => x.defaultName == name) != null;
+    }
 
     public static int InputTemplateID = new InputNode(true).GetTemplateID();
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
