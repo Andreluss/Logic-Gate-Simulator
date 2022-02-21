@@ -27,8 +27,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         StateMachine.UpdateStateMachine();
-        if (EventSystem.current.currentSelectedGameObject != null)
-            Debug.Log(EventSystem.current.currentSelectedGameObject);
+        //if (EventSystem.current.currentSelectedGameObject != null)
+        //    Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     private void FixedUpdate()
@@ -66,10 +66,9 @@ public class PlayerController : MonoBehaviour
         {
             var obj = GetObjectUnderMouse();
             Debug.Log(EventSystem.current.currentSelectedGameObject);
-            Debug.Log("clicked " + GetObjectUnderMouse().name);
             if (obj != null)
             {
-
+                Debug.Log("clicked " + GetObjectUnderMouse().name);
                 selectedObject = obj.GetComponent<CollisionData>();
                 ChangeSelection(selectedObject, selectedObject);
 

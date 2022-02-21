@@ -29,3 +29,11 @@ Do zrobienia :
 
 
 \[[A-Z]{2,}\]
+
+
+
+
+
+
+-> dostosować wysokość zasobnika
+-> 
