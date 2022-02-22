@@ -13,6 +13,7 @@ public class InputRenderer : NodeRenderer
                                      ("Sprites/InputRoot"));
         var inputGO = inputRootGO.transform.GetChild(0).gameObject;
         var inputRend = inputGO.GetComponent<InputRenderer>();
+        inputRend.Node = forWho;
         Vector2 dim = inputGO.GetComponent<SpriteRenderer>().size;
 
         var socket = OutSocketRenderer.Make(forWho, 0);
@@ -26,7 +27,7 @@ public class InputRenderer : NodeRenderer
         inputRend.text = inputRootGO.GetComponentInChildren<TextMeshPro>();
 
         var coll = inputGO.GetComponent<InputCollision>();
-        coll.inputNode = forWho;
+        coll.node = forWho;
 
         return inputRend;
     }

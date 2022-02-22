@@ -9,6 +9,7 @@ public class SplitRenderer : NodeRenderer
         var rootGO = Resources.Load<GameObject>("Sprites/Split");
         var splitGO = rootGO.transform.GetChild(0);
         var rend = splitGO.GetComponent<SplitRenderer>();
+        rend.Node = forWho;
 
         float width = splitGO.GetComponent<SpriteRenderer>().size.x;
 
@@ -27,7 +28,7 @@ public class SplitRenderer : NodeRenderer
         rend.outSocketRends = new OutSocketRenderer[] { outSocket };
 
         var coll = splitGO.GetComponent<SplitCollision>();
-        coll.split = forWho;
+        coll.node = forWho;
 
         return rend;
     }

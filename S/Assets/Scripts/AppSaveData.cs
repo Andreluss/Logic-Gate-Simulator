@@ -28,20 +28,27 @@ public static class AppSaveData
         GateTemplates.Add(newTemplate);
         GateTemplates.SaveClass(Application.dataPath + "/GateTemplates.bin");
     }
+    public static bool TemplateExists(string name)
+    {
+        return GateTemplates.Find(x => x.defaultName == name) != null;
+    }
 
     public static int InputTemplateID = new InputNode(true).GetTemplateID();
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
 
     private static List<GateTemplate> GateTemplates;
     private static string gatePath = Application.dataPath + "/GateTemplates.bin";
-    static AppSaveData()
+
+    public struct Settings
     {
-        //to chyba nie dzialalo
+        public static bool SnapObjects = false;
+        public static float SnapDistance = 0.5f;
     }
+
+
     public static void Load()
     {
-        Debug.Log("constr");
-        if (!File.Exists(gatePath))
+        if (!File.Exists(gatePath)) // jesli nie istnieje to odtwarzamy 5 podstawowych bramek
         {
             List<GateTemplate> gateTemplates = new();
             for (int i = 0; i < 5; i++)
@@ -56,5 +63,7 @@ public static class AppSaveData
         {
             Debug.LogError("my ass");
         }
+        Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
+
     }
 }

@@ -12,13 +12,12 @@ public class Gate : Node
     public GateRenderer renderer;
     protected override void CreateRenderer()
     {
-        Debug.Log("yeah nigggaaaa");
         renderer = GateRenderer.Make(this);
     }
     protected override void DestroyRenderer()
     {
-        Object.Destroy(renderer.transform.parent);
-        Debug.Log($"nigggaaaa gaterend = {renderer}");
+        Object.Destroy(renderer.transform.parent.gameObject);
+        Debug.Log($"Gaterend {renderer} destroyed");
     }
     public override NodeRenderer GetRenderer()
     {

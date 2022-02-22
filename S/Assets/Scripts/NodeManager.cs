@@ -7,7 +7,7 @@ using System;
 // - AppSaveData
 public static class NodeManager //: Singleton<NodeManager>
 {
-    static HashSet<Node> nodes = new HashSet<Node>();
+    static HashSet<Node> nodes = new HashSet<Node>();//widzialne nody
     static HashSet<InputNode> inputNodes = new();
     static HashSet<OutputNode> outputNodes = new();
     public static Node CreateNode(GateTemplate template, Vector2? where = null)
@@ -31,26 +31,73 @@ public static class NodeManager //: Singleton<NodeManager>
 
     public static void DeleteNode(Node node)
     {
-        throw new NotImplementedException();
+        nodes.Remove(node);
+        if(node is InputNode)
+        {
+            inputNodes.Remove(node as InputNode);
+        }
+        else if(node is OutputNode)
+        {
+            outputNodes.Remove(node as OutputNode);
+        }
+
+        node.Destroy();
+
+        Debug.Log($"Node {node} deleted");//msdlkjl
+
+        CalculateAll();
     }
     
     public static void Connect(Node A, int outIdx, Node B, int inIdx)
     {
         // ### Assuming the B.ins[inIdx] is free ###
+        // ??? [DESIGN] ???
+        // UPDATE: jesli socket B.ins[inIdx] jest wolny, to nic nie robimy....
+        //  ........ALBO usuwamy poprzedni¹ krawêdŸ i tworzymy t¹ now¹??? 
+        
         A.ConnectTo(outIdx, B, inIdx);
         // some extra actions itp. itd. 
         // update renderers and shit
+        
+        CalculateAll();
     }
-    public static void CalculateAll()
+    public static void Disconnect(Node A, int outIdx, Node B, int inIdx)
     {
-        NodeSearch.RunSearchAndCalculateAllNodes(inputNodes, outputNodes);
+        A.DisconnectWith(outIdx, B, inIdx);
+
+        CalculateAll();
+    }
+
+    private static void CalculateAll()
+    {
+        //[DESIGN] ?? ?? 
+        //jako input mozna tez wzi¹æ wszystkie wiecho³ki ktore maja totalInputEdgesCount == 0
+
+        //(A)
+        //NodeSearch.RunSearchAndCalculateAllNodes(inputNodes);
+
+        //(B)
+        List<Node> readyNodes = new();
+        foreach(var node in nodes)
+        {
+            if(node.totalInputEdgesCount == 0) 
+                readyNodes.Add(node);
+        }
+        NodeSearch.RunSearchAndCalculateAllNodes(readyNodes);
+    }
+
+
+    public static void Flip(InputCollision inputCollision)
+    {
+        inputCollision.InputNode.FlipValue();
+        CalculateAll();
     }
 
     public static void ClearAll()
     {
         throw new NotImplementedException();
     }
-    public static GateTemplate SaveAllAsTemplate(string newName) // TODO: ### jeszcze color i size !!!
+    public static GateTemplate SaveAllAsTemplate(string newName, RenderProperties renderProperties) // TODO: ### jeszcze color i size !!!
     {
         GateTemplate template = new();
         template.defaultName = newName;
@@ -102,6 +149,8 @@ public static class NodeManager //: Singleton<NodeManager>
 
     public static GateTemplate SaveNodesAsTemplateALPHA(List<Node> nodes, string templateName)
     {
+        throw new Exception("do not try this at home");
+        /*
         Dictionary<Node, int> ID = new Dictionary<Node, int>(); 
         List<Pair<Pair<int, int>, Pair<int, int>>> edges = new();
         List<int> TemplateIDsForEachNode = new();
@@ -151,14 +200,14 @@ public static class NodeManager //: Singleton<NodeManager>
         }
         GateTemplate template = new();
         return template;
+        */
     }
-    
 }
 
 public static class NodeSearch
 {
     private static int CurrentSearchId = 0;
-    public static void RunSearchAndCalculateAllNodes(IEnumerable<InputNode> inputs, IEnumerable<OutputNode> outputs)
+    public static void RunSearchAndCalculateAllNodes(IEnumerable<Node> inputs)
     {
         Queue<Node> queue = new Queue<Node>();
         foreach (var inputNode in inputs)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputCollision : CollisionData
+public class InputCollision : NodeCollision
 {
-    public InputNode inputNode;
+    public InputNode InputNode { get => (InputNode)node; }
 }

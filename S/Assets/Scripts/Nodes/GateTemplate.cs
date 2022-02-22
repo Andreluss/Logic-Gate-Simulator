@@ -11,13 +11,13 @@ public enum NodeType
 [Serializable]
 public class GateTemplate
 {
-    public NodeType NodeType;
-    public int inCnt, outCnt;
+    public NodeType NodeType;//lajhflkajhflkjashdflkj
+    public int inCnt, outCnt;//dskjfyabsdkfjhbsdkjhafbkjasdhfb
     public string defaultName;
     public int N;//, M;//number of verticies(nodes) and edges
-    public RenderProperties renderProperties;
-    public int[] TemplateIDsForEachNode;
-    public int templateId;
+    public RenderProperties renderProperties;//sdkjfhhsudfksdjfhksdjhf
+    public int[] TemplateIDsForEachNode;//wererwerwerwerwerwerwerwerwerwer
+    public int templateId;//qwkuehqowuyobiuyfobiausydoauisd
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
     public Node BuildNodeFromTemplate(bool hidden = false, Vector2? where = null)
@@ -53,7 +53,7 @@ public class GateTemplate
             Node[] IDtoNode = new Node[N];
             for (int i = 0; i < N; i++)
             {
-                //TODO: add cheks for size
+                //TODO: add checks for size
                 int id = TemplateIDsForEachNode[i];
                 GateTemplate template = AppSaveData.GetTemplate(id);
                 IDtoNode[i] = template.BuildNodeFromTemplate(true); //lessgo

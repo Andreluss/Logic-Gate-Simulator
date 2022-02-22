@@ -24,7 +24,7 @@ public class Split : Node
     }
     protected override void DestroyRenderer()
     {
-        Object.Destroy(renderer.transform.parent);
+        Object.Destroy(renderer.transform.parent.gameObject);
     }
     public override NodeRenderer GetRenderer()
     {
