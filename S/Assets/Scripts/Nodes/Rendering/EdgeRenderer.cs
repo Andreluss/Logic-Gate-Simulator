@@ -65,11 +65,11 @@ public class EdgeRenderer : BaseRenderer
         //buhahaha
         var positions = new List<Vector3>();
         positions.Add(start);
-        if(Mathf.Abs(start.y - end.y) > 0.5f)
+        if(Mathf.Abs(start.y - end.y) > 0.25f)
         {
             float dx = end.x - start.x;
-            positions.Add(new Vector3(start.x + dx/2, start.y, C.transform.position.z));
-            positions.Add(new Vector3(start.x + dx/2, end.y, C.transform.position.z));
+            positions.Add(new Vector3(start.x + dx*2/3, start.y, C.transform.position.z));
+            positions.Add(new Vector3(start.x + dx*2/3, end.y, C.transform.position.z));
         }
         positions.Add(end);
         LR.positionCount = positions.Count;

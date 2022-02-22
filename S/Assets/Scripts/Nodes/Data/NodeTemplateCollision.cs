@@ -6,5 +6,5 @@ public class NodeTemplateCollision : CollisionData
 {
     public int TemplateID;
     public string Name;
-    public override BaseRenderer Renderer { get => null; }
+    public override BaseRenderer Renderer { get => GetComponent<NodeTemplateRenderer>(); }
 }

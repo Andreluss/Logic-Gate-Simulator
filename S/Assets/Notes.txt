@@ -36,4 +36,4 @@ Do zrobienia :
 
 
 -> dostosować wysokość zasobnika
--> 
+-> wgl przenieść collider do renderera

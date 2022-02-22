@@ -35,7 +35,9 @@ public class NodeRenderer : BaseRenderer
     public void UpdatePosition(Vector2 position)
     {
         //[DANGER] we assume the prefabs have a 'root structure'!
-        gameObject.transform.parent.position = position;
+        gameObject.transform.parent.position = new Vector3(position.x,
+                                                           position.y,
+                                                           gameObject.transform.parent.position.z);
         for (int i = 0; i < inCnt; i++)
         {
             if(inEdgeRenderers[i] != null)
@@ -93,5 +95,27 @@ public class NodeRenderer : BaseRenderer
             rendidx++;
         }
         with.GetRenderer().inEdgeRenderers[inIdx] = null;
+    }
+
+    bool isOverUI = false;
+    float UIoffset = 15;
+    public void MoveOverUI()
+    {
+        if(!isOverUI)
+        {
+            transform.parent.position = transform.parent.position 
+                                      - new Vector3(0, 0, UIoffset);
+            isOverUI = true;
+        }
+    }
+
+    public void MoveBehindUI()
+    {
+        if(isOverUI)
+        {
+            transform.parent.position = transform.parent.position 
+                                      + new Vector3(0, 0, UIoffset);
+            isOverUI = false;
+        }
     }
 }

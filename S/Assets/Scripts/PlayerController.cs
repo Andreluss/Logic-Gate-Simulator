@@ -17,19 +17,24 @@ public class PlayerController : MonoBehaviour
         StateMachine = GetComponent<StateMachine>();
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
         PlayerState = State.Idle;
+
+        //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
 
     void Start()
     {
         
     }
+    
+
 
     void Update()
     {
         StateMachine.UpdateStateMachine();
-        if(PlayerState != State.Idle)
+        if(PlayerState == State.Idle)
         {
             //wkurza mnie ten warning
+            //Debug.Log("is over UI: " + IsPointerOverUIObject());
         }
         //if (EventSystem.current.currentSelectedGameObject != null)
         //    Debug.Log(EventSystem.current.currentSelectedGameObject);
@@ -43,7 +48,7 @@ public class PlayerController : MonoBehaviour
     /* Klikniêcia guzików */
     public void OnSaveAsTemplateClick()
     {
-        StateMachine.ChangeState(new StateMachine.PlayerState(StateNewTemplate));
+        StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
     }
 
 
@@ -58,6 +63,7 @@ public class PlayerController : MonoBehaviour
         NodeDrag,
         EdgeNew,
         EdgeOld,
+        NodeNew,
     }
 
     private void StateIdleStart()
@@ -95,6 +101,8 @@ public class PlayerController : MonoBehaviour
                 else if(selectedObject is NodeTemplateCollision)
                 {
                     //...
+                    newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
                 }
             }
         }
@@ -118,59 +126,50 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private void StateNewNodeStart()
-    {
 
+    private void StateNodeNewStart()
+    {
+        PlayerState = State.NodeNew;
+        selectedNode = NodeManager.CreateNode(AppSaveData.GetTemplate(newNodeTemplateID), GetMousePosition());
+        ChangeSelectionTo(selectedNode.GetRenderer().GetComponent<NodeCollision>());
+        //Debug.Assert(false);
+        selectedNode.GetRenderer().MoveOverUI();
     }
-    private void StateNewNode()
+    private void StateNodeNew()
     {
-
-    }
-    private void StateNewNodeEnd()
-    {
-
-    }
-
-
-
-
-
-    private void StateNewTemplateStart()
-    {
-        //wyswietl to okienko 
-        //zapisz jakas referencje do niego 
-    }
-    private void StateNewTemplate()
-    {
-        
-        if (Input.GetMouseButtonDown(0) && EventSystem.current.currentSelectedGameObject == null)
+        Vector2 newPos = GetMousePosition();
+        if (AppSaveData.Settings.SnapObjects != Input.GetKey(KeyCode.LeftControl))//albo albo
         {
-            StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
-            return;
+            //wtedy snapujemy do siatki
+            float dist = AppSaveData.Settings.SnapDistance;
+            newPos.x = Mathf.Round(newPos.x / dist) * dist;
+            newPos.y = Mathf.Round(newPos.y / dist) * dist;
+            Debug.Log(newPos);
         }
-        bool clickedOK = false;
-        string selectedName = "NAND";
-        if(clickedOK)
+        selectedNode.Position = newPos;
+
+        if (!Input.GetMouseButton(0))
         {
-            if(AppSaveData.TemplateExists(selectedName))
+            if(IsPointerOverUIObject())
             {
-                Debug.Log("blok o takiej nazwie juz istnieje");
+                //usuwamy
+                NodeManager.DeleteNode(selectedNode);
             }
             else
             {
-                
-                NodeManager.SaveAllAsTemplate(selectedName, new RenderProperties());
-                Debug.Log("Zapisano now¹ bramkê.");
-                //[TODO] ewentualnie usun¹æ ca³oœæ i zostawiæ tylko inputy i now¹ bramkê
-                StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
+                //git, tylko przesuwamy z powrotem
+                selectedNode.GetRenderer().MoveBehindUI();
             }
+            StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
         }
     }
-    private void StateNewTemplateEnd()
+    private void StateNodeNewEnd()
     {
-        //zamknij okienko jesli jeszcze sie nie zamknelo
     }
 
+    private int newNodeTemplateID;
+    //Node selectedNode;
+    //bool startedDragging;
 
 
 
@@ -326,7 +325,7 @@ public class PlayerController : MonoBehaviour
     {
         var prev = selectedObject;
         if(prev == curr) return;
-        Debug.Log($"Selected obj is now {curr}");
+        Debug.Log($"Selected obj is now {curr.name}");
         if (prev != null) prev.Renderer.Selected = false;
         if (curr != null) curr.Renderer.Selected = true;
         selectedObject = curr;
@@ -339,6 +338,32 @@ public class PlayerController : MonoBehaviour
     {
         var origin = GetMousePosition();//czy nie vector3??[!!!!]
         var hit = Physics2D.Raycast(origin, Vector2.zero);
-        return hit.collider != null ? hit.collider.gameObject : null;
+        if (hit.collider != null) return hit.collider.gameObject;//return hit.collider != null ? hit.collider.gameObject : null;
+
+        //(A)
+        return EventSystem.current.currentSelectedGameObject;
+
+        //(B)
+        //if(hit.collider != null) return hit.collider.gameObject;
+
+        //var pointerData = new PointerEventData(EventSystem.current);
+        //List<RaycastResult> results = new List<RaycastResult>();
+        //EventSystem.current.RaycastAll(pointerData, results);
+
+        //if (results.Count > 0)
+        //{
+        //    Debug.Log($"first of {results.Count} elements: {results[0]}");
+        //    return results[0].gameObject;
+        //}
+        //return null;
+    }
+    public static bool IsPointerOverUIObject()
+    {
+        //[TODO] sprawdzic czy to nie jest ultra smooth
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 }

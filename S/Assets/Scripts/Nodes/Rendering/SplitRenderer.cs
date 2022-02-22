@@ -6,7 +6,7 @@ public class SplitRenderer : NodeRenderer
 {
     public static SplitRenderer Make(Split forWho)
     {
-        var rootGO = Resources.Load<GameObject>("Sprites/Split");
+        var rootGO = Instantiate(Resources.Load<GameObject>("Sprites/SplitRoot"));
         var splitGO = rootGO.transform.GetChild(0);
         var rend = splitGO.GetComponent<SplitRenderer>();
         rend.Node = forWho;
