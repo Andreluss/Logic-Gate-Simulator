@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         StateMachine.UpdateStateMachine();
+        if(PlayerState != State.Idle)
+        {
+            //wkurza mnie ten warning
+        }
         //if (EventSystem.current.currentSelectedGameObject != null)
         //    Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
@@ -69,8 +73,7 @@ public class PlayerController : MonoBehaviour
             if (obj != null)
             {
                 Debug.Log("clicked " + GetObjectUnderMouse().name);
-                selectedObject = obj.GetComponent<CollisionData>();
-                ChangeSelection(selectedObject, selectedObject);
+                ChangeSelectionTo(obj.GetComponent<CollisionData>());
 
 
                 if (selectedObject is NodeCollision)
@@ -88,6 +91,10 @@ public class PlayerController : MonoBehaviour
                 {
                     inSocket = selectedObject as InSocketCollision;
                     StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
+                }
+                else if(selectedObject is NodeTemplateCollision)
+                {
+                    //...
                 }
             }
         }
@@ -315,12 +322,14 @@ public class PlayerController : MonoBehaviour
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
-    private void ChangeSelection(CollisionData prev, CollisionData curr)
+    private void ChangeSelectionTo(CollisionData curr)
     {
+        var prev = selectedObject;
         if(prev == curr) return;
         Debug.Log($"Selected obj is now {curr}");
         if (prev != null) prev.Renderer.Selected = false;
         if (curr != null) curr.Renderer.Selected = true;
+        selectedObject = curr;
     }
     private Vector2 GetMousePosition()
     {
