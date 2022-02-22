@@ -22,6 +22,8 @@ public static class AppSaveData
     public static GateTemplate SplitTemplate { get => GateTemplates[2]; }
     public static GateTemplate AndTemplate { get => GateTemplates[3]; }
     public static GateTemplate NotTemplate { get => GateTemplates[4]; }
+    public static int TemplateCnt { get => GateTemplates.Count; }
+
     public static void AddTemplate(GateTemplate newTemplate)
     {
         newTemplate.templateId = GateTemplates.Count;
@@ -37,6 +39,7 @@ public static class AppSaveData
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
 
     private static List<GateTemplate> GateTemplates;
+    private static int templateCnt;
     private static string gatePath = Application.dataPath + "/GateTemplates.bin";
 
     public struct Settings
@@ -51,10 +54,12 @@ public static class AppSaveData
         if (!File.Exists(gatePath)) // jesli nie istnieje to odtwarzamy 5 podstawowych bramek
         {
             List<GateTemplate> gateTemplates = new();
+            string[] names = {"In", "Out", "Split", "NOT", "AND"};
             for (int i = 0; i < 5; i++)
             {
                 gateTemplates.Add(new GateTemplate());
                 gateTemplates[i].NodeType = (NodeType)i;
+                gateTemplates[i].defaultName = names[i];
             }
             gateTemplates.SaveClass(gatePath);
         }

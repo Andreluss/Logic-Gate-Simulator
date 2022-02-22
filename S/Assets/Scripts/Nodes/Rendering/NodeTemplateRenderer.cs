@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class NodeTemplateRenderer : BaseRenderer
 {
-
+    //[TODO] Make() static build function
 }

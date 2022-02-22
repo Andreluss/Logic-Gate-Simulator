@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(StateMachine))]
 public class PlayerController : MonoBehaviour
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         m_Camera = Camera.main; 
+        AppSaveData.Load();
+        LoadHUD();
         StateMachine = GetComponent<StateMachine>();
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
         PlayerState = State.Idle;
@@ -321,6 +324,17 @@ public class PlayerController : MonoBehaviour
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
+    [SerializeField]
+    private GameObject BottomBarContent;
+    private void LoadHUD()
+    {
+        for (int i = 0; i < AppSaveData.TemplateCnt; i++)
+        {
+            var button = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform);
+            button.GetComponent<NodeTemplateCollision>().TemplateID = i;
+            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = AppSaveData.GetTemplate(i).defaultName;
+        }
+    }
     private void ChangeSelectionTo(CollisionData curr)
     {
         var prev = selectedObject;

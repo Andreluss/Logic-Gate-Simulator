@@ -7,7 +7,6 @@ public class XDebug : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
-        AppSaveData.Load();
         NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, -2));
         NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, 2));
         NodeManager.CreateNode(AppSaveData.GetTemplate(5), new Vector2(0, 0));
