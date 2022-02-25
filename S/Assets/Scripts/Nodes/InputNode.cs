@@ -1,10 +1,26 @@
 ﻿using UnityEngine;
 public class InputNode : Node
 {
-    public InputNode(bool hidden=true) : base(0, 1, "Input", hidden)
+    public InputNode(bool hidden = true) : base(0, 1, "Input", hidden)
     {
     }
     private InputRenderer renderer;
+
+
+    private MultibitControllerInput controller;
+    public MultibitControllerInput Controller
+    {
+        get => controller;
+        set
+        {
+            controller = value;
+            Controlled = true;
+        }
+    }
+
+    public bool Controlled { get; private set; }
+
+
     //Overrides
     public override int GetTemplateID()
     {
@@ -28,7 +44,7 @@ public class InputNode : Node
     public void SetValue(bool value)
     {
         outVals[0] = value;
-        if(renderer != null)
+        if (renderer != null)
             renderer.HandleValue(value);
     }
     public void FlipValue()

@@ -104,6 +104,9 @@ public abstract class Node
         with.HandleDeletedInputConnection(inIdx, this, outIdx);
     }
 
+    /// <summary>
+    /// Oblicza wartoœci wyjœciowe danej bramki, w sposób zale¿ny od jej typu (funkcja wirtualna)
+    /// </summary>
     public virtual void Calculate()
     {
         //Same here

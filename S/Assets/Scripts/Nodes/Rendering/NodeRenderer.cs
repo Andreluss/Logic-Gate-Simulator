@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class NodeRenderer : BaseRenderer
 {
@@ -95,6 +96,11 @@ public class NodeRenderer : BaseRenderer
             rendidx++;
         }
         with.GetRenderer().inEdgeRenderers[inIdx] = null;
+    }
+
+    public void ShowDescription(bool descriptionsEnabled)
+    {
+        transform.parent.GetChild(2).gameObject.SetActive(descriptionsEnabled);
     }
 
     bool isOverUI = false;

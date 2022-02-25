@@ -9,19 +9,25 @@ public static class AppSaveData
 {
     //0  -> Input
     //1  -> Output
-    //2  -> Split
-    //3  -> And
-    //4  -> Not
-    //5+ -> <reszta>
+    //2  -> MultibitInput (2)
+    //3  -> MultibitInput (4)
+    //4  -> MultibitInput (8)
+    //5  -> MultibitOutput (2) 
+    //6  -> MultibitOutput (4)
+    //7  -> MultibitOutput (8)
+    //8  -> Split
+    //9  -> And
+    //10 -> Not
+    //7+ -> <reszta>
     public static GateTemplate GetTemplate(int id)
     {
         return GateTemplates[id];
     }
     public static GateTemplate InputTemplate { get => GateTemplates[0]; }
     public static GateTemplate OutputTemplate { get => GateTemplates[1]; }
-    public static GateTemplate SplitTemplate { get => GateTemplates[2]; }
-    public static GateTemplate AndTemplate { get => GateTemplates[3]; }
-    public static GateTemplate NotTemplate { get => GateTemplates[4]; }
+    public static GateTemplate SplitTemplate { get => GateTemplates[8]; }
+    public static GateTemplate AndTemplate { get => GateTemplates[9]; }
+    public static GateTemplate NotTemplate { get => GateTemplates[10]; }
     public static int TemplateCnt { get => GateTemplates.Count; }
 
     public static void AddTemplate(GateTemplate newTemplate)
@@ -39,8 +45,7 @@ public static class AppSaveData
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
 
     private static List<GateTemplate> GateTemplates;
-    private static int templateCnt;
-    private static string gatePath = Application.dataPath + "/GateTemplates.bin";
+    private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
 
     public struct Settings
     {

@@ -170,9 +170,9 @@ public class PlayerController : MonoBehaviour
     {
     }
 
-    private int newNodeTemplateID;
     //Node selectedNode;
     //bool startedDragging;
+    private int newNodeTemplateID;
 
 
 
@@ -324,6 +324,11 @@ public class PlayerController : MonoBehaviour
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
+    public void ToggleDescriptions()
+    {
+        //ahh bo Unity nie widzi menegera
+        NodeManager.ToggleDestriptions();
+    }
     [SerializeField]
     private GameObject BottomBarContent;
     private void LoadHUD()
@@ -339,7 +344,7 @@ public class PlayerController : MonoBehaviour
     {
         var prev = selectedObject;
         if(prev == curr) return;
-        Debug.Log($"Selected obj is now {curr.name}");
+        Debug.Log($"Selected obj is now {curr}");
         if (prev != null) prev.Renderer.Selected = false;
         if (curr != null) curr.Renderer.Selected = true;
         selectedObject = curr;
@@ -374,9 +379,9 @@ public class PlayerController : MonoBehaviour
     public static bool IsPointerOverUIObject()
     {
         //[TODO] sprawdzic czy to nie jest ultra smooth
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        PointerEventData eventDataCurrentPosition = new(EventSystem.current);
         eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        List<RaycastResult> results = new List<RaycastResult>();
+        List<RaycastResult> results = new();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
     }
