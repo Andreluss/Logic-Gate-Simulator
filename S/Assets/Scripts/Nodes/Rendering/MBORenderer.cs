@@ -31,4 +31,20 @@ public class MBORenderer : NodeRenderer //to jest taki node ale bez inputow i ou
     {
         text.text = value.ToString();
     }
+
+    public override void UpdatePosition(Vector2 position, bool sdfsdf  =false)
+    {
+        gameObject.transform.parent.position = new Vector3(position.x,
+                                                           position.y,
+                                                           gameObject.transform.parent.position.z);
+        var outputs = (Node as MultibitControllerOutput).Outputs;
+        if(outputs != null)
+        {
+            foreach (var outputNode in outputs)
+            {
+                if(outputNode.renderer != null)
+                    outputNode.renderer.UpdatePosition(position, true);
+            }
+        }
+    }
 }

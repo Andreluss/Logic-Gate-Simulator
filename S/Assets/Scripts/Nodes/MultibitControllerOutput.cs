@@ -19,6 +19,7 @@ public class MultibitControllerOutput : MultibitController //wlasciwie taki meta
             Outputs[i].Controller = this;
             Outputs[i].Description = "bit " + i;
         }
+
     }
     public MultibitControllerOutput(List<OutputNode> forOutputs, bool hidden) : base(forOutputs.Count, true)
     {
