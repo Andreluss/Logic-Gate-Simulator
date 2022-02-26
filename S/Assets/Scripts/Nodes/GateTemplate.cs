@@ -20,13 +20,13 @@ public class GateTemplate
     public int N;//, M;//number of verticies(nodes) and edges
     public RenderProperties renderProperties;
     public int[] TemplateIDsForEachNode;
-    public Vector2[] PositionsForEachNode;
+    public ValueTuple<float, float>[] PositionsForEachNode;
     public int templateId;
 
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
     //(List of controlled nodes, position)
-    public List<ValueTuple<Vector2, List<int>>> inputControllers, outputControllers;
+    public List<ValueTuple<ValueTuple<float, float>, List<int>>> inputControllers, outputControllers;
     public Node BuildNodeFromTemplate(bool hidden = false, Vector2? where = null)
     {
         Node node;
@@ -71,36 +71,43 @@ public class GateTemplate
             }
 
             /* ----- controllers ----- */
-            foreach (var (pos, cinputs) in inputControllers)
+            if(inputControllers != null)
             {
-                List<InputNode> controlledInputNodes = new();
-                foreach (var c in cinputs)
+
+                foreach (var (pos, cinputs) in inputControllers)
                 {
-                    Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
-                    Debug.Assert(IDtoNode[c] is InputNode);
-                    controlledInputNodes.Add(IDtoNode[c] as InputNode);
+                    List<InputNode> controlledInputNodes = new();
+                    foreach (var c in cinputs)
+                    {
+                        Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
+                        Debug.Assert(IDtoNode[c] is InputNode);
+                        controlledInputNodes.Add(IDtoNode[c] as InputNode);
+                    }
+                    //create this at specified position,
+                    //controlled nodes already exist
+                    new MultibitControllerInput(controlledInputNodes, true)
+                    {
+                        Position = pos.ToVector2()
+                    };
                 }
-                //create this at specified position,
-                //controlled nodes already exist
-                new MultibitControllerInput(controlledInputNodes, true)
-                {
-                    Position = pos
-                };
             }
 
-            foreach(var (pos, coutputs) in outputControllers)
+            if(outputControllers != null)
             {
-                List<OutputNode> controlledOutputNodes = new();
-                foreach (var c in coutputs)
+                foreach (var (pos, coutputs) in outputControllers)
                 {
-                    Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
-                    Debug.Assert(IDtoNode[c] is OutputNode);
-                    controlledOutputNodes.Add(IDtoNode[c] as OutputNode);
+                    List<OutputNode> controlledOutputNodes = new();
+                    foreach (var c in coutputs)
+                    {
+                        Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
+                        Debug.Assert(IDtoNode[c] is OutputNode);
+                        controlledOutputNodes.Add(IDtoNode[c] as OutputNode);
+                    }
+                    new MultibitControllerOutput(controlledOutputNodes, true)
+                    {
+                        Position = pos.ToVector2()
+                    };
                 }
-                new MultibitControllerOutput(controlledOutputNodes, true)
-                {
-                    Position = pos
-                };
             }
 
 

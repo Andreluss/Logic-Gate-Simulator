@@ -19,6 +19,16 @@ public static class Helper
             array[i] = value;
         }
     }
+
+    public static Vector2 ToVector2(this (float, float) pair)
+    {
+        return new Vector2(pair.Item1, pair.Item2);
+    }
+
+    public static (float, float) ToFloat2(this Vector2 vector)
+    {
+        return (vector.x, vector.y);
+    }
     public static void SaveClass<T>(this T _Class, string FilePath)
     {
         FileStream fileStream = File.Create(FilePath);

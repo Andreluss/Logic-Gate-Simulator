@@ -1,10 +1,35 @@
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
 
 public class MultibitControllerInput : MultibitController
 {
+
+    /* ----- constr ----- */
+    public MultibitControllerInput(int bitCount, bool hidden) : base(bitCount, true)
+    {
+        Hidden = hidden;
+        //...
+        //dopasuj rozmiar calego kloca
+        Inputs = new List<InputNode>();
+        for (int i = 0; i < bitCount; i++)
+        {
+            //Vector2 pos = new(0, -bitCount + i); // <== [TODO] wyliczyc to
+            Inputs.Add(NodeManager.CreateNode(AppSaveData.InputTemplate, Vector2.zero) as InputNode);
+            Inputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
+            Inputs[i].Controller = this;
+        }
+    }
+
+    public MultibitControllerInput(List<InputNode> forInputs, bool hidden) : base(forInputs.Count, true)
+    {
+        Inputs = forInputs;
+        Hidden = hidden;//bo inaczej renderer nie widzi inputow!!!
+        //chyba tyle [TODO] check czy faktycznie tyle
+    }
+
+
+    /* ----- props ----- */
     public int Value
     {
         get => value;
@@ -18,26 +43,9 @@ public class MultibitControllerInput : MultibitController
     public int MinValue { get => Signed ? -(1 << BitCount) : 0; }
     public bool Signed { get; set; }//[TODO] ogarn¹æ guzik, który to zmienia
     public List<InputNode> Inputs { get; private set; }
-    public MultibitControllerInput(int bitCount, bool hidden) : base(bitCount, hidden)
-    {
-        //...
-        //dopasuj rozmiar calego kloca
-        Inputs = new List<InputNode>();
-        for (int i = 0; i < bitCount; i++)
-        {
-            //create new InputNode
-            Vector2 pos = new(0, -bitCount + i); // <== [TODO] wyliczyc to
-            Inputs[i] = NodeManager.CreateNode(AppSaveData.InputTemplate, pos) as InputNode;
-            Inputs[i].Controller = this;
-        }
-    }
-
-    public MultibitControllerInput(List<InputNode> forInputs, bool hidden) : base(forInputs.Count, hidden)
-    {
-        Inputs = forInputs;
-        throw new NotImplementedException();
-    }
     
+
+    /* ----- overrides ----- */
     public override void Calculate()
     {
         //[TODO] update Value based on inputs
@@ -54,31 +62,35 @@ public class MultibitControllerInput : MultibitController
             newValue += 1 << (BitCount - 1);
         Value = newValue;
     }
-    private MBIRenderer renderer;
-    private int value;
-
     public override NodeRenderer GetRenderer()
     {
         return renderer;
     }
     protected override void CreateRenderer()
     {
-        throw new NotImplementedException();
+        renderer = MBIRenderer.Make(this);
     }
 
     protected override void DestroyRenderer()
     {
-        throw new NotImplementedException();
+        UnityEngine.Object.Destroy(renderer.transform.parent.gameObject);
+        Debug.Log($"MBI renderer {renderer} destroyed");
     }
 
     public override int GetTemplateID()
     {
         return BitCount switch
         {
-            2 => 2,
-            4 => 3,
-            8 => 4,
+            2 => 1,
+            4 => 2,
+            8 => 3,
             _ => throw new Exception("This multibit input controller doesn;t have a template ID"),
         };
     }
+
+
+    /* ----- private stuff -----  */
+    private MBIRenderer renderer;
+    private int value;
+
 }

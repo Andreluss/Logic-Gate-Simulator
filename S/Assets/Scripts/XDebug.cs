@@ -9,8 +9,8 @@ public class XDebug : MonoBehaviour
     {
         NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, -2));
         NodeManager.CreateNode(AppSaveData.InputTemplate, new Vector2(-4, 2));
-        NodeManager.CreateNode(AppSaveData.GetTemplate(5), new Vector2(0, 0));
         NodeManager.CreateNode(AppSaveData.OutputTemplate, new Vector2(4, 0));
+        NodeManager.CreateNode(AppSaveData.GetTemplate(11), new Vector2(0, 0));
 
         NodeManager.CreateNode(AppSaveData.AndTemplate);
         NodeManager.CreateNode(AppSaveData.NotTemplate);

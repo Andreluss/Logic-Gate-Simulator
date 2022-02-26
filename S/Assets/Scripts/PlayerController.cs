@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour
     /* Klikniêcia guzików */
     public void OnSaveAsTemplateClick()
     {
-        StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
+        //StateMachine.ChangeState(new StateMachine.PlayerState(StateGateNew));
+        NodeManager.SaveAllAsTemplate("NAND", new RenderProperties(Color.magenta, Vector2.zero));
     }
 
 
@@ -125,6 +126,20 @@ public class PlayerController : MonoBehaviour
 
     private CollisionData selectedObject;
     private Node selectedNode;
+
+
+
+    
+    
+    private void StateGateNewStart()
+    {
+    }
+    private void StateGateNew()
+    {
+    }
+    private void StateGateNewEnd()
+    {
+    }
 
 
 

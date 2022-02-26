@@ -9,10 +9,22 @@ public class MBIRenderer : NodeRenderer //to jest taki node ale bez inputow i ou
     private TextMeshPro text;
     public static MBIRenderer Make(MultibitControllerInput forWho)
     {
-        //var rend = GetComponent< new MBIRenderer();
-        //assign text 
-        throw new NotImplementedException();
-        //return rend;
+        var rootGO = Instantiate(Resources.Load("Sprites/InputControllerRoot") as GameObject);
+        var GO = rootGO.transform.GetChild(0).gameObject;
+        
+        /* calculate and set the scale */ 
+        Vector2 dim = new Vector2(1.5f, 1.5f + forWho.BitCount * 1.25f);
+        rootGO.GetComponent<RectTransform>().sizeDelta = dim;
+        GO.transform.localScale = dim;
+
+        var rend = GO.GetComponent<MBIRenderer>();
+        rend.text = rootGO.GetComponentInChildren<TextMeshPro>();
+        rend.Node = forWho;//??
+
+        var coll = GO.GetComponent<MBICollision>();
+        coll.node = forWho;
+
+        return rend;
     }
 
     internal void HandleValue(int value)

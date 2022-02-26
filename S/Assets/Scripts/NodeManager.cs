@@ -140,14 +140,14 @@ public static class NodeManager //: Singleton<NodeManager>
         //template.renderProperties ??????   position na pewno??
         //template.templateId = AppSaveData.GateTemplates.Length; <-- this will be assigned internally 
         template.TemplateIDsForEachNode = new int[template.N];
-        template.PositionsForEachNode = new Vector2[template.N];
+        template.PositionsForEachNode = new (float, float)[template.N];
 
         Dictionary<Node, int> ID = new();
         int k = 0;
         foreach (var node in nodes)//[TODO] check perf
         {
             template.TemplateIDsForEachNode[k] = node.GetTemplateID();
-            template.PositionsForEachNode[k] = node.Position;
+            template.PositionsForEachNode[k] = node.Position.ToFloat2();
             ID[node] = k++;
             if(node is InputNode)
             {
@@ -166,14 +166,14 @@ public static class NodeManager //: Singleton<NodeManager>
                 var cids = new List<int>();
                 foreach(var inputNode in mci.Inputs)
                     cids.Add(ID[inputNode]);
-                template.inputControllers.Add((controller.Position, cids));//(pos, controlled inputs)
+                template.inputControllers.Add((controller.Position.ToFloat2(), cids));//(pos, controlled inputs)
             }
             else if (controller is MultibitControllerOutput mco)
             {
                 var cids = new List<int>();
                 foreach(var outputNode in mco.Outputs)
                     cids.Add(ID[outputNode]);
-                template.outputControllers.Add((controller.Position, cids));
+                template.outputControllers.Add((controller.Position.ToFloat2(), cids));
             }
         }
 

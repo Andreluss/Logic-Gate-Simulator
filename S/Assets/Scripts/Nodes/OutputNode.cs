@@ -13,7 +13,7 @@ public class OutputNode : Node
     }
     public override int GetTemplateID()
     {
-        return 1;
+        return 4;
     }
     protected override void CreateRenderer()
     {
