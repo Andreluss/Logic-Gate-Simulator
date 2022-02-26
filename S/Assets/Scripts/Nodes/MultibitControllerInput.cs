@@ -18,12 +18,16 @@ public class MultibitControllerInput : MultibitController
             Inputs.Add(NodeManager.CreateNode(AppSaveData.InputTemplate, Vector2.zero) as InputNode);
             Inputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
             Inputs[i].Controller = this;
+            Inputs[i].Description = "bit " + i;
         }
     }
-
     public MultibitControllerInput(List<InputNode> forInputs, bool hidden) : base(forInputs.Count, true)
     {
         Inputs = forInputs;
+        for (int i = 0; i < Inputs.Count; i++)
+        {
+            Inputs[i].Description = "bit " + i;
+        }
         Hidden = hidden;//bo inaczej renderer nie widzi inputow!!!
         //chyba tyle [TODO] check czy faktycznie tyle
     }
@@ -48,6 +52,7 @@ public class MultibitControllerInput : MultibitController
     /* ----- overrides ----- */
     public override void Calculate()
     {
+        Debug.Log("mci recalc");
         //[TODO] update Value based on inputs
         // ale wypadaloby wywolywac ta funkcjê dopiero po obliczeniu wszystkich normalnych node'ow
         int newValue = 0;
@@ -56,10 +61,13 @@ public class MultibitControllerInput : MultibitController
             if (Inputs[i].GetValue())
                 newValue += 1 << i;
         }
-        if (Signed)
-            newValue -= 1 << (BitCount - 1);
-        else
-            newValue += 1 << (BitCount - 1);
+        if(Inputs[BitCount - 1].GetValue())
+        {
+            if (Signed)
+                newValue -= 1 << (BitCount - 1);
+            else
+                newValue += 1 << (BitCount - 1);
+        }
         Value = newValue;
     }
     public override NodeRenderer GetRenderer()
@@ -69,6 +77,7 @@ public class MultibitControllerInput : MultibitController
     protected override void CreateRenderer()
     {
         renderer = MBIRenderer.Make(this);
+        //Calculate();
     }
 
     protected override void DestroyRenderer()

@@ -39,6 +39,14 @@ public class InputNode : Node
     {
         return renderer;
     }
+    public override string Description { get => base.Description; set
+        {
+            base.Description = value;
+            var rend = GetRenderer() as InputRenderer;
+            if (rend != null)
+                rend.UpdateDescription();
+        }
+    }
 
     //Special functions of this type of node
     public void SetValue(bool value)

@@ -6,22 +6,28 @@ using UnityEngine;
 public class MultibitControllerOutput : MultibitController //wlasciwie taki meta node
 {
     /* ----- constr ----- */
-    public MultibitControllerOutput(int bitCount, bool hidden) : base(bitCount, hidden)
+    public MultibitControllerOutput(int bitCount, bool hidden) : base(bitCount, true)
     {
+        Hidden = hidden;
         //...
         //dopasuj rozmiar calego kloca
         Outputs = new List<OutputNode>();
         for (int i = 0; i < bitCount; i++)
         {
-            //create new OutputNode
-            Vector2 pos = new Vector2(0, -bitCount + i); // <== [TODO] wyliczyc to
-            Outputs[i] = NodeManager.CreateNode(AppSaveData.OutputTemplate, pos) as OutputNode;
-            //Outputs[i].Controller = this;
+            Outputs.Add(NodeManager.CreateNode(AppSaveData.OutputTemplate, Vector2.zero) as OutputNode);
+            Outputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
+            Outputs[i].Controller = this;
+            Outputs[i].Description = "bit " + i;
         }
     }
-    public MultibitControllerOutput(List<OutputNode> forOutputs, bool hidden) : base(forOutputs.Count, hidden)
+    public MultibitControllerOutput(List<OutputNode> forOutputs, bool hidden) : base(forOutputs.Count, true)
     {
-        throw new NotImplementedException();
+        Outputs = forOutputs;
+        for (int i = 0; i < Outputs.Count; i++)
+        {
+            Outputs[i].Description = "bit " + i;
+        }
+        Hidden = hidden;
     }
 
 
@@ -52,10 +58,13 @@ public class MultibitControllerOutput : MultibitController //wlasciwie taki meta
             if (Outputs[i].GetValue())
                 newValue += 1 << i;
         }
-        if (Signed)
-            newValue -= 1 << (BitCount - 1);
-        else
-            newValue += 1 << (BitCount - 1);
+        if (Outputs[BitCount - 1].GetValue())
+        {
+            if (Signed)
+                newValue -= 1 << (BitCount - 1);
+            else
+                newValue += 1 << (BitCount - 1);
+        }
         Value = newValue;
     }
 
@@ -67,11 +76,12 @@ public class MultibitControllerOutput : MultibitController //wlasciwie taki meta
     protected override void CreateRenderer()
     {
         renderer = MBORenderer.Make(this);
+        //Calculate();
     }
 
     protected override void DestroyRenderer()
     {
-        throw new NotImplementedException();
+        UnityEngine.Object.Destroy(renderer.transform.parent.gameObject);
     }
 
     public override int GetTemplateID()

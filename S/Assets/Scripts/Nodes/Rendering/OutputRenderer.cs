@@ -6,6 +6,7 @@ using UnityEngine;
 public class OutputRenderer : NodeRenderer
 {
     private TextMeshPro text;
+    private TextMeshPro description;
     public static OutputRenderer Make(OutputNode forWho)
     {
         var outputRootGO = Instantiate(Resources.Load<GameObject>
@@ -23,6 +24,7 @@ public class OutputRenderer : NodeRenderer
         outputRend.inSocketRends = new InSocketRenderer[] { socket };
 
         outputRend.text = outputRootGO.GetComponentInChildren<TextMeshPro>();
+        outputRend.description = outputRootGO.transform.GetChild(2).GetComponent<TextMeshPro>();
 
         var coll = outputGO.GetComponent<OutputCollision>();
         coll.node = forWho;
@@ -30,6 +32,10 @@ public class OutputRenderer : NodeRenderer
         return outputRend;
     }
 
+    public void UpdateDescription()
+    {
+        description.text = Node.Description;
+    }
     internal void HandleValue(bool value)
     {
         text.text = value ? "1" : "0";

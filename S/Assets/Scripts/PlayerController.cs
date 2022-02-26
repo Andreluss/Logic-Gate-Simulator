@@ -283,6 +283,19 @@ public class PlayerController : MonoBehaviour
         Debug.Assert(selectedNode != null);
         selectedNodePositionLMBDown = selectedNode.Position;
         startedDragging = false;
+
+        controller = null;
+
+        if (selectedNode is InputNode inputNode && inputNode.Controlled)
+        {
+            controller = inputNode.Controller;
+            controllerPositionLMBDown = controller.Position;
+        }
+        else if(selectedNode is OutputNode outputNode && outputNode.Controlled)
+        {
+            controller = outputNode.Controller;
+            controllerPositionLMBDown = controller.Position;
+        }
     }
     private void StateNodeInteract()
     {
@@ -290,6 +303,14 @@ public class PlayerController : MonoBehaviour
         if (startedDragging || deltaPosition.magnitude > 0.2f) //zeby przez przypadek 
         {                                                       //nie przesuwaæ o 0.001mm
             startedDragging = true; //Debug.Log("draggin"); 
+            if(controller != null)
+            {
+                ChangeSelectionTo(controller.GetRenderer().GetComponent<CollisionData>());
+                selectedNode = controller;//chyba git
+                selectedNodePositionLMBDown = controllerPositionLMBDown;
+                controller = null;
+            }
+
             Vector2 newPos = selectedNodePositionLMBDown + deltaPosition;
             if (AppSaveData.Settings.SnapObjects != Input.GetKey(KeyCode.LeftControl))//albo albo
             {
@@ -297,7 +318,7 @@ public class PlayerController : MonoBehaviour
                 float dist = AppSaveData.Settings.SnapDistance;
                 newPos.x = Mathf.Round(newPos.x / dist) * dist;
                 newPos.y = Mathf.Round(newPos.y / dist) * dist;
-                Debug.Log(newPos);
+                //Debug.Log(newPos);
             }
             selectedNode.Position = newPos;
         }
@@ -318,6 +339,8 @@ public class PlayerController : MonoBehaviour
 
     bool startedDragging;
     Vector2 mousePositionLMBDown;
+    MultibitController controller;
+    Vector2 controllerPositionLMBDown;
     Vector2 selectedNodePositionLMBDown;
 
 
