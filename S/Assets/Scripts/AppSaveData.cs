@@ -47,6 +47,8 @@ public static class AppSaveData
     private static List<GateTemplate> GateTemplates;
     private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
 
+    public static List<GateTemplate> Projects;
+
     public struct Settings
     {
         public static bool SnapObjects = false;

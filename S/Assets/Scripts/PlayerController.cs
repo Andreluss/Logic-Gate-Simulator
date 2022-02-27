@@ -62,7 +62,7 @@ public class PlayerController : Singleton<PlayerController>
     public void OnSaveAsTemplateClick()
     {
         //StateMachine.ChangeState(new StateMachine.PlayerState(StateGateNew));
-        NodeManager.SaveAllAsTemplate("NAND", new RenderProperties(Color.magenta));
+        NodeManager.SaveAllAsTemplate("OR", new RenderProperties(Helper.ColorFromHex(0xb6d7a8)));
         LoadHUD();
     }
 
@@ -76,6 +76,12 @@ public class PlayerController : Singleton<PlayerController>
         throw new System.NotImplementedException();
     }
 
+    public void OnSaveProject()
+    {
+        var project = NodeManager.SaveAllAsProject("Project name");
+        AppSaveData.Projects.Add(project);
+        throw new NotImplementedException();
+    }
 
     /* Stany i zmienne potrzebne do ró¿nych stanów: */
 
