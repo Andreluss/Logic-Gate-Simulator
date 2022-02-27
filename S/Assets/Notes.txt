@@ -19,7 +19,8 @@ Do zrobienia :
 - zmienić Pair<> na ValueTuple<> wszędzie
 - dodać wykrywanie cykli w połączeniach, albo raczej ich blokowanie
 - "klocki i pola przyłączeniowe powinny być rozkładane na wirtualnej siatce" -> JAKIEJ DOKŁADNIE?
-- Collider => Detector
+- Collider => Detector, a raczej po prostu:
+              (Node) Renderer + (Node) Collider => (Node) Object
 - edycja bramek -> TYLKO zapisanie jako nowa bramka?
 
 
@@ -36,4 +37,5 @@ Do zrobienia :
 
 
 -> dostosować wysokość zasobnika
--> 
+-> wgl przenieść collider do renderera
+-> RAycastAll - wygodniejsze łączenie bramek

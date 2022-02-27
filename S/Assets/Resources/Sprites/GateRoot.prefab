@@ -310,5 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 151fa21c275f39f48a7ae72cb5c1c8bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inSocketRends: []
   outSocketRends: []
+  inSocketRends: []
+  inEdgeRenderers: []

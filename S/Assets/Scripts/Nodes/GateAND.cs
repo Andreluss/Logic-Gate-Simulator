@@ -8,7 +8,7 @@
     //Overrides
     public override int GetTemplateID()
     {
-        return 3;
+        return 10;
     }
     public override void Calculate()
     {

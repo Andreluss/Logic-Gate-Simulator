@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(StateMachine))]
 public class PlayerController : MonoBehaviour
@@ -14,19 +15,30 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         m_Camera = Camera.main; 
+        AppSaveData.Load();
+        LoadHUD();
         StateMachine = GetComponent<StateMachine>();
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
         PlayerState = State.Idle;
+
+        //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
 
     void Start()
     {
         
     }
+    
+
 
     void Update()
     {
         StateMachine.UpdateStateMachine();
+        if(PlayerState == State.Idle)
+        {
+            //wkurza mnie ten warning
+            //Debug.Log("is over UI: " + IsPointerOverUIObject());
+        }
         //if (EventSystem.current.currentSelectedGameObject != null)
         //    Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
@@ -39,7 +51,8 @@ public class PlayerController : MonoBehaviour
     /* Klikniêcia guzików */
     public void OnSaveAsTemplateClick()
     {
-        StateMachine.ChangeState(new StateMachine.PlayerState(StateNewTemplate));
+        //StateMachine.ChangeState(new StateMachine.PlayerState(StateGateNew));
+        NodeManager.SaveAllAsTemplate("NAND", new RenderProperties(Color.magenta, Vector2.zero));
     }
 
 
@@ -54,6 +67,7 @@ public class PlayerController : MonoBehaviour
         NodeDrag,
         EdgeNew,
         EdgeOld,
+        NodeNew,
     }
 
     private void StateIdleStart()
@@ -69,8 +83,7 @@ public class PlayerController : MonoBehaviour
             if (obj != null)
             {
                 Debug.Log("clicked " + GetObjectUnderMouse().name);
-                selectedObject = obj.GetComponent<CollisionData>();
-                ChangeSelection(selectedObject, selectedObject);
+                ChangeSelectionTo(obj.GetComponent<CollisionData>());
 
 
                 if (selectedObject is NodeCollision)
@@ -88,6 +101,12 @@ public class PlayerController : MonoBehaviour
                 {
                     inSocket = selectedObject as InSocketCollision;
                     StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
+                }
+                else if(selectedObject is NodeTemplateCollision)
+                {
+                    //...
+                    newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
                 }
             }
         }
@@ -110,60 +129,65 @@ public class PlayerController : MonoBehaviour
 
 
 
-
-    private void StateNewNodeStart()
+    
+    
+    private void StateGateNewStart()
     {
-
     }
-    private void StateNewNode()
+    private void StateGateNew()
     {
-
     }
-    private void StateNewNodeEnd()
+    private void StateGateNewEnd()
     {
-
     }
 
 
 
 
 
-    private void StateNewTemplateStart()
+    private void StateNodeNewStart()
     {
-        //wyswietl to okienko 
-        //zapisz jakas referencje do niego 
+        PlayerState = State.NodeNew;
+        selectedNode = NodeManager.CreateNode(AppSaveData.GetTemplate(newNodeTemplateID), GetMousePosition());
+        ChangeSelectionTo(selectedNode.GetRenderer().GetComponent<NodeCollision>());
+        //Debug.Assert(false);
+        selectedNode.GetRenderer().MoveOverUI();
     }
-    private void StateNewTemplate()
+    private void StateNodeNew()
     {
-        
-        if (Input.GetMouseButtonDown(0) && EventSystem.current.currentSelectedGameObject == null)
+        Vector2 newPos = GetMousePosition();
+        if (AppSaveData.Settings.SnapObjects != Input.GetKey(KeyCode.LeftControl))//albo albo
         {
-            StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
-            return;
+            //wtedy snapujemy do siatki
+            float dist = AppSaveData.Settings.SnapDistance;
+            newPos.x = Mathf.Round(newPos.x / dist) * dist;
+            newPos.y = Mathf.Round(newPos.y / dist) * dist;
+            Debug.Log(newPos);
         }
-        bool clickedOK = false;
-        string selectedName = "NAND";
-        if(clickedOK)
+        selectedNode.Position = newPos;
+
+        if (!Input.GetMouseButton(0))
         {
-            if(AppSaveData.TemplateExists(selectedName))
+            if(IsPointerOverUIObject())
             {
-                Debug.Log("blok o takiej nazwie juz istnieje");
+                //usuwamy
+                NodeManager.DeleteNode(selectedNode);
             }
             else
             {
-                
-                NodeManager.SaveAllAsTemplate(selectedName, new RenderProperties());
-                Debug.Log("Zapisano now¹ bramkê.");
-                //[TODO] ewentualnie usun¹æ ca³oœæ i zostawiæ tylko inputy i now¹ bramkê
-                StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
+                //git, tylko przesuwamy z powrotem
+                selectedNode.GetRenderer().MoveBehindUI();
             }
+            StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
         }
     }
-    private void StateNewTemplateEnd()
+    private void StateNodeNewEnd()
     {
-        //zamknij okienko jesli jeszcze sie nie zamknelo
     }
 
+    //Node selectedNode;
+    //bool startedDragging;
+    private int newNodeTemplateID;
 
 
 
@@ -259,6 +283,19 @@ public class PlayerController : MonoBehaviour
         Debug.Assert(selectedNode != null);
         selectedNodePositionLMBDown = selectedNode.Position;
         startedDragging = false;
+
+        controller = null;
+
+        if (selectedNode is InputNode inputNode && inputNode.Controlled)
+        {
+            controller = inputNode.Controller;
+            controllerPositionLMBDown = controller.Position;
+        }
+        else if(selectedNode is OutputNode outputNode && outputNode.Controlled)
+        {
+            controller = outputNode.Controller;
+            controllerPositionLMBDown = controller.Position;
+        }
     }
     private void StateNodeInteract()
     {
@@ -266,6 +303,14 @@ public class PlayerController : MonoBehaviour
         if (startedDragging || deltaPosition.magnitude > 0.2f) //zeby przez przypadek 
         {                                                       //nie przesuwaæ o 0.001mm
             startedDragging = true; //Debug.Log("draggin"); 
+            if(controller != null)
+            {
+                ChangeSelectionTo(controller.GetRenderer().GetComponent<CollisionData>());
+                selectedNode = controller;//chyba git
+                selectedNodePositionLMBDown = controllerPositionLMBDown;
+                controller = null;
+            }
+
             Vector2 newPos = selectedNodePositionLMBDown + deltaPosition;
             if (AppSaveData.Settings.SnapObjects != Input.GetKey(KeyCode.LeftControl))//albo albo
             {
@@ -273,7 +318,7 @@ public class PlayerController : MonoBehaviour
                 float dist = AppSaveData.Settings.SnapDistance;
                 newPos.x = Mathf.Round(newPos.x / dist) * dist;
                 newPos.y = Mathf.Round(newPos.y / dist) * dist;
-                Debug.Log(newPos);
+                //Debug.Log(newPos);
             }
             selectedNode.Position = newPos;
         }
@@ -294,6 +339,8 @@ public class PlayerController : MonoBehaviour
 
     bool startedDragging;
     Vector2 mousePositionLMBDown;
+    MultibitController controller;
+    Vector2 controllerPositionLMBDown;
     Vector2 selectedNodePositionLMBDown;
 
 
@@ -315,12 +362,30 @@ public class PlayerController : MonoBehaviour
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
-    private void ChangeSelection(CollisionData prev, CollisionData curr)
+    public void ToggleDescriptions()
     {
+        //ahh bo Unity nie widzi menegera
+        NodeManager.ToggleDestriptions();
+    }
+    [SerializeField]
+    private GameObject BottomBarContent;
+    private void LoadHUD()
+    {
+        for (int i = 0; i < AppSaveData.TemplateCnt; i++)
+        {
+            var button = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform);
+            button.GetComponent<NodeTemplateCollision>().TemplateID = i;
+            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = AppSaveData.GetTemplate(i).defaultName;
+        }
+    }
+    private void ChangeSelectionTo(CollisionData curr)
+    {
+        var prev = selectedObject;
         if(prev == curr) return;
         Debug.Log($"Selected obj is now {curr}");
         if (prev != null) prev.Renderer.Selected = false;
         if (curr != null) curr.Renderer.Selected = true;
+        selectedObject = curr;
     }
     private Vector2 GetMousePosition()
     {
@@ -330,6 +395,32 @@ public class PlayerController : MonoBehaviour
     {
         var origin = GetMousePosition();//czy nie vector3??[!!!!]
         var hit = Physics2D.Raycast(origin, Vector2.zero);
-        return hit.collider != null ? hit.collider.gameObject : null;
+        if (hit.collider != null) return hit.collider.gameObject;//return hit.collider != null ? hit.collider.gameObject : null;
+
+        //(A)
+        return EventSystem.current.currentSelectedGameObject;
+
+        //(B)
+        //if(hit.collider != null) return hit.collider.gameObject;
+
+        //var pointerData = new PointerEventData(EventSystem.current);
+        //List<RaycastResult> results = new List<RaycastResult>();
+        //EventSystem.current.RaycastAll(pointerData, results);
+
+        //if (results.Count > 0)
+        //{
+        //    Debug.Log($"first of {results.Count} elements: {results[0]}");
+        //    return results[0].gameObject;
+        //}
+        //return null;
+    }
+    public static bool IsPointerOverUIObject()
+    {
+        //[TODO] sprawdzic czy to nie jest ultra smooth
+        PointerEventData eventDataCurrentPosition = new(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 }

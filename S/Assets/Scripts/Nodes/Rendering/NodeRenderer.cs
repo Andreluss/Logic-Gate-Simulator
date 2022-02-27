@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class NodeRenderer : BaseRenderer
 {
     private Node node;//!!! musi byc przypisany przy tworzeniu
-    int inCnt, outCnt;
+    private int inCnt, outCnt;
     public OutSocketRenderer[] outSocketRends;
     public InSocketRenderer[] inSocketRends;
     public List<EdgeRenderer>[] outEdgeRenderers;
@@ -32,10 +33,13 @@ public class NodeRenderer : BaseRenderer
         }
     }
 
-    public void UpdatePosition(Vector2 position)
+    public virtual void UpdatePosition(Vector2 position, bool controlled = false)
     {
         //[DANGER] we assume the prefabs have a 'root structure'!
-        gameObject.transform.parent.position = position;
+        if(!controlled) 
+            gameObject.transform.parent.position = new Vector3(position.x,
+                                                           position.y,
+                                                           gameObject.transform.parent.position.z);
         for (int i = 0; i < inCnt; i++)
         {
             if(inEdgeRenderers[i] != null)
@@ -93,5 +97,32 @@ public class NodeRenderer : BaseRenderer
             rendidx++;
         }
         with.GetRenderer().inEdgeRenderers[inIdx] = null;
+    }
+
+    public void ShowDescription(bool descriptionsEnabled)
+    {
+        transform.parent.GetChild(2).gameObject.SetActive(descriptionsEnabled);
+    }
+
+    bool isOverUI = false;
+    float UIoffset = 15;
+    public void MoveOverUI()
+    {
+        if(!isOverUI)
+        {
+            transform.parent.position = transform.parent.position 
+                                      - new Vector3(0, 0, UIoffset);
+            isOverUI = true;
+        }
+    }
+
+    public void MoveBehindUI()
+    {
+        if(isOverUI)
+        {
+            transform.parent.position = transform.parent.position 
+                                      + new Vector3(0, 0, UIoffset);
+            isOverUI = false;
+        }
     }
 }

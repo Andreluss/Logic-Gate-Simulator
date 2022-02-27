@@ -7,6 +7,7 @@ using TMPro;
 public class InputRenderer : NodeRenderer
 {
     private TextMeshPro text;
+    private TextMeshPro description;
     public static InputRenderer Make(InputNode forWho)
     {
         var inputRootGO = Instantiate(Resources.Load<GameObject>
@@ -26,10 +27,17 @@ public class InputRenderer : NodeRenderer
 
         inputRend.text = inputRootGO.GetComponentInChildren<TextMeshPro>();
 
+        inputRend.description = inputRootGO.transform.GetChild(2).GetComponent<TextMeshPro>();
+
         var coll = inputGO.GetComponent<InputCollision>();
         coll.node = forWho;
 
         return inputRend;
+    }
+
+    public void UpdateDescription()
+    {
+        description.text = Node.Description;
     }
 
     internal void HandleValue(bool value)

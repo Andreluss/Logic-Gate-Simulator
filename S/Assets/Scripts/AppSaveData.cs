@@ -8,20 +8,28 @@ using System.IO;
 public static class AppSaveData
 {
     //0  -> Input
-    //1  -> Output
-    //2  -> Split
-    //3  -> And
-    //4  -> Not
-    //5+ -> <reszta>
+    //1  -> MultibitInput (2)
+    //2  -> MultibitInput (4)
+    //3  -> MultibitInput (8)
+    //4  -> Output
+    //5  -> MultibitOutput (2) 
+    //6  -> MultibitOutput (4)
+    //7  -> MultibitOutput (8)
+    //8  -> Split
+    //9 -> Not
+    //10  -> And
+    //11+ -> <reszta>
     public static GateTemplate GetTemplate(int id)
     {
         return GateTemplates[id];
     }
     public static GateTemplate InputTemplate { get => GateTemplates[0]; }
-    public static GateTemplate OutputTemplate { get => GateTemplates[1]; }
-    public static GateTemplate SplitTemplate { get => GateTemplates[2]; }
-    public static GateTemplate AndTemplate { get => GateTemplates[3]; }
-    public static GateTemplate NotTemplate { get => GateTemplates[4]; }
+    public static GateTemplate OutputTemplate { get => GateTemplates[4]; }
+    public static GateTemplate SplitTemplate { get => GateTemplates[8]; }
+    public static GateTemplate NotTemplate { get => GateTemplates[9]; }
+    public static GateTemplate AndTemplate { get => GateTemplates[10]; }
+    public static int TemplateCnt { get => GateTemplates.Count; }
+
     public static void AddTemplate(GateTemplate newTemplate)
     {
         newTemplate.templateId = GateTemplates.Count;
@@ -37,7 +45,7 @@ public static class AppSaveData
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
 
     private static List<GateTemplate> GateTemplates;
-    private static string gatePath = Application.dataPath + "/GateTemplates.bin";
+    private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
 
     public struct Settings
     {
@@ -51,10 +59,19 @@ public static class AppSaveData
         if (!File.Exists(gatePath)) // jesli nie istnieje to odtwarzamy 5 podstawowych bramek
         {
             List<GateTemplate> gateTemplates = new();
-            for (int i = 0; i < 5; i++)
+            string[] names = {"In", "In2bit", "In4bit", "In8bit",
+                              "Out", "Out2bit", "Out4bit", "Out8bit",
+                              "Split", "NOT", "AND"};
+            int[] bitc = { 0, 2, 4, 8, 0, 2, 4, 8, 0, 0, 0 };
+            NodeType[] types = {NodeType.Input, NodeType.MultibitInput, NodeType.MultibitInput, NodeType.MultibitInput,
+                                NodeType.Output, NodeType.MultibitOutput, NodeType.MultibitOutput, NodeType.MultibitOutput,
+                                NodeType.Split, NodeType.NOT, NodeType.AND};
+            for (int i = 0; i < names.Length; i++)
             {
                 gateTemplates.Add(new GateTemplate());
-                gateTemplates[i].NodeType = (NodeType)i;
+                gateTemplates[i].NodeType = types[i];
+                gateTemplates[i].defaultName = names[i];
+                gateTemplates[i].bitCount = bitc[i];
             }
             gateTemplates.SaveClass(gatePath);
         }

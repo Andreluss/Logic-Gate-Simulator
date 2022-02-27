@@ -1,50 +1,48 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public enum NodeType
 {
-    Input, Output, Split, AND, NOT, ComplexGate
+    Input, Output, Split, AND, NOT, ComplexGate, MultibitInput, MultibitOutput
 }
 
 //This class requires AppSaveData.gateTemplates
 [Serializable]
 public class GateTemplate
 {
-    public NodeType NodeType;//lajhflkajhflkjashdflkj
-    public int inCnt, outCnt;//dskjfyabsdkfjhbsdkjhafbkjasdhfb
+    public NodeType NodeType;
+    public int bitCount;//tylko jesli NodeType => MultibitController
+    //public bool isControlled;//tylko jesli NodeType => (In|Out)putNode
+    public int inCnt, outCnt;
     public string defaultName;
     public int N;//, M;//number of verticies(nodes) and edges
-    public RenderProperties renderProperties;//sdkjfhhsudfksdjfhksdjhf
-    public int[] TemplateIDsForEachNode;//wererwerwerwerwerwerwerwerwerwer
-    public int templateId;//qwkuehqowuyobiuyfobiausydoauisd
-    public Pair<Pair<int, int>, Pair<int, int>>[] edges;
+    public RenderProperties renderProperties;
+    public int[] TemplateIDsForEachNode;
+    public ValueTuple<float, float>[] PositionsForEachNode;
+    public int templateId;
+
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
+    public Pair<Pair<int, int>, Pair<int, int>>[] edges;
+    //(List of controlled nodes, position)
+    public List<ValueTuple<ValueTuple<float, float>, List<int>>> inputControllers, outputControllers;
     public Node BuildNodeFromTemplate(bool hidden = false, Vector2? where = null)
     {
         Node node;
         if (NodeType != NodeType.ComplexGate)
         {
-            switch (NodeType)
+            node = NodeType switch
             {
-                case NodeType.Input:
-                    node = new InputNode(hidden); // #### tutaj dodac wiecej typow inputu
-                    break;
-                case NodeType.Output:
-                    node = new OutputNode(hidden);
-                    break;
-                case NodeType.Split:
-                    node = new Split(hidden);
-                    break;
-                case NodeType.AND:
-                    node = new GateAND(hidden);
-                    break;
-                case NodeType.NOT:
-                    node = new GateNOT(hidden);
-                    break;
-                default:
-                    throw new Exception("unrecognized gate type");
-            }
+                NodeType.Input => new InputNode(hidden),// #### tutaj dodac wiecej typow inputu
+                NodeType.Output => new OutputNode(hidden),
+                NodeType.Split => new Split(hidden),
+                NodeType.AND => new GateAND(hidden),
+                NodeType.NOT => new GateNOT(hidden),
+                NodeType.MultibitInput => new MultibitControllerInput(bitCount, hidden),
+                NodeType.MultibitOutput => new MultibitControllerOutput(bitCount, hidden),
+                _ => throw new Exception("unrecognized or not properly used gate type"),
+            };
         }
         else
         {
@@ -53,7 +51,7 @@ public class GateTemplate
             Node[] IDtoNode = new Node[N];
             for (int i = 0; i < N; i++)
             {
-                //TODO: add checks for size
+                //[TODO]: add checks for size
                 int id = TemplateIDsForEachNode[i];
                 GateTemplate template = AppSaveData.GetTemplate(id);
                 IDtoNode[i] = template.BuildNodeFromTemplate(true); //lessgo
@@ -71,6 +69,47 @@ public class GateTemplate
 
                 }
             }
+
+            /* ----- controllers ----- */
+            if(inputControllers != null)
+            {
+
+                foreach (var (pos, cinputs) in inputControllers)
+                {
+                    List<InputNode> controlledInputNodes = new();
+                    foreach (var c in cinputs)
+                    {
+                        Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
+                        Debug.Assert(IDtoNode[c] is InputNode);
+                        controlledInputNodes.Add(IDtoNode[c] as InputNode);
+                    }
+                    //create this at specified position,
+                    //controlled nodes already exist
+                    new MultibitControllerInput(controlledInputNodes, true)
+                    {
+                        Position = pos.ToVector2()
+                    };
+                }
+            }
+
+            if(outputControllers != null)
+            {
+                foreach (var (pos, coutputs) in outputControllers)
+                {
+                    List<OutputNode> controlledOutputNodes = new();
+                    foreach (var c in coutputs)
+                    {
+                        Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
+                        Debug.Assert(IDtoNode[c] is OutputNode);
+                        controlledOutputNodes.Add(IDtoNode[c] as OutputNode);
+                    }
+                    new MultibitControllerOutput(controlledOutputNodes, true)
+                    {
+                        Position = pos.ToVector2()
+                    };
+                }
+            }
+
 
             foreach (var edge in edges)
             {

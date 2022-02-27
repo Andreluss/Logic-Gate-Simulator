@@ -5,6 +5,20 @@ public class OutputNode : Node
     {
     }
     public OutputRenderer renderer;
+
+    private MultibitControllerOutput controller;
+    public MultibitControllerOutput Controller
+    {
+        get => controller;
+        set
+        {
+            controller = value;
+            Controlled = true;
+        }
+    }
+
+    public bool Controlled { get; private set; }
+
     //Overrides
     public override void Calculate()
     {
@@ -13,7 +27,7 @@ public class OutputNode : Node
     }
     public override int GetTemplateID()
     {
-        return 1;
+        return 4;
     }
     protected override void CreateRenderer()
     {
@@ -27,6 +41,17 @@ public class OutputNode : Node
     public override NodeRenderer GetRenderer()
     {
         return renderer;
+    }
+
+    public override string Description
+    {
+        get => base.Description; set
+        {
+            base.Description = value;
+            var rend = GetRenderer() as OutputRenderer;
+            if(rend != null) 
+                rend.UpdateDescription();
+        }
     }
 
     public bool GetValue() => inVals[0];

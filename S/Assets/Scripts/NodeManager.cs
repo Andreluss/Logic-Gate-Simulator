@@ -1,15 +1,18 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 //Dependencies:
 // - AppSaveData
+//[TODO] zmieniæ Nodemanager na Monobehaviour Singleton
 public static class NodeManager //: Singleton<NodeManager>
 {
-    static HashSet<Node> nodes = new HashSet<Node>();//widzialne nody
-    static HashSet<InputNode> inputNodes = new();
-    static HashSet<OutputNode> outputNodes = new();
+    static readonly HashSet<Node> nodes = new();//widzialne nody
+    static readonly HashSet<Node> controllers = new();//widzialne controllery
+    static readonly HashSet<InputNode> inputNodes = new();
+    static readonly HashSet<OutputNode> outputNodes = new();
     public static Node CreateNode(GateTemplate template, Vector2? where = null)
     {
         Node node = template.BuildNodeFromTemplate();
@@ -17,14 +20,30 @@ public static class NodeManager //: Singleton<NodeManager>
         if(where != null) 
             node.Position = (Vector2)where;
 
-        nodes.Add(node);
+        if(node is not MultibitController)
+            nodes.Add(node);
+        else
+            controllers.Add(node);
+
         if (node is InputNode)
         {
             inputNodes.Add(node as InputNode); // hmm
         }
         else if (node is OutputNode)
         {
-            outputNodes.Add((OutputNode)node); // hmm
+            outputNodes.Add(node as OutputNode); // hmm
+        }
+        else if(node is MultibitControllerInput mcinput)
+        {
+            foreach(var inputNode in mcinput.Inputs)
+            {
+                nodes.Add(inputNode);
+                inputNodes.Add(inputNode);
+            }
+        }
+        else if(node is MultibitControllerOutput)
+        {
+
         }
         return node;
     }
@@ -83,9 +102,21 @@ public static class NodeManager //: Singleton<NodeManager>
             if(node.totalInputEdgesCount == 0) 
                 readyNodes.Add(node);
         }
-        NodeSearch.RunSearchAndCalculateAllNodes(readyNodes);
+        NodeSearch.RunSearchAndCalculateAllNodes(readyNodes, controllers);
     }
 
+    private static bool descriptionsEnabled = true;
+    public static void ToggleDestriptions()
+    {
+        descriptionsEnabled = !descriptionsEnabled;
+        foreach (var node in nodes)
+        {
+            if(node is InputNode)
+                (node as InputNode).GetRenderer().ShowDescription(descriptionsEnabled);
+            else if(node is OutputNode)
+                (node as OutputNode).GetRenderer().ShowDescription(descriptionsEnabled);
+        }
+    }
 
     public static void Flip(InputCollision inputCollision)
     {
@@ -103,18 +134,20 @@ public static class NodeManager //: Singleton<NodeManager>
         template.defaultName = newName;
         //template.edges 
         template.inCnt = 0;
-        template.N = nodes.Count;
+        template.N = nodes.Count;//controllers ?
         template.NodeType = NodeType.ComplexGate;
         template.outCnt = 0;
-        //template.renderProperties ??????
+        //template.renderProperties ??????   position na pewno??
         //template.templateId = AppSaveData.GateTemplates.Length; <-- this will be assigned internally 
         template.TemplateIDsForEachNode = new int[template.N];
+        template.PositionsForEachNode = new (float, float)[template.N];
 
         Dictionary<Node, int> ID = new();
         int k = 0;
-        foreach (var node in nodes)
+        foreach (var node in nodes)//[TODO] check perf
         {
             template.TemplateIDsForEachNode[k] = node.GetTemplateID();
+            template.PositionsForEachNode[k] = node.Position.ToFloat2();
             ID[node] = k++;
             if(node is InputNode)
             {
@@ -122,6 +155,25 @@ public static class NodeManager //: Singleton<NodeManager>
             }
             else if (node is OutputNode) {
                 template.outCnt++;
+            }
+        }
+
+        /* ----- controllers ----- */
+        foreach (var controller in controllers)
+        {
+            if (controller is MultibitControllerInput mci)
+            {
+                var cids = new List<int>();
+                foreach(var inputNode in mci.Inputs)
+                    cids.Add(ID[inputNode]);
+                template.inputControllers.Add((controller.Position.ToFloat2(), cids));//(pos, controlled inputs)
+            }
+            else if (controller is MultibitControllerOutput mco)
+            {
+                var cids = new List<int>();
+                foreach(var outputNode in mco.Outputs)
+                    cids.Add(ID[outputNode]);
+                template.outputControllers.Add((controller.Position.ToFloat2(), cids));
             }
         }
 
@@ -207,9 +259,9 @@ public static class NodeManager //: Singleton<NodeManager>
 public static class NodeSearch
 {
     private static int CurrentSearchId = 0;
-    public static void RunSearchAndCalculateAllNodes(IEnumerable<Node> inputs)
+    public static void RunSearchAndCalculateAllNodes(IEnumerable<Node> inputs, IEnumerable<Node> controllers)
     {
-        Queue<Node> queue = new Queue<Node>();
+        Queue<Node> queue = new();
         foreach (var inputNode in inputs)
         {
             queue.Enqueue(inputNode);
@@ -248,6 +300,16 @@ public static class NodeSearch
                 }
             }
 
+        }
+
+        //na koncu obliczyc controllery, jesli to ma wgl sens 
+        //np. jesli jestesmy w wartwie ukrytej to nie ma sensu liczyc controllerow
+        if(controllers != null)
+        {
+            foreach (var controller in controllers)
+            {
+                controller.Calculate();
+            }
         }
 
         //zeby nastepnym razem inputy sie tez zerowaly
