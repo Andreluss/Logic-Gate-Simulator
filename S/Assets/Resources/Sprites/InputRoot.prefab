@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 1289127619760395833}
   - component: {fileID: 6778843467731983378}
   - component: {fileID: 6778843467731983389}
+  - component: {fileID: 8824361678590974144}
   m_Layer: 0
   m_Name: Input
   m_TagString: Untagged
@@ -312,6 +313,22 @@ MonoBehaviour:
   outSocketRends: []
   inSocketRends: []
   inEdgeRenderers: []
+--- !u!114 &8824361678590974144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6444925729633499939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b2e5cb0b767da141932a3ebec3525e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleButton: {fileID: 1590758565910596613, guid: 0d71cbdc91dfdef46a20e868c6e70591, type: 3}
+  contextMenuItems:
+  - text: 
+    button: {fileID: 0}
 --- !u!1 &7796195858057363529
 GameObject:
   m_ObjectHideFlags: 0

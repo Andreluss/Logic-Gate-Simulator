@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class ItemController : MonoBehaviour
 {
     public Button sampleButton;                         // sample button prefab
+    [SerializeField]
     private List<ContextMenuItem> contextMenuItems;     // list of items in menu
 
     void Awake()
