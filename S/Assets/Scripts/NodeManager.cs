@@ -137,7 +137,7 @@ public static class NodeManager //: Singleton<NodeManager>
         template.N = nodes.Count;//controllers ?
         template.NodeType = NodeType.ComplexGate;
         template.outCnt = 0;
-        //template.renderProperties ??????   position na pewno??
+        template.renderProperties = renderProperties;
         //template.templateId = AppSaveData.GateTemplates.Length; <-- this will be assigned internally 
         template.TemplateIDsForEachNode = new int[template.N];
         template.PositionsForEachNode = new (float, float)[template.N];
@@ -158,6 +158,8 @@ public static class NodeManager //: Singleton<NodeManager>
             }
         }
 
+        template.inputControllers = new();
+        template.outputControllers = new();
         /* ----- controllers ----- */
         foreach (var controller in controllers)
         {

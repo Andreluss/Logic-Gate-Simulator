@@ -12,9 +12,9 @@ public class ContextMenuItem
 
     public string text;             // text to display on button
     public Button button;           // sample button prefab
-    public Action<Image> action;    // delegate to method that needs to be executed when button is clicked
+    public Action<Node> action;    // delegate to method that needs to be executed when button is clicked
 
-    public ContextMenuItem(string text, Button button, Action<Image> action)
+    public ContextMenuItem(string text, Button button, Action<Node> action)
     {
         this.text = text;
         this.button = button;
@@ -22,47 +22,41 @@ public class ContextMenuItem
     }
 }
 
-public class ContextMenu : MonoBehaviour
+public class ContextMenu : Singleton<ContextMenu>
 {
-    public Image contentPanel;              // content panel prefab
+    public Image contentPanelPrefab;              // content panel prefab
     public Canvas canvas;                   // link to main canvas, where will be Context Menu
+    private Image panel;
 
-    private static ContextMenu instance;    // some kind of singleton here
-
-    public static ContextMenu Instance
+    private void Awake()
     {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType(typeof(ContextMenu)) as ContextMenu;
-                if (instance == null)
-                {
-                    instance = new GameObject().AddComponent<ContextMenu>();
-                }
-            }
-            return instance;
-        }
+        contentPanelPrefab = Resources.Load<Image>("Sprites/UI/ContextPanel");
     }
-
-    public void CreateContextMenu(List<ContextMenuItem> items, Vector2 position)
+    public void DestroyContextMenu()
     {
-        // here we are creating and displaying Context Menu
+        if (panel != null) 
+            Destroy(panel.gameObject);
+    }
+    public void CreateContextMenu(Node forNode, List<ContextMenuItem> items, Vector2 position)
+    {
+        DestroyContextMenu();
 
-        Image panel = Instantiate(contentPanel, new Vector3(position.x, position.y, 0), Quaternion.identity) as Image;
+        panel = Instantiate(contentPanelPrefab/*, Vector3.zero, Quaternion.identity*/);
         panel.transform.SetParent(canvas.transform, false); 
-        panel.transform.SetAsLastSibling();
-        panel.rectTransform.anchoredPosition = position;
+        panel.transform.position = position;
+        //panel.transform.SetAsLastSibling();
+        //panel.rectTransform.anchoredPosition = position;
 
         foreach (var item in items)
         {
-            ContextMenuItem tempReference = item;
+            //ContextMenuItem tempReference = item;
             Button button = Instantiate(item.button) as Button;
             var buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
             //var buttonText = button.GetComponentInChildren<Text>();
             buttonText.text = item.text;
-            button.onClick.AddListener(delegate { tempReference.action(panel); });
+            button.onClick.AddListener(delegate { item.action(forNode); Destroy(panel.gameObject); });
             button.transform.SetParent(panel.transform, false);
         }
+
     }
 }

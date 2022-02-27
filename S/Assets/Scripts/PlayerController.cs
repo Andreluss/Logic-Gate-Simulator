@@ -4,17 +4,21 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 [RequireComponent(typeof(StateMachine))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     private Camera m_Camera;
+    private Camera c_Camera;
     private StateMachine StateMachine;
     
 
     private void Awake()
     {
-        m_Camera = Camera.main; 
+        m_Camera = Camera.main;
+        c_Camera = GameObject.Find("Const Camera").GetComponent<Camera>();
+
         AppSaveData.Load();
         LoadHUD();
         StateMachine = GetComponent<StateMachine>();
@@ -39,23 +43,38 @@ public class PlayerController : MonoBehaviour
             //wkurza mnie ten warning
             //Debug.Log("is over UI: " + IsPointerOverUIObject());
         }
-        //if (EventSystem.current.currentSelectedGameObject != null)
-        //    Debug.Log(EventSystem.current.currentSelectedGameObject);
+        var delta = -Input.mouseScrollDelta.y;
+        if(Mathf.Abs(delta) > 0)
+        {
+            Debug.Log(Input.mouseScrollDelta);
+            m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
+            c_Camera.orthographicSize = m_Camera.orthographicSize;
+        }
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
-
+        //if (Input.GetMouseButtonDown(0) && selectedObject != null)
+        //    ContextMenu.Instance.DestroyContextMenu();
     }
 
     /* Klikniêcia guzików */
     public void OnSaveAsTemplateClick()
     {
         //StateMachine.ChangeState(new StateMachine.PlayerState(StateGateNew));
-        NodeManager.SaveAllAsTemplate("NAND", new RenderProperties(Color.magenta, Vector2.zero));
+        NodeManager.SaveAllAsTemplate("NAND", new RenderProperties(Color.magenta));
+        LoadHUD();
     }
 
+    public void OnChangeDescriptionClick(Node node)
+    {
+        throw new System.NotImplementedException();
+    }
 
+    public void OnTypeValue(MultibitController controller)
+    {
+        throw new System.NotImplementedException();
+    }
 
 
     /* Stany i zmienne potrzebne do ró¿nych stanów: */
@@ -79,12 +98,17 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             var obj = GetObjectUnderMouse();
-            Debug.Log(EventSystem.current.currentSelectedGameObject);
+            //Debug.Log(EventSystem.current.currentSelectedGameObject);
+            if (obj == null)
+                ContextMenu.Instance.DestroyContextMenu();
             if (obj != null)
             {
-                Debug.Log("clicked " + GetObjectUnderMouse().name);
+                Debug.Log("clicked " + GetObjectUnderMouse());
                 ChangeSelectionTo(obj.GetComponent<CollisionData>());
 
+                if (selectedObject != null)
+                    ContextMenu.Instance.DestroyContextMenu();
+                    //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
 
                 if (selectedObject is NodeCollision)
                 {
@@ -110,13 +134,17 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        if (Input.GetMouseButtonDown(1))
+        else if (Input.GetMouseButtonDown(1))
         {
             var obj = GetObjectUnderMouse();
             if(obj != null)
             {
                 Debug.Log("[TODO] Tutaj bedzie menu kontekstowe -> opcje danej bramki/krawedzi...");
             }
+        }
+        else if(Input.GetMouseButtonDown(2))
+        {
+            StateMachine.ChangeState(StateCameraPan);
         }
     }
     private void StateIdleEnd()
@@ -129,8 +157,35 @@ public class PlayerController : MonoBehaviour
 
 
 
-    
-    
+
+    private void StateCameraPanStart()
+    {
+        ContextMenu.Instance.DestroyContextMenu();
+        mousePosStart = GetMousePositionConstCamera();
+        cameraPosStart = m_Camera.transform.position;
+    }
+    private void StateCameraPan()
+    {
+        if(!Input.GetMouseButton(2))
+        {
+            StateMachine.ChangeState(StateIdle);
+        }
+        else
+        {
+            var delta = GetMousePositionConstCamera() - mousePosStart;
+            Debug.Log(delta);
+            m_Camera.transform.position = cameraPosStart - (Vector3)delta;//reverse
+        }
+    }
+    private void StateCameraPanEnd()
+    {
+    }
+    Vector2 mousePosStart;
+    Vector3 cameraPosStart;
+
+
+
+
     private void StateGateNewStart()
     {
     }
@@ -371,11 +426,17 @@ public class PlayerController : MonoBehaviour
     private GameObject BottomBarContent;
     private void LoadHUD()
     {
+        for (int i = 0; i < BottomBarContent.transform.childCount; i++)
+        {
+            Destroy(BottomBarContent.transform.GetChild(i).gameObject);
+        }
         for (int i = 0; i < AppSaveData.TemplateCnt; i++)
         {
-            var button = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform);
-            button.GetComponent<NodeTemplateCollision>().TemplateID = i;
-            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = AppSaveData.GetTemplate(i).defaultName;
+            var template = AppSaveData.GetTemplate(i);
+            var coll = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform).GetComponent<NodeTemplateCollision>();
+            coll.TemplateID = i;
+            coll.Color = template.renderProperties.Color;
+            coll.NodeName = template.defaultName;
         }
     }
     private void ChangeSelectionTo(CollisionData curr)
@@ -391,14 +452,24 @@ public class PlayerController : MonoBehaviour
     {
         return m_Camera.ScreenToWorldPoint(Input.mousePosition);
     }
+    private Vector2 GetMousePositionConstCamera()
+    {
+        return c_Camera.ScreenToWorldPoint(Input.mousePosition);
+    }
     private GameObject GetObjectUnderMouse()
     {
+        //(C)
+        if (EventSystem.current.currentSelectedGameObject != null) 
+            return EventSystem.current.currentSelectedGameObject;
+
         var origin = GetMousePosition();//czy nie vector3??[!!!!]
         var hit = Physics2D.Raycast(origin, Vector2.zero);
-        if (hit.collider != null) return hit.collider.gameObject;//return hit.collider != null ? hit.collider.gameObject : null;
+        if (hit.collider != null) 
+            return hit.collider.gameObject;//return hit.collider != null ? hit.collider.gameObject : null;
+        return null;
 
         //(A)
-        return EventSystem.current.currentSelectedGameObject;
+        //return EventSystem.current.currentSelectedGameObject;
 
         //(B)
         //if(hit.collider != null) return hit.collider.gameObject;
@@ -422,5 +493,22 @@ public class PlayerController : MonoBehaviour
         List<RaycastResult> results = new();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
+    }
+
+    public void InvokeNextFrame(Action function)
+    {
+        try
+        {
+            StartCoroutine(_InvokeNextFrame(function));
+        }
+        catch
+        {
+            Debug.Log("Trying to invoke " + function.ToString() + " but it doesnt seem to exist");
+        }
+    }
+    private IEnumerator _InvokeNextFrame(Action function)
+    {
+        yield return null;
+        function();
     }
 }

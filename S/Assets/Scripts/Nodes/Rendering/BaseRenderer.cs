@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class BaseRenderer : MonoBehaviour
+public class BaseRenderer : MonoBehaviour
 {
     protected BaseRenderer()
     {

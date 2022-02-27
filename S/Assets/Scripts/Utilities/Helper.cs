@@ -20,11 +20,24 @@ public static class Helper
         }
     }
 
+    public static Color Dim(this Color color, float amount)
+    {
+        Color newcolor = color * amount;
+        newcolor.a = 1f;
+        return newcolor;
+    }
     public static Vector2 ToVector2(this (float, float) pair)
     {
         return new Vector2(pair.Item1, pair.Item2);
     }
-
+    public static Vector2 ToVector2(this Vector3 vector3)
+    {
+        return new Vector2(vector3.x, vector3.y);
+    }
+    public static Vector3 ToVector3(this Vector2 vector2)
+    {
+        return new Vector3(vector2.x, vector2.y, 0);
+    }
     public static (float, float) ToFloat2(this Vector2 vector)
     {
         return (vector.x, vector.y);

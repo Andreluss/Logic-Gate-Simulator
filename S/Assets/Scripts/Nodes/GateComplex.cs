@@ -27,10 +27,9 @@ using UnityEngine;
     public RenderProperties()
     {
     }
-    public RenderProperties(Color color, Vector2 size)
+    public RenderProperties(Color color)
     {
         this.Color = color;
-        this.Size = size;
     }
     //...
 }

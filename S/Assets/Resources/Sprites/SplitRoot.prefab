@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6808365635255609896}
   - component: {fileID: 8179232351753212180}
   - component: {fileID: 3639730097130288431}
+  - component: {fileID: 242505080239335400}
   m_Layer: 0
   m_Name: Split
   m_TagString: Untagged
@@ -59,6 +60,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d75828afd85ea44975530582042ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outSocketRends: []
+  inSocketRends: []
+  inEdgeRenderers: []
 --- !u!212 &8179232351753212180
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -137,6 +141,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &242505080239335400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3816291349430810906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b2e5cb0b767da141932a3ebec3525e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleButton: {fileID: 0}
+  contextMenuItems: []
 --- !u!1 &5239930840557238256
 GameObject:
   m_ObjectHideFlags: 0

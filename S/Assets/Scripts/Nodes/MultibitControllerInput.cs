@@ -37,17 +37,25 @@ public class MultibitControllerInput : MultibitController
     public int Value
     {
         get => value;
-        set {
+        set
+        {
             this.value = value;
-            if(renderer != null)
+            if (renderer != null)
                 renderer.HandleValue(value);
         }
     }
     public int MaxValue { get => (1 << (BitCount - Convert.ToInt32(Signed))) - 1; }
     public int MinValue { get => Signed ? -(1 << BitCount) : 0; }
-    public bool Signed { get; set; }//[TODO] ogarn¹æ guzik, który to zmienia
+    public bool Signed
+    {
+        get => signed; set
+        {
+            signed = value;
+            Calculate();
+        }
+    }
     public List<InputNode> Inputs { get; private set; }
-    
+
 
     /* ----- overrides ----- */
     public override void Calculate()
@@ -56,12 +64,12 @@ public class MultibitControllerInput : MultibitController
         //[TODO] update Value based on inputs
         // ale wypadaloby wywolywac ta funkcjê dopiero po obliczeniu wszystkich normalnych node'ow
         int newValue = 0;
-        for (int i = 0; i < BitCount-1; i++)
+        for (int i = 0; i < BitCount - 1; i++)
         {
             if (Inputs[i].GetValue())
                 newValue += 1 << i;
         }
-        if(Inputs[BitCount - 1].GetValue())
+        if (Inputs[BitCount - 1].GetValue())
         {
             if (Signed)
                 newValue -= 1 << (BitCount - 1);
@@ -101,5 +109,5 @@ public class MultibitControllerInput : MultibitController
     /* ----- private stuff -----  */
     private MBIRenderer renderer;
     private int value;
-
+    private bool signed;
 }

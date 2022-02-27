@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1590758565910596612}
   - component: {fileID: 1590758565910596613}
   - component: {fileID: 1590758565910596610}
-  - component: {fileID: 1590758565910596609}
+  - component: {fileID: 8581512523008393427}
   m_Layer: 5
   m_Name: Template Klocka
   m_TagString: Untagged
@@ -137,8 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TemplateID: 0
-  Name: 
---- !u!114 &1590758565910596609
+--- !u!114 &8581512523008393427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,7 +146,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1590758565910596615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d4c18280040b9f409adcd2c7d0f05d5, type: 3}
+  m_Script: {fileID: 11500000, guid: f81629b5811f1c048a7c7645cc9cb98f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1590758566438483716

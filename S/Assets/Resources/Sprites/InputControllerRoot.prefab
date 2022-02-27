@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 2787552223691266210}
   - component: {fileID: 1483430166001956801}
   - component: {fileID: 5501763964290716831}
+  - component: {fileID: 2160827622903503884}
   m_Layer: 0
   m_Name: InputController
   m_TagString: Untagged
@@ -377,3 +378,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c49f1ba7cc74145a740074d4f4c297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2160827622903503884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787552223691266214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aac2a5ee3b8d7244a8e271ed557d526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleButton: {fileID: 0}
+  contextMenuItems: []
