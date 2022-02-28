@@ -2715,6 +2715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7957f3217304f7b41a0699cc284c9c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 673037288}
   createBlockPopup: {fileID: 6542667630588625255, guid: 62f806d0f86abd546973037827d90bf9, type: 3}
   BottomBarContent: {fileID: 416814443}
 --- !u!114 &1291405521
