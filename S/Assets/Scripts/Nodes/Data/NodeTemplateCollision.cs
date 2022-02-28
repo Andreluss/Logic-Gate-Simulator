@@ -1,10 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NodeTemplateCollision : CollisionData
 {
     public int TemplateID;
-    public string Name;
-    public override BaseRenderer Renderer { get => GetComponent<NodeTemplateRenderer>(); }
+    public string NodeName
+    {
+        get => nodeName;
+        set
+        {
+            nodeName = value;
+            transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = nodeName;
+        }
+    }
+    private Color color;
+    private string nodeName;
+    public override BaseRenderer Renderer { get => GetComponent<BaseRenderer>(); }
+    public Color Color
+    {
+        get => color; set
+        {
+            color = value;
+            //troszke ciemniejszy wyswietlamy ? [DESIGN]
+            GetComponent<Image>().color = color.Dim(0.9f);
+        }
+    }
 }

@@ -9,50 +9,39 @@ public class ItemController : MonoBehaviour
 {
     public Button sampleButton;                         // sample button prefab
     [SerializeField]
-    private List<ContextMenuItem> contextMenuItems;     // list of items in menu
+    protected List<ContextMenuItem> contextMenuItems;     // list of items in menu
+    protected new Camera camera;
+    protected NodeCollision nodeObj;
 
     void Awake()
     {
-        // Here we are creating and populating our future Context Menu.
-        // I do it in Awake once, but as you can see, 
-        // it can be edited at runtime anywhere and anytime.
+        Debug.Log("lkjshadlkfjh");
+        camera = Camera.main;
+        if (sampleButton == null)
+            sampleButton = Resources.Load<Button>("Sprites/UI/ContextButton");
+    }
 
+    protected virtual void Start()
+    {
+        nodeObj = gameObject.GetComponent<NodeCollision>();
         contextMenuItems = new List<ContextMenuItem>();
-        Action<Image> equip = new(EquipAction);
-        Action<Image> use = new Action<Image>(UseAction);
-        Action<Image> drop = new Action<Image>(DropAction);
-
-        contextMenuItems.Add(new ContextMenuItem("Equip", sampleButton, equip));
-        contextMenuItems.Add(new ContextMenuItem("Use", sampleButton, use));
-        contextMenuItems.Add(new ContextMenuItem("Drop", sampleButton, drop));
+        contextMenuItems.Add(new ContextMenuItem("Delete", sampleButton, x => NodeManager.DeleteNode(x)));
+        //[TODO] copy node (moze nawet selected nodes)
     }
 
     void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-            Debug.DrawRay(pos, Vector3.forward);
-            ContextMenu.Instance.CreateContextMenu(contextMenuItems, new Vector2(pos.x, pos.y));
+            //Vector3 pos = transform.position;
+            Vector3 pos = GetMousePosition();
+            ContextMenu.Instance.CreateContextMenu(nodeObj.node, contextMenuItems, new Vector2(pos.x, pos.y));
         }
 
     }
 
-    void EquipAction(Image contextPanel)
+    private Vector2 GetMousePosition()
     {
-        Debug.Log("Equipped");
-        Destroy(contextPanel.gameObject);
-    }
-
-    void UseAction(Image contextPanel)
-    {
-        Debug.Log("Used");
-        Destroy(contextPanel.gameObject);
-    }
-
-    void DropAction(Image contextPanel)
-    {
-        Debug.Log("Dropped");
-        Destroy(contextPanel.gameObject);
+        return camera.ScreenToWorldPoint(Input.mousePosition);
     }
 }

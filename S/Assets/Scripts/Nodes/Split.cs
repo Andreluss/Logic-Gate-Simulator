@@ -17,6 +17,7 @@ public class Split : Node
     public override void Calculate()
     {
         outVals[0] = inVals[0];
+        base.Calculate();
     }
     protected override void CreateRenderer()
     {

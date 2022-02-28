@@ -47,6 +47,8 @@ public static class AppSaveData
     private static List<GateTemplate> GateTemplates;
     private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
 
+    public static List<GateTemplate> Projects;
+
     public struct Settings
     {
         public static bool SnapObjects = false;
@@ -66,12 +68,24 @@ public static class AppSaveData
             NodeType[] types = {NodeType.Input, NodeType.MultibitInput, NodeType.MultibitInput, NodeType.MultibitInput,
                                 NodeType.Output, NodeType.MultibitOutput, NodeType.MultibitOutput, NodeType.MultibitOutput,
                                 NodeType.Split, NodeType.NOT, NodeType.AND};
+            RenderProperties[] rendprops = { new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white),
+                                             new RenderProperties(Color.white) };
             for (int i = 0; i < names.Length; i++)
             {
                 gateTemplates.Add(new GateTemplate());
                 gateTemplates[i].NodeType = types[i];
                 gateTemplates[i].defaultName = names[i];
                 gateTemplates[i].bitCount = bitc[i];
+                gateTemplates[i].renderProperties = rendprops[i];
             }
             gateTemplates.SaveClass(gatePath);
         }

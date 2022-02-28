@@ -13,5 +13,6 @@
     public override void Calculate()
     {
         outVals[0] = inVals[0] && inVals[1];
+        base.Calculate();
     }
 }

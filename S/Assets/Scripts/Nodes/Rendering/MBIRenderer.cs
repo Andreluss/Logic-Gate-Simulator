@@ -29,7 +29,10 @@ public class MBIRenderer : NodeRenderer //to jest taki node ale bez inputow i ou
 
     internal void HandleValue(int value)
     {
-        text.text = value.ToString();
+        string str = value.ToString();
+        if ((Node as MultibitControllerInput).Signed && value < 0)
+            str = "-" + str;
+        text.text = str;
     }
     public override void UpdatePosition(Vector2 position, bool sdfsdf = false)
     {

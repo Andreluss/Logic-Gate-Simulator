@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EdgeRenderer : BaseRenderer
 {
+    public Material materialON, materialOFF;
     public Node from;
     public int outIdx;
     public Node to;
@@ -60,18 +61,25 @@ public class EdgeRenderer : BaseRenderer
 
     private void UpdateRenderer()
     {
-        //[TODO][GUI] przerobic na lepsze zaginanie
         SetProperZIndex();
-        //buhahaha
         var positions = new List<Vector3>();
         positions.Add(start);
+
         if(Mathf.Abs(start.y - end.y) > 0.25f)
         {
             float dx = end.x - start.x;
             positions.Add(new Vector3(start.x + dx*2/3, start.y, C.transform.position.z));
             positions.Add(new Vector3(start.x + dx*2/3, end.y, C.transform.position.z));
         }
+        if(start.x > end.x)
+        {
+            //cos nie tak
+            //Mathf.Pow(start.x, 0.5f);
+            positions.Add(new Vector3(start.x + 10 / 3, start.y + 5, C.transform.position.z));
+        }
         positions.Add(end);
+
+
         LR.positionCount = positions.Count;
         LR.SetPositions(positions.ToArray());
     }
@@ -104,5 +112,13 @@ public class EdgeRenderer : BaseRenderer
             UpdateRenderer();
             UpdateCollider();
         }
+    }
+
+    internal void HandleState(bool ON)
+    {
+        if (ON)
+            LR.material = materialON;
+        else
+            LR.material = materialOFF;
     }
 }

@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 2787552223691266210}
   - component: {fileID: 2967471006566602722}
   - component: {fileID: 8014112533448716248}
+  - component: {fileID: 3676241693113611620}
   m_Layer: 0
   m_Name: OutputController
   m_TagString: Untagged
@@ -377,3 +378,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba79c2fb16efc449bbd0749fd78d52d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3676241693113611620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787552223691266214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff6b3eea40fdd414b865a11902c25779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleButton: {fileID: 0}
+  contextMenuItems: []

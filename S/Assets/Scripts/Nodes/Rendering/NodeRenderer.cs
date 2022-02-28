@@ -125,4 +125,18 @@ public class NodeRenderer : BaseRenderer
             isOverUI = false;
         }
     }
+
+    internal void UpdateMaterials()
+    {
+        for (int i = 0; i < inCnt; i++)
+        {
+            inSocketRends[i].HandleState(node.inVals[i]);
+            if(inEdgeRenderers[i] != null)
+                inEdgeRenderers[i].HandleState(node.inVals[i]);
+        }
+        for (int i = 0; i < outCnt; i++)
+        {
+            outSocketRends[i].HandleState(node.outVals[i]);
+        }
+    }
 }

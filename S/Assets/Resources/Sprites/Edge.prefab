@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc37edc114d93648b304e4709751167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialON: {fileID: 2100000, guid: f5b3e760607d40947b127d4112b6420c, type: 2}
+  materialOFF: {fileID: 2100000, guid: 5e47a3baaefbd0e4b84e3a075e10465e, type: 2}
   outIdx: 0
   inIdx: 0
 --- !u!114 &7711763622656526041
@@ -191,4 +193,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outIdx: 0
   inIdx: 0
-  edgeRenderer: {fileID: 0}

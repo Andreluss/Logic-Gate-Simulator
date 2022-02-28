@@ -128,16 +128,14 @@ public static class NodeManager //: Singleton<NodeManager>
     {
         throw new NotImplementedException();
     }
-    public static GateTemplate SaveAllAsTemplate(string newName, RenderProperties renderProperties) // TODO: ### jeszcze color i size !!!
+    private static GateTemplate GetTemplateFromAll()
     {
         GateTemplate template = new();
-        template.defaultName = newName;
         //template.edges 
         template.inCnt = 0;
         template.N = nodes.Count;//controllers ?
         template.NodeType = NodeType.ComplexGate;
         template.outCnt = 0;
-        //template.renderProperties ??????   position na pewno??
         //template.templateId = AppSaveData.GateTemplates.Length; <-- this will be assigned internally 
         template.TemplateIDsForEachNode = new int[template.N];
         template.PositionsForEachNode = new (float, float)[template.N];
@@ -149,29 +147,32 @@ public static class NodeManager //: Singleton<NodeManager>
             template.TemplateIDsForEachNode[k] = node.GetTemplateID();
             template.PositionsForEachNode[k] = node.Position.ToFloat2();
             ID[node] = k++;
-            if(node is InputNode)
+            if (node is InputNode)
             {
                 template.inCnt++;
             }
-            else if (node is OutputNode) {
+            else if (node is OutputNode)
+            {
                 template.outCnt++;
             }
         }
 
+        template.inputControllers = new();
+        template.outputControllers = new();
         /* ----- controllers ----- */
         foreach (var controller in controllers)
         {
             if (controller is MultibitControllerInput mci)
             {
                 var cids = new List<int>();
-                foreach(var inputNode in mci.Inputs)
+                foreach (var inputNode in mci.Inputs)
                     cids.Add(ID[inputNode]);
                 template.inputControllers.Add((controller.Position.ToFloat2(), cids));//(pos, controlled inputs)
             }
             else if (controller is MultibitControllerOutput mco)
             {
                 var cids = new List<int>();
-                foreach(var outputNode in mco.Outputs)
+                foreach (var outputNode in mco.Outputs)
                     cids.Add(ID[outputNode]);
                 template.outputControllers.Add((controller.Position.ToFloat2(), cids));
             }
@@ -194,8 +195,24 @@ public static class NodeManager //: Singleton<NodeManager>
         }
         template.edges = edges.ToArray();
 
-        AppSaveData.AddTemplate(template);
+        //AppSaveData.AddTemplate(template);
 
+        return template;
+    }
+    public static GateTemplate SaveAllAsTemplate(string newName, RenderProperties renderProperties) // TODO: ### jeszcze color i size !!!
+    {
+        var template = GetTemplateFromAll();
+        template.defaultName = newName;
+        template.renderProperties = renderProperties;
+        AppSaveData.AddTemplate(template);
+        return template;
+    }
+
+    public static GateTemplate SaveAllAsProject(string projectName)
+    {
+        var template = GetTemplateFromAll();
+        template.defaultName = projectName;
+        template.renderProperties = new RenderProperties();
         return template;
     }
 
