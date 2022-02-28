@@ -90,6 +90,10 @@ public class MultibitControllerInput : MultibitController
 
     protected override void DestroyRenderer()
     {
+        foreach (var node in Inputs)
+        {
+            NodeManager.DeleteNode(node);
+        }
         UnityEngine.Object.Destroy(renderer.transform.parent.gameObject);
         Debug.Log($"MBI renderer {renderer} destroyed");
     }

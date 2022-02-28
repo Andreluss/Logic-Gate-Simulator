@@ -51,6 +51,8 @@ public abstract class Node
     {
         totalInputEdgesCount -= 1;
         ins[inIdx].st = null;
+
+        inVals[inIdx] = false; //no bo przeciez juz prad nie plynie!
     }
     public virtual void ConnectTo(int outIdx, Node to, int inIdx)
     {

@@ -12,7 +12,13 @@ public class PlayerController : Singleton<PlayerController>
     private Camera m_Camera;
     private Camera c_Camera;
     private StateMachine StateMachine;
-    
+
+    /* okienka */
+    [SerializeField]
+    private Canvas canvas;
+    [SerializeField]
+    private GameObject createBlockPopup;
+
 
     private void Awake()
     {
@@ -62,7 +68,8 @@ public class PlayerController : Singleton<PlayerController>
     public void OnSaveAsTemplateClick()
     {
         //StateMachine.ChangeState(new StateMachine.PlayerState(StateGateNew));
-        NodeManager.SaveAllAsTemplate("OR", new RenderProperties(Helper.ColorFromHex(0xb6d7a8)));
+        Instantiate(createBlockPopup, canvas.transform);
+        //NodeManager.SaveAllAsTemplate("OR", new RenderProperties(Helper.ColorFromHex(0xb6d7a8)));
         LoadHUD();
     }
 
@@ -430,7 +437,7 @@ public class PlayerController : Singleton<PlayerController>
     }
     [SerializeField]
     private GameObject BottomBarContent;
-    private void LoadHUD()
+    public void LoadHUD()
     {
         for (int i = 0; i < BottomBarContent.transform.childCount; i++)
         {

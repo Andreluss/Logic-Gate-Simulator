@@ -82,6 +82,10 @@ public class MultibitControllerOutput : MultibitController //wlasciwie taki meta
 
     protected override void DestroyRenderer()
     {
+        foreach (var node in Outputs)
+        {
+            NodeManager.DeleteNode(node);
+        }
         UnityEngine.Object.Destroy(renderer.transform.parent.gameObject);
     }
 

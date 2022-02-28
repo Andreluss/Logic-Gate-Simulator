@@ -59,7 +59,7 @@ public class EdgeCollision : CollisionData
 
         Debug.Log(positions);
 
-        float grubosc = 0.1f;
+        //float grubosc = 0.1f;
         //tutaj start
         PolygonCollider.pathCount = positions.Length - 1;
         //dla kazdej krawedzi prostok¹t

@@ -21,7 +21,7 @@ public class GateRenderer : NodeRenderer
         //--outSocket0
         //...
 
-        var TMP = gateRootGO.GetComponent<TextMeshPro>();
+        var TMP = gateRootGO.GetComponentInChildren<TextMeshPro>();
         TMP.text = forWho.Name;//pierwszy chyba raz sie to przydaje (chociaz [TODO] i tak lepiej to brac z template'a)
         var rt = gateRootGO.GetComponent<RectTransform>();
         rt.sizeDelta = dim;

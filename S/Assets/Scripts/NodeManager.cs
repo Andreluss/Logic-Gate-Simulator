@@ -45,6 +45,9 @@ public static class NodeManager //: Singleton<NodeManager>
         {
 
         }
+
+        CalculateAll();
+
         return node;
     }
 

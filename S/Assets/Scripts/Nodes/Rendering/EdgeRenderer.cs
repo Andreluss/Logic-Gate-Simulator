@@ -75,7 +75,7 @@ public class EdgeRenderer : BaseRenderer
         {
             //cos nie tak
             //Mathf.Pow(start.x, 0.5f);
-            positions.Add(new Vector3(start.x + 10 / 3, start.y + 5, C.transform.position.z));
+            //positions.Add(new Vector3(start.x + 10 / 3, start.y + 5, C.transform.position.z));
         }
         positions.Add(end);
 
