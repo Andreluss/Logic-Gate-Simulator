@@ -74,5 +74,8 @@ public class GateComplex : Gate
         {
             outVals[i] = internalOuts[i].GetValue();
         }
+
+        base.Calculate();
+
     }
 }

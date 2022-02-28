@@ -111,8 +111,16 @@ public abstract class Node
     /// </summary>
     public virtual void Calculate()
     {
-        //Same here
+        //no wiem ze to jest troche bad design aleeee
+        //na koncu:
+        var rend = GetRenderer();
+        if(rend != null)
+        {
+            rend.UpdateMaterials();
+        }
     }
+
+
     /// <summary>
     /// Usuwa dany wierzcholek i wszsystkie jego po³¹czenia z innymi
     /// </summary>

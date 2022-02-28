@@ -24,6 +24,7 @@ public class OutputNode : Node
     {
         if (renderer != null)
             renderer.HandleValue(inVals[0]);
+        base.Calculate();
     }
     public override int GetTemplateID()
     {

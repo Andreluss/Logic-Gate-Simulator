@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EdgeRenderer : BaseRenderer
 {
+    public Material materialON, materialOFF;
     public Node from;
     public int outIdx;
     public Node to;
@@ -104,5 +105,13 @@ public class EdgeRenderer : BaseRenderer
             UpdateRenderer();
             UpdateCollider();
         }
+    }
+
+    internal void HandleState(bool ON)
+    {
+        if (ON)
+            LR.material = materialON;
+        else
+            LR.material = materialOFF;
     }
 }

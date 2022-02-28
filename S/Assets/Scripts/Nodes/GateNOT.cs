@@ -13,10 +13,11 @@
     public override void Calculate()
     {
         outVals[0] = !inVals[0];
+        base.Calculate();
     }
     //protected override void CreateRenderer()
     //{
-        
+
     //}
     //protected override void DestroyRenderer()
     //{
