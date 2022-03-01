@@ -40,9 +40,9 @@ public static class Helper
     }
     public static Color ColorFromHex(int hex)
     {
-        return new Color((hex & 0xff0000 >> 16) / 255f,
-                         (hex & 0x00ff00 >> 8) / 255f,
-                         (hex & 0x0000ff) / 255f);
+        return new Color(((hex & 0xff0000) >> 16) / 255f,
+                         ((hex & 0x00ff00) >> 8) / 255f,
+                          (hex & 0x0000ff) / 255f);
     }
     public static (float, float) ToFloat2(this Vector2 vector)
     {

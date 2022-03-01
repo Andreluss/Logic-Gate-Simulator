@@ -257,9 +257,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
-        m_MethodName: CreateTemplate
+      - m_Target: {fileID: 338452714694842351}
+        m_TargetAssemblyTypeName: SaveProjectChangesController, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -796,9 +796,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
-        m_MethodName: CreateTemplate
+      - m_Target: {fileID: 338452714694842351}
+        m_TargetAssemblyTypeName: SaveProjectChangesController, Assembly-CSharp
+        m_MethodName: SaveChanges
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

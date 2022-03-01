@@ -77,16 +77,9 @@ public class GateTemplate
             /* ----- controllers ----- */
             if (inputControllers != null)
             {
-
                 foreach (var (pos, cinputs) in inputControllers)
                 {
                     List<InputNode> controlledInputNodes = GetControlledNodes<InputNode>(cinputs, IDtoNode);
-                    //foreach (var c in cinputs)
-                    //{
-                    //    Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
-                    //    Debug.Assert(IDtoNode[c] is InputNode);
-                    //    controlledInputNodes.Add(IDtoNode[c] as InputNode);
-                    //}
                     //create this at specified position,
                     //controlled nodes already exist
                     new MultibitControllerInput(controlledInputNodes, true)
@@ -101,12 +94,6 @@ public class GateTemplate
                 foreach (var (pos, coutputs) in outputControllers)
                 {
                     List<OutputNode> controlledOutputNodes = GetControlledNodes<OutputNode>(coutputs, IDtoNode);
-                    //foreach (var c in coutputs)
-                    //{
-                    //    Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length));
-                    //    Debug.Assert(IDtoNode[c] is OutputNode);
-                    //    controlledOutputNodes.Add(IDtoNode[c] as OutputNode);
-                    //}
                     new MultibitControllerOutput(controlledOutputNodes, true)
                     {
                         Position = pos.ToVector2()

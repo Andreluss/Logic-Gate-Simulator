@@ -99,7 +99,10 @@ public class PlayerController : Singleton<PlayerController>
             //just save changes
             SaveChanges();
         }
-
+    }
+    public void OnClear()
+    {
+        NodeManager.ClearAll();
     }
 
 
@@ -131,6 +134,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         NodeManager.SaveAllAsTemplate(name, rendprops);
         NodeManager.ClearAll();
+        Debug.Log($"New block ({name}) has been succesfully saved.");
         LoadHUD();
     }
 

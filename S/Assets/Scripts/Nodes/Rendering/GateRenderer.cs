@@ -7,11 +7,9 @@ public class GateRenderer : NodeRenderer
 {
     public static GateRenderer Make(Gate forWho)
     {
-        Vector2 dim = new Vector2(2, 1.7f);//TODO: calculate this/get from templateID
         var gateRootGO = Instantiate(Resources.Load("Sprites/GateRoot")) as GameObject; 
         Debug.Log($"{gateRootGO.name} loaded");
         var gateGO = gateRootGO.transform.GetChild(0).gameObject;
-        gateGO.transform.localScale = dim;
         var gateRend = gateGO.GetComponent<GateRenderer>();
 
         //root (with TMP component)
@@ -23,9 +21,26 @@ public class GateRenderer : NodeRenderer
 
         var TMP = gateRootGO.GetComponentInChildren<TextMeshPro>();
         TMP.text = forWho.Name;//pierwszy chyba raz sie to przydaje (chociaz [TODO] i tak lepiej to brac z template'a)
-        var rt = gateRootGO.GetComponent<RectTransform>();
-        rt.sizeDelta = dim;
-        
+
+
+
+
+
+        /* ============ rendering part ============ */
+
+        int id = forWho.GetTemplateID();
+        var rendprops = AppSaveData.GetTemplate(id).renderProperties;
+        gateRend.SetColor(rendprops.Color);
+
+        int c = Mathf.Max(forWho.inCnt, forWho.outCnt);
+        float y = 1.2f + (c - 1) * 0.5f;
+        var dim = gateRend.transform.localScale = new Vector2(2, y);
+
+
+
+
+
+
         float width = dim.x;
         float height = dim.y;
         float distIn = height / (forWho.inCnt + 1);//odleglosc miedzy kolejnych socketami (OY)
@@ -61,5 +76,10 @@ public class GateRenderer : NodeRenderer
         var coll = gateGO.GetComponent<GateCollision>();
         coll.node = forWho;
         return gateRend;
+    }
+
+    void SetColor(Color color)
+    {
+        //[TODO]
     }
 }
