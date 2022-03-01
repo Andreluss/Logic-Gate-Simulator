@@ -96,7 +96,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         //[TODO] clear or save curent project!!
         Debug.Assert(AppSaveData.Projects.Count > 0);
-        AppSaveData.Projects.Last().BuildProjectFromTemplate();
+        AppSaveData.Projects.Last().BuildProjectFromTemplate(new Vector2(2, 5));
         //[TODO]
     }
 
