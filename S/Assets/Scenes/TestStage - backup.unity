@@ -3002,7 +3002,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: -50.639008}
+  m_AnchoredPosition: {x: 0, y: -50.639038}
   m_SizeDelta: {x: 184.62292, y: 50.640015}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1281663270
@@ -3109,7 +3109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 673037288}
-  SaveAsNewBlockMenu: {fileID: 6542667630588625255, guid: 6f4ccabdb0573de448e5e6ed2c2b58c8, type: 3}
+  SaveAsNewBlockMenu: {fileID: 4243898063870518386, guid: 452665bc84f1c7544a61707d45024252, type: 3}
   SaveOnExitMenu: {fileID: 6542667630588625255, guid: d20577bf6989e3b4ca7a7b50dc9c9667, type: 3}
   SaveAsNewProjectMenu: {fileID: 0}
   BottomBarContent: {fileID: 416814443}
