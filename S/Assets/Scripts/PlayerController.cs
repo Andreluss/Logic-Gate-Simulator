@@ -18,10 +18,18 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private Canvas canvas;
     [SerializeField]
-    private GameObject createBlockPopup;
+    private GameObject SaveAsNewBlockMenu;
+    [SerializeField]
+    private GameObject SaveOnExitMenu;
+    [SerializeField]
+    private GameObject SaveAsNewProjectMenu;
 
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
+    public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
+
+
+
 
     private void Awake()
     {
@@ -37,10 +45,6 @@ public class PlayerController : Singleton<PlayerController>
         //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
 
-    void Start()
-    {
-
-    }
 
 
 
@@ -61,57 +65,92 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-    private void LateUpdate()
-    {
-        //if (Input.GetMouseButtonDown(0) && selectedObject != null)
-        //    ContextMenu.Instance.DestroyContextMenu();
-    }
+
+
+
 
     /* Klikniêcia guzików */
-    public void OnSaveAsTemplateClick()
+    public void OnToggleDescriptions()
     {
-        //StateMachine.ChangeState(new StateMachine.PlayerState(StateGateNew));
-        Instantiate(createBlockPopup, canvas.transform);
-        //NodeManager.SaveAllAsTemplate("OR", new RenderProperties(Helper.ColorFromHex(0xb6d7a8)));
-        LoadHUD();
+        //ahh bo Unity nie widzi menegera
+        NodeManager.ToggleDestriptions();
     }
-
+    public void OnToggleSnapping()
+    {
+        AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
+    }
     public void OnChangeDescriptionClick(Node node)
     {
         throw new System.NotImplementedException();
     }
-
     public void OnTypeValue(MultibitController controller)
     {
         throw new System.NotImplementedException();
     }
-
-    public void OnSaveProject()
-    {
-        //[TODO] popup menu for saving a project
-        throw new NotImplementedException();
-        var project = NodeManager._dgb_SaveAllAsProject("Project name");
-        AppSaveData.AddProject(project);
-        //[TODO]
-    }
-
-    public void SaveChanges()
+    public void OnSaveClick() //(Ctrl + S)
     {
         if (CurrentProjectID == -1)
         {
-            //save new project
-            
-            throw new NotImplementedException();
+            //save as new project or cancel
+            ShowSaveAsNewProjectMenu();
         }
         else
         {
             //just save changes
-            NodeManager.SaveChangesToProject(CurrentProjectID);
+            SaveChanges();
         }
-        
+
     }
 
-    public void OnLoadProject()
+
+
+
+
+
+    /* wyœwietlacze menu itp. */
+    public void ShowSaveAsNewBlockMenu()
+    {
+        Instantiate(SaveAsNewBlockMenu, canvas.transform);
+    }
+    public void ShowSaveAsNewProjectMenu()
+    {
+        Instantiate(SaveAsNewProjectMenu, canvas.transform);
+    }
+    public void ShowSaveOnExitMenu()
+    {
+        Instantiate(SaveOnExitMenu, canvas.transform);
+    }
+
+
+
+
+
+
+    /* w³aœciwe operacje ju¿ po wyklikaniu opcji z menu */
+    public void SaveAllAsNewTemplate(string name, RenderProperties rendprops)
+    {
+        NodeManager.SaveAllAsTemplate(name, rendprops);
+        NodeManager.ClearAll();
+        LoadHUD();
+    }
+
+    public void SaveAsNewProject(string name)
+    {
+        CurrentProjectID = NodeManager.SaveAsNewProject(name);
+    }
+
+    public void SaveChanges()
+    {
+        NodeManager.SaveChangesToProject(CurrentProjectID);
+        Debug.Log($"Changes saved to project {CurrentProjectName}");
+    }
+
+
+
+
+
+
+    public void _dbg_OnLoadProject()
     {
         //[TODO] clear or save curent project!!
         Debug.Assert(AppSaveData.Projects.Count > 0);
@@ -119,10 +158,7 @@ public class PlayerController : Singleton<PlayerController>
         //[TODO]
     }
 
-    public void OnToggleSnapping()
-    {
-        AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
-    }
+
 
     /* Stany i zmienne potrzebne do ró¿nych stanów: */
 
@@ -205,6 +241,7 @@ public class PlayerController : Singleton<PlayerController>
 
 
 
+
     private void StateCameraPanStart()
     {
         ContextMenu.Instance.DestroyContextMenu();
@@ -230,18 +267,6 @@ public class PlayerController : Singleton<PlayerController>
     Vector2 mousePosStart;
     Vector3 cameraPosStart;
 
-
-
-
-    private void StateGateNewStart()
-    {
-    }
-    private void StateGateNew()
-    {
-    }
-    private void StateGateNewEnd()
-    {
-    }
 
 
 
@@ -464,15 +489,6 @@ public class PlayerController : Singleton<PlayerController>
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
-    public void ToggleDescriptions()
-    {
-        //ahh bo Unity nie widzi menegera
-        NodeManager.ToggleDestriptions();
-    }
-    [SerializeField]
-    private GameObject BottomBarContent;
-    private int currentProjectID = -1;
-
     public void LoadHUD()
     {
         for (int i = 0; i < BottomBarContent.transform.childCount; i++)
@@ -560,4 +576,8 @@ public class PlayerController : Singleton<PlayerController>
         yield return null;
         function();
     }
+
+    [SerializeField]
+    private GameObject BottomBarContent;
+    private int currentProjectID = -1;
 }

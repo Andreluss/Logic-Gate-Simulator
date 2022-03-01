@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SaveBlockMenuController : MonoBehaviour
+public class SaveAsNewBlockMenuController : MonoBehaviour
 {
     [SerializeField]
     private TMP_InputField inputField;
@@ -14,17 +14,6 @@ public class SaveBlockMenuController : MonoBehaviour
     private Button createButton;
 
     private RenderProperties rendprops = new();
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void TestName()
     {
@@ -48,6 +37,7 @@ public class SaveBlockMenuController : MonoBehaviour
     public void CreateTemplate()
     {
         Debug.Log("nigga whass cracking?");//NodeManager.SaveAllAsTemplate(inputField.text, rendprops);
+        PlayerController.Instance.SaveAllAsNewTemplate(inputField.text, rendprops);
         Close();
     }
 

@@ -15,20 +15,10 @@ public class SaveProjectChangesController : MonoBehaviour
 
     private RenderProperties rendprops = new();
 
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void SaveChanges()
     {
-        PlayerController.Instance.SaveChanges();
+        PlayerController.Instance.OnSaveClick();
         Close();
     }
 

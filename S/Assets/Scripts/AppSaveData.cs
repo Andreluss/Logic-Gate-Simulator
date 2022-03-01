@@ -42,7 +42,6 @@ public static class AppSaveData
         return GateTemplates.Find(x => x.defaultName == name) != null;
     }
 
-
     public static GateTemplate GetProject(int id)
     {
         return Projects[id];
@@ -58,6 +57,11 @@ public static class AppSaveData
         Debug.Assert(Helper.InRange(id, 0, ProjectCnt));
         Projects[id] = newProjectData;
     }
+    public static bool ProjectExists(string name)
+    {
+        return Projects.Find(x => x.defaultName == name) != null;
+    }
+
 
     public static int InputTemplateID = new InputNode(true).GetTemplateID();
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
