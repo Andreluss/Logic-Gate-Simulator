@@ -24,11 +24,14 @@ public class MultibitControllerInput : MultibitController
     public MultibitControllerInput(List<InputNode> forInputs, bool hidden) : base(forInputs.Count, true)
     {
         Inputs = forInputs;
+        Hidden = hidden;//bo inaczej renderer nie widzi inputow!!!
+
         for (int i = 0; i < Inputs.Count; i++)
         {
+            Inputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
+            Inputs[i].Controller = this;
             Inputs[i].Description = "bit " + i;
         }
-        Hidden = hidden;//bo inaczej renderer nie widzi inputow!!!
         //chyba tyle [TODO] check czy faktycznie tyle
     }
 
@@ -90,10 +93,10 @@ public class MultibitControllerInput : MultibitController
 
     protected override void DestroyRenderer()
     {
-        foreach (var node in Inputs)
-        {
-            NodeManager.DeleteNode(node);
-        }
+        //foreach (var node in Inputs)
+        //{
+        //    NodeManager.DeleteNode(node);
+        //} to robimy w managerze
         UnityEngine.Object.Destroy(renderer.transform.parent.gameObject);
         Debug.Log($"MBI renderer {renderer} destroyed");
     }

@@ -38,8 +38,8 @@ public class NodeRenderer : BaseRenderer
         //[DANGER] we assume the prefabs have a 'root structure'!
         if(!controlled) 
             gameObject.transform.parent.position = new Vector3(position.x,
-                                                           position.y,
-                                                           gameObject.transform.parent.position.z);
+                                                               position.y,
+                                                               gameObject.transform.parent.position.z);
         for (int i = 0; i < inCnt; i++)
         {
             if(inEdgeRenderers[i] != null)

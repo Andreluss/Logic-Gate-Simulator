@@ -13,6 +13,12 @@ public static class NodeManager //: Singleton<NodeManager>
     static readonly HashSet<Node> controllers = new();//widzialne controllery
     static readonly HashSet<InputNode> inputNodes = new();
     static readonly HashSet<OutputNode> outputNodes = new();
+    /// <summary>
+    /// Funkcja, która tworzy i rejestruje w menedzerze nowy klocek z danego template'u
+    /// </summary>
+    /// <param name="template">template klocka, ktory chcemy utworzyc</param>
+    /// <param name="where">null lub pozycja klocka</param>
+    /// <returns></returns>
     public static Node CreateNode(GateTemplate template, Vector2? where = null)
     {
         Node node = template.BuildNodeFromTemplate();
@@ -20,7 +26,18 @@ public static class NodeManager //: Singleton<NodeManager>
         if(where != null) 
             node.Position = (Vector2)where;
 
-        if(node is not MultibitController)
+        RegisterNode(node);
+
+        return node;
+    }
+
+    /// <summary>
+    /// Funkcja umozliwiajaca zapisanie przez NodeManager <b>stworzonego ju¿</b> klocka
+    /// </summary>
+    /// <param name="node"></param>
+    public static void RegisterNode(Node node)
+    {
+        if (node is not MultibitController)
             nodes.Add(node);
         else
             controllers.Add(node);
@@ -33,34 +50,56 @@ public static class NodeManager //: Singleton<NodeManager>
         {
             outputNodes.Add(node as OutputNode); // hmm
         }
-        else if(node is MultibitControllerInput mcinput)
+        else if (node is MultibitControllerInput mcinput)
         {
-            foreach(var inputNode in mcinput.Inputs)
+            foreach (var inputNode in mcinput.Inputs)
             {
                 nodes.Add(inputNode);
                 inputNodes.Add(inputNode);
             }
         }
-        else if(node is MultibitControllerOutput)
+        else if (node is MultibitControllerOutput mco)
         {
-
+            foreach (var outnode in mco.Outputs)
+            {
+                nodes.Add(outnode);
+                outputNodes.Add(outnode);
+            }
         }
 
         CalculateAll();
-
-        return node;
     }
 
     public static void DeleteNode(Node node)
     {
-        nodes.Remove(node);
-        if(node is InputNode)
+        if (node is not MultibitController)
+            nodes.Remove(node);
+        else
+            controllers.Remove(node);
+
+        if (node is InputNode)
         {
             inputNodes.Remove(node as InputNode);
         }
         else if(node is OutputNode)
         {
             outputNodes.Remove(node as OutputNode);
+        }
+        else if (node is MultibitControllerInput mcinput)
+        {
+            foreach (var inputNode in mcinput.Inputs)
+            {
+                nodes.Remove(inputNode);
+                inputNodes.Remove(inputNode);
+            }
+        }
+        else if (node is MultibitControllerOutput mco)
+        {
+            foreach (var outnode in mco.Outputs)
+            {
+                nodes.Remove(outnode);
+                outputNodes.Remove(outnode);
+            }
         }
 
         node.Destroy();
@@ -90,7 +129,7 @@ public static class NodeManager //: Singleton<NodeManager>
         CalculateAll();
     }
 
-    private static void CalculateAll()
+    public static void CalculateAll()
     {
         //[DESIGN] ?? ?? 
         //jako input mozna tez wzi¹æ wszystkie wiecho³ki ktore maja totalInputEdgesCount == 0

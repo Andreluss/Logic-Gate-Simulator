@@ -16,7 +16,7 @@ public class MBORenderer : NodeRenderer //to jest taki node ale bez inputow i ou
         Vector2 dim = new Vector2(1.5f, 1.5f + forWho.BitCount * 1.25f);
         rootGO.GetComponent<RectTransform>().sizeDelta = dim;
         GO.transform.localScale = dim;
-
+        
         var rend = GO.GetComponent<MBORenderer>();
         rend.text = rootGO.GetComponentInChildren<TextMeshPro>();
         rend.Node = forWho;//??

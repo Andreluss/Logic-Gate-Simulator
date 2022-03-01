@@ -29,16 +29,24 @@ public static class AppSaveData
     public static GateTemplate NotTemplate { get => GateTemplates[9]; }
     public static GateTemplate AndTemplate { get => GateTemplates[10]; }
     public static int TemplateCnt { get => GateTemplates.Count; }
+    public static int ProjectCnt { get => Projects.Count; }
 
     public static void AddTemplate(GateTemplate newTemplate)
     {
         newTemplate.templateId = GateTemplates.Count;
         GateTemplates.Add(newTemplate);
-        GateTemplates.SaveClass(Application.dataPath + "/GateTemplates.bin");
+        GateTemplates.SaveClass(gatePath);
     }
     public static bool TemplateExists(string name)
     {
         return GateTemplates.Find(x => x.defaultName == name) != null;
+    }
+
+    public static void AddProject(GateTemplate project)
+    {
+        project.templateId = -1;
+        Projects.Add(project);
+        GateTemplates.SaveClass(projectPath);
     }
 
     public static int InputTemplateID = new InputNode(true).GetTemplateID();
@@ -46,6 +54,7 @@ public static class AppSaveData
 
     private static List<GateTemplate> GateTemplates;
     private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
+    private static readonly string projectPath = Application.dataPath + "/Projects.bin";
 
     public static List<GateTemplate> Projects;
 
@@ -58,6 +67,7 @@ public static class AppSaveData
 
     public static void Load()
     {
+        /* Gate stuff */
         if (!File.Exists(gatePath)) // jesli nie istnieje to odtwarzamy 5 podstawowych bramek
         {
             List<GateTemplate> gateTemplates = new();
@@ -90,10 +100,14 @@ public static class AppSaveData
             gateTemplates.SaveClass(gatePath);
         }
         GateTemplates = Helper.LoadClass<List<GateTemplate>>(gatePath);
-        if (GateTemplates == null)
-        {
-            Debug.LogError("my ass");
-        }
+        Debug.Assert(GateTemplates == null);
+
+        /* Projects files */
+        if (!File.Exists(projectPath))
+            Projects = new();
+        else 
+            Projects = Helper.LoadClass<List<GateTemplate>>(projectPath);
+
         Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
 
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 using UnityEngine.UI;
 using TMPro;
 using System;
@@ -85,9 +86,18 @@ public class PlayerController : Singleton<PlayerController>
 
     public void OnSaveProject()
     {
+        //[TODO] popup menu for saving a project
         var project = NodeManager.SaveAllAsProject("Project name");
-        AppSaveData.Projects.Add(project);
-        throw new NotImplementedException();
+        AppSaveData.AddProject(project);
+        //[TODO]
+    }
+
+    public void OnLoadProject()
+    {
+        //[TODO] clear or save curent project!!
+        Debug.Assert(AppSaveData.Projects.Count > 0);
+        AppSaveData.Projects.Last().BuildProjectFromTemplate();
+        //[TODO]
     }
 
     /* Stany i zmienne potrzebne do ró¿nych stanów: */

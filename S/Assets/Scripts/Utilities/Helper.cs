@@ -19,7 +19,7 @@ public static class Helper
             array[i] = value;
         }
     }
-
+    public static readonly Vector2 zero2 = Vector2.zero;
     public static Color Dim(this Color color, float amount)
     {
         Color newcolor = color * amount;
