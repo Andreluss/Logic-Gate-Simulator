@@ -100,6 +100,11 @@ public class PlayerController : Singleton<PlayerController>
         //[TODO]
     }
 
+    public void OnToggleSnapping()
+    {
+        AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
+    }
+
     /* Stany i zmienne potrzebne do ró¿nych stanów: */
 
     private State PlayerState;
