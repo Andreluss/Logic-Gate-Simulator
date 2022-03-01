@@ -257,7 +257,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3938552360671194712}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
         m_MethodName: CreateTemplate
         m_Mode: 1
@@ -796,7 +796,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3938552360671194712}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
         m_MethodName: CreateTemplate
         m_Mode: 1
@@ -954,7 +954,7 @@ GameObject:
   - component: {fileID: 6542667630458722567}
   - component: {fileID: 6542667630458722565}
   - component: {fileID: 6542667630458722564}
-  - component: {fileID: 3938552360671194712}
+  - component: {fileID: 338452714694842351}
   - component: {fileID: 8985653616401428034}
   m_Layer: 5
   m_Name: SaveBlock
@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.5
---- !u!114 &3938552360671194712
+--- !u!114 &338452714694842351
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1035,12 +1035,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6542667630458722566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab7473f63061344cb172590ac8dd7cd, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ad1bd44d40132b4c8d80a9067a1d6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputField: {fileID: 0}
-  warning: {fileID: 774873595235083190}
-  createButton: {fileID: 7088373478985490737}
+  warning: {fileID: 0}
+  createButton: {fileID: 0}
 --- !u!114 &8985653616401428034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1207,7 +1207,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3938552360671194712}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -1341,7 +1341,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3938552360671194712}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
         m_MethodName: CreateTemplate
         m_Mode: 1

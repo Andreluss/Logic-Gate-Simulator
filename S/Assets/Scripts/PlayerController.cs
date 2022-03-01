@@ -20,6 +20,8 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject createBlockPopup;
 
+    /* Dane aktualnego projektu */
+    public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
 
     private void Awake()
     {
@@ -37,21 +39,21 @@ public class PlayerController : Singleton<PlayerController>
 
     void Start()
     {
-        
+
     }
-    
+
 
 
     void Update()
     {
         StateMachine.UpdateStateMachine();
-        if(PlayerState == State.Idle)
+        if (PlayerState == State.Idle)
         {
             //wkurza mnie ten warning
             //Debug.Log("is over UI: " + IsPointerOverUIObject());
         }
         var delta = -Input.mouseScrollDelta.y;
-        if(Mathf.Abs(delta) > 0)
+        if (Mathf.Abs(delta) > 0)
         {
             Debug.Log(Input.mouseScrollDelta);
             m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
@@ -87,9 +89,26 @@ public class PlayerController : Singleton<PlayerController>
     public void OnSaveProject()
     {
         //[TODO] popup menu for saving a project
-        var project = NodeManager.SaveAllAsProject("Project name");
+        throw new NotImplementedException();
+        var project = NodeManager._dgb_SaveAllAsProject("Project name");
         AppSaveData.AddProject(project);
         //[TODO]
+    }
+
+    public void SaveChanges()
+    {
+        if (CurrentProjectID == -1)
+        {
+            //save new project
+            
+            throw new NotImplementedException();
+        }
+        else
+        {
+            //just save changes
+            NodeManager.SaveChangesToProject(CurrentProjectID);
+        }
+        
     }
 
     public void OnLoadProject()
@@ -136,7 +155,7 @@ public class PlayerController : Singleton<PlayerController>
 
                 if (selectedObject != null)
                     ContextMenu.Instance.DestroyContextMenu();
-                    //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
+                //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
 
                 if (selectedObject is NodeCollision)
                 {
@@ -149,12 +168,12 @@ public class PlayerController : Singleton<PlayerController>
                     edgeNewRend = EdgeRenderer.Make(info.sourceNode, info.outIdx, GetMousePosition());
                     StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
                 }
-                else if(selectedObject is InSocketCollision)
+                else if (selectedObject is InSocketCollision)
                 {
                     inSocket = selectedObject as InSocketCollision;
                     StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
                 }
-                else if(selectedObject is NodeTemplateCollision)
+                else if (selectedObject is NodeTemplateCollision)
                 {
                     //...
                     newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
@@ -165,12 +184,12 @@ public class PlayerController : Singleton<PlayerController>
         else if (Input.GetMouseButtonDown(1))
         {
             var obj = GetObjectUnderMouse();
-            if(obj != null)
+            if (obj != null)
             {
                 Debug.Log("[TODO] Tutaj bedzie menu kontekstowe -> opcje danej bramki/krawedzi...");
             }
         }
-        else if(Input.GetMouseButtonDown(2))
+        else if (Input.GetMouseButtonDown(2))
         {
             StateMachine.ChangeState(StateCameraPan);
         }
@@ -194,7 +213,7 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void StateCameraPan()
     {
-        if(!Input.GetMouseButton(2))
+        if (!Input.GetMouseButton(2))
         {
             StateMachine.ChangeState(StateIdle);
         }
@@ -251,7 +270,7 @@ public class PlayerController : Singleton<PlayerController>
 
         if (!Input.GetMouseButton(0))
         {
-            if(IsPointerOverUIObject())
+            if (IsPointerOverUIObject())
             {
                 //usuwamy
                 NodeManager.DeleteNode(selectedNode);
@@ -284,20 +303,20 @@ public class PlayerController : Singleton<PlayerController>
     {
         edgeNewRend.End = GetMousePosition();
         //[TODO] dorobiæ layermask tutaj, ¿eby wykrywa³o tylko collidery socketów 
-        
+
         var obj = GetObjectUnderMouse();
         InSocketCollision currentInputSocket = null;
-        if (obj != null) 
+        if (obj != null)
             currentInputSocket = obj.GetComponent<InSocketCollision>();
-        
+
         //[TODO] ewentualnie dorobiæ podgl¹d wartoœci, gdyby po³¹czono z tym socketem
 
-        if(!Input.GetMouseButton(0))
+        if (!Input.GetMouseButton(0))
         {
             edgeNewRend.Destroy();
             if (currentInputSocket != null)
             {
-                if(edgeNewRend.from != currentInputSocket.targetNode)
+                if (edgeNewRend.from != currentInputSocket.targetNode)
                 {
                     //czy przypadkiem nie ³¹czymy z tym samym
                     NodeManager.Connect(edgeNewRend.from, edgeNewRend.outIdx,
@@ -332,7 +351,7 @@ public class PlayerController : Singleton<PlayerController>
         //[DESIGN] jesli usuniemy ten próg od³¹czenia socketu (0.2f), 
         // to wgl bêdzie mo¿na usun¹æ ca³y stan EdgeOld
         var mpos = GetMousePosition();
-        if(Vector2.Distance(mpos, inSocket.transform.position) > 0.2f)
+        if (Vector2.Distance(mpos, inSocket.transform.position) > 0.2f)
         {
             var (node, inidx) = (inSocket.targetNode, inSocket.inIdx);
             var (from, outidx) = (node.ins[inidx].st, node.ins[inidx].nd);
@@ -374,7 +393,7 @@ public class PlayerController : Singleton<PlayerController>
             controller = inputNode.Controller;
             controllerPositionLMBDown = controller.Position;
         }
-        else if(selectedNode is OutputNode outputNode && outputNode.Controlled)
+        else if (selectedNode is OutputNode outputNode && outputNode.Controlled)
         {
             controller = outputNode.Controller;
             controllerPositionLMBDown = controller.Position;
@@ -386,7 +405,7 @@ public class PlayerController : Singleton<PlayerController>
         if (startedDragging || deltaPosition.magnitude > 0.2f) //zeby przez przypadek 
         {                                                       //nie przesuwaæ o 0.001mm
             startedDragging = true; //Debug.Log("draggin"); 
-            if(controller != null)
+            if (controller != null)
             {
                 ChangeSelectionTo(controller.GetRenderer().GetComponent<CollisionData>());
                 selectedNode = controller;//chyba git
@@ -408,7 +427,7 @@ public class PlayerController : Singleton<PlayerController>
 
         if (!Input.GetMouseButton(0)) //jesli juz nie trzymamy LPM
         {
-            if(!startedDragging && selectedObject is InputCollision)
+            if (!startedDragging && selectedObject is InputCollision)
             {
                 NodeManager.Flip(selectedObject as InputCollision);
             }
@@ -452,6 +471,8 @@ public class PlayerController : Singleton<PlayerController>
     }
     [SerializeField]
     private GameObject BottomBarContent;
+    private int currentProjectID = -1;
+
     public void LoadHUD()
     {
         for (int i = 0; i < BottomBarContent.transform.childCount; i++)
@@ -470,7 +491,7 @@ public class PlayerController : Singleton<PlayerController>
     private void ChangeSelectionTo(CollisionData curr)
     {
         var prev = selectedObject;
-        if(prev == curr) return;
+        if (prev == curr) return;
         Debug.Log($"Selected obj is now {curr}");
         if (prev != null) prev.Renderer.Selected = false;
         if (curr != null) curr.Renderer.Selected = true;
@@ -487,12 +508,12 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject GetObjectUnderMouse()
     {
         //(C)
-        if (EventSystem.current.currentSelectedGameObject != null) 
+        if (EventSystem.current.currentSelectedGameObject != null)
             return EventSystem.current.currentSelectedGameObject;
 
         var origin = GetMousePosition();//czy nie vector3??[!!!!]
         var hit = Physics2D.Raycast(origin, Vector2.zero);
-        if (hit.collider != null) 
+        if (hit.collider != null)
             return hit.collider.gameObject;//return hit.collider != null ? hit.collider.gameObject : null;
         return null;
 

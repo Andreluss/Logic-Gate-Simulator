@@ -259,13 +259,33 @@ public static class NodeManager //: Singleton<NodeManager>
         return template;
     }
 
-    public static GateTemplate SaveAllAsProject(string projectName)
+    public static GateTemplate _dgb_SaveAllAsProject(string projectName)
     {
         var template = GetTemplateFromAll(true);
         template.defaultName = projectName;
         template.renderProperties = new RenderProperties();
 
         return template;
+    }
+
+    public static GateTemplate SaveChangesToProject(int id)
+    {
+        Debug.Assert(id < AppSaveData.ProjectCnt);
+        
+        var oldSave = AppSaveData.GetProject(id);
+        var newSave = GetTemplateFromAll(true);
+
+        newSave.defaultName = oldSave.defaultName;
+        newSave.renderProperties = oldSave.renderProperties;
+        
+        AppSaveData.UpdateProject(id, newSave);
+        
+        return newSave;
+    }
+
+    public static void SaveAsNewProject(string name)
+    {
+        
     }
 
     public static GateTemplate SaveNodesAsTemplateALPHA(List<Node> nodes, string templateName)

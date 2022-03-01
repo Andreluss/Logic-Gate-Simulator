@@ -42,11 +42,21 @@ public static class AppSaveData
         return GateTemplates.Find(x => x.defaultName == name) != null;
     }
 
+
+    public static GateTemplate GetProject(int id)
+    {
+        return Projects[id];
+    }
     public static void AddProject(GateTemplate project)
     {
         project.templateId = -1;
         Projects.Add(project);
         GateTemplates.SaveClass(projectPath);
+    }
+    public static void UpdateProject(int id, GateTemplate newProjectData)
+    {
+        Debug.Assert(Helper.InRange(id, 0, ProjectCnt));
+        Projects[id] = newProjectData;
     }
 
     public static int InputTemplateID = new InputNode(true).GetTemplateID();
