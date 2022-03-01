@@ -302,9 +302,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: SaveBlock
       objectReference: {fileID: 0}
+    - target: {fileID: 2818506250713694371, guid: c5575e709af26e340b29d419fef4b787, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2818506250713694371, guid: c5575e709af26e340b29d419fef4b787, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2818506250713694371, guid: c5575e709af26e340b29d419fef4b787, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2935617987171883667, guid: c5575e709af26e340b29d419fef4b787, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00038522267
+      value: 10.327299
       objectReference: {fileID: 0}
     - target: {fileID: 4918043374629666977, guid: c5575e709af26e340b29d419fef4b787, type: 3}
       propertyPath: m_AnchorMax.x
