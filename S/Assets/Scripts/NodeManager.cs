@@ -170,7 +170,7 @@ public static class NodeManager //: Singleton<NodeManager>
     {
         throw new NotImplementedException();
     }
-    private static GateTemplate GetTemplateFromAll()
+    private static GateTemplate GetTemplateFromAll(bool saveInputVals = false)
     {
         GateTemplate template = new();
         //template.edges 
@@ -237,6 +237,15 @@ public static class NodeManager //: Singleton<NodeManager>
         }
         template.edges = edges.ToArray();
 
+        if(saveInputVals)
+        {
+            template.inputValues = new();
+            foreach (var inputNode in inputNodes)
+            {
+                template.inputValues.Add((ID[inputNode], inputNode.GetValue()));
+            }
+        }
+
         //AppSaveData.AddTemplate(template);
 
         return template;
@@ -252,9 +261,10 @@ public static class NodeManager //: Singleton<NodeManager>
 
     public static GateTemplate SaveAllAsProject(string projectName)
     {
-        var template = GetTemplateFromAll();
+        var template = GetTemplateFromAll(true);
         template.defaultName = projectName;
         template.renderProperties = new RenderProperties();
+
         return template;
     }
 

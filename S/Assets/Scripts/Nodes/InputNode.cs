@@ -61,6 +61,7 @@ public class InputNode : Node
         if (renderer)
             renderer.HandleValue(outVals[0]);
     }
+
     public bool GetValue()
     {
         return outVals[0];

@@ -96,8 +96,13 @@ public class PlayerController : Singleton<PlayerController>
     {
         //[TODO] clear or save curent project!!
         Debug.Assert(AppSaveData.Projects.Count > 0);
-        AppSaveData.Projects.Last().BuildProjectFromTemplate();
+        AppSaveData.Projects.Last().BuildProjectFromTemplate(new Vector2(2, 5));
         //[TODO]
+    }
+
+    public void OnToggleSnapping()
+    {
+        AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
     }
 
     /* Stany i zmienne potrzebne do ró¿nych stanów: */

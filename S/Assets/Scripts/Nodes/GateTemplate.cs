@@ -22,6 +22,7 @@ public class GateTemplate
     public RenderProperties renderProperties;
     public int[] TemplateIDsForEachNode;
     public ValueTuple<float, float>[] PositionsForEachNode;
+    public List<ValueTuple<int, bool>> inputValues;//nodeID, value
     public int templateId;
 
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
@@ -188,6 +189,11 @@ public class GateTemplate
             }
         }
 
+        Debug.Assert(inputValues != null);
+        foreach (var (inputID, value) in inputValues)
+        {
+            (IDtoNode[inputID] as InputNode).SetValue(value);
+        }
 
         foreach (var edge in edges)
         {
