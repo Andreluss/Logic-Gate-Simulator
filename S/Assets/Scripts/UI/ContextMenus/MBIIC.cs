@@ -7,11 +7,11 @@ public class MBIIC : ItemController
     protected override void Start()
     {
         base.Start();
-
+        var ctrl = (nodeOrEdgeObj as MBICollision).node;
         contextMenuItems.Add(new ContextMenuItem("Switch signed/unsigned", sampleButton,
-            x => (x as MultibitControllerInput).Signed = !(x as MultibitControllerInput).Signed));
+            () => (ctrl as MultibitControllerInput).Signed = !(ctrl as MultibitControllerInput).Signed));
 
         contextMenuItems.Add(new ContextMenuItem("Change value", sampleButton,
-            x => PlayerController.Instance.OnTypeValue(x as MultibitControllerInput)));
+            () => PlayerController.Instance.OnTypeValue(ctrl as MultibitControllerInput)));
     }
 }

@@ -110,11 +110,6 @@ public static class NodeManager //: Singleton<NodeManager>
 
         if(recalc) CalculateAll();
     }
-
-    public static void DeleteEdge()
-    {
-        throw new NotImplementedException();
-    }
     
     public static void Connect(Node A, int outIdx, Node B, int inIdx)
     {

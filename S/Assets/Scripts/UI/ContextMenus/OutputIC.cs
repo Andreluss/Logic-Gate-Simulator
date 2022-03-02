@@ -7,11 +7,12 @@ public class OutputIC : ItemController
     protected override void Start()
     {
         base.Start();
-        
-        if((nodeObj.node as OutputNode).Controlled) 
+
+        var outnode = (nodeOrEdgeObj as OutputCollision).OutputNode;
+        if (outnode.Controlled) 
             contextMenuItems.RemoveAt(0);
-        
+
         contextMenuItems.Add(new ContextMenuItem("Change description", sampleButton,
-            x => PlayerController.Instance.OnChangeDescriptionClick(nodeObj.node)));
+            () => PlayerController.Instance.OnChangeDescriptionClick(outnode)));
     }
 }

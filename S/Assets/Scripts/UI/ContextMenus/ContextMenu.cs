@@ -12,9 +12,9 @@ public class ContextMenuItem
 
     public string text;             // text to display on button
     public Button button;           // sample button prefab
-    public Action<Node> action;    // delegate to method that needs to be executed when button is clicked
+    public Action action;    // delegate to method that needs to be executed when button is clicked
 
-    public ContextMenuItem(string text, Button button, Action<Node> action)
+    public ContextMenuItem(string text, Button button, Action action)
     {
         this.text = text;
         this.button = button;
@@ -37,7 +37,7 @@ public class ContextMenu : Singleton<ContextMenu>
         if (panel != null) 
             Destroy(panel.gameObject);
     }
-    public void CreateContextMenu(Node forNode, List<ContextMenuItem> items, Vector2 position)
+    public void CreateContextMenu(List<ContextMenuItem> items, Vector2 position)
     {
         DestroyContextMenu();
 
@@ -54,7 +54,7 @@ public class ContextMenu : Singleton<ContextMenu>
             var buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
             //var buttonText = button.GetComponentInChildren<Text>();
             buttonText.text = item.text;
-            button.onClick.AddListener(delegate { item.action(forNode); Destroy(panel.gameObject); });
+            button.onClick.AddListener(delegate { item.action(); Destroy(panel.gameObject); });
             button.transform.SetParent(panel.transform, false);
         }
 

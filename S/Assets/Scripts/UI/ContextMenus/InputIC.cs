@@ -7,13 +7,14 @@ public class InputIC : ItemController
     protected override void Start()
     {
         base.Start();
-        
-        if((nodeObj.node as InputNode).Controlled) 
+
+        var innode = (nodeOrEdgeObj as InputCollision).InputNode;
+        if(innode.Controlled) 
             contextMenuItems.RemoveAt(0);
 
         contextMenuItems.Add(new ContextMenuItem("Flip bit", sampleButton,
-            x => NodeManager.Flip(nodeObj as InputCollision)));
+            () => NodeManager.Flip(nodeOrEdgeObj as InputCollision)));
         contextMenuItems.Add(new ContextMenuItem("Change desc.", sampleButton,
-            x => PlayerController.Instance.OnChangeDescriptionClick(nodeObj.node)));
+            () => PlayerController.Instance.OnChangeDescriptionClick(innode)));
     }
 }
