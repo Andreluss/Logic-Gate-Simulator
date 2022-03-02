@@ -962,6 +962,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: _SaveAsNewBlock(Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 4243898063870518386, guid: 452665bc84f1c7544a61707d45024252, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4256908960406327282, guid: 452665bc84f1c7544a61707d45024252, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1548,7 +1552,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6471499871044177988, guid: 452665bc84f1c7544a61707d45024252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6471499871044177988, guid: 452665bc84f1c7544a61707d45024252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

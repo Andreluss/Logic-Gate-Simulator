@@ -14,9 +14,20 @@ public class PlayerController : Singleton<PlayerController>
     private Camera c_Camera;
     private StateMachine StateMachine;
 
+    public enum GameMode
+    {
+        Menu, Normal, StrictEdit, FreeEdit
+    }
+    private GameMode mode = GameMode.Normal;
+
+
     /* okienka */
     [SerializeField]
     private Canvas canvas;
+    [SerializeField]
+    private GameObject NormalUI;
+    [SerializeField]
+    private GameObject Menu;
     [SerializeField]
     private GameObject SaveAsNewBlockMenu;
     [SerializeField]
@@ -24,19 +35,57 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject SaveAsNewProjectMenu;
 
+
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
     public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
+    public GameMode Mode
+    {
+        get => mode; set
+        {
+            if(mode == value) return;
+            switch (value)
+            {
+                case GameMode.Normal:
+                    ShowNormalUI(true);
+                    //[TODO] update and unlock some buttons 
+                    break;
+                case GameMode.Menu:
+                    ShowNormalUI(false);
+                    ShowMenu();
+                    break;
+                case GameMode.StrictEdit:
+                    //[TODO] 
+                    //block and change some buttons
+                    break;
+                case GameMode.FreeEdit:
+                    //[TODO] same jak wy¿ej
+                    break;
+            }
+            mode = value;
+        }
+    }
 
 
+    /* Funkcje zwi¹zane z trybem Gry (tryb >> stan) */
+    private void ShowNormalUI(bool show)
+    {
+        NormalUI.SetActive(show);
+    }
+    private void ShowMenu()
+    {
+        Instantiate(Menu, canvas.transform);
+    }
 
 
+    /*     === Unity funkcje ===     */ 
     private void Awake()
     {
         m_Camera = Camera.main;
         c_Camera = GameObject.Find("Const Camera").GetComponent<Camera>();
 
         AppSaveData.Load();
+        AppSaveData.Settings.SnapObjects = false;//[CHANGE] on release
         LoadHUD();
         StateMachine = GetComponent<StateMachine>();
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
@@ -56,7 +105,7 @@ public class PlayerController : Singleton<PlayerController>
             //wkurza mnie ten warning
             //Debug.Log("is over UI: " + IsPointerOverUIObject());
         }
-        if(EventSystem.current.IsPointerOverGameObject() == false)
+        if(EventSystem.current.IsPointerOverGameObject() == false && Mode != GameMode.Menu)
         {
             var delta = -Input.mouseScrollDelta.y;
             if (Mathf.Abs(delta) > 0)
@@ -97,22 +146,32 @@ public class PlayerController : Singleton<PlayerController>
     {
         throw new System.NotImplementedException();
     }
-    public void OnSaveClick() //(Ctrl + S)
+    public void OnSaveClick(bool andClose) //(Ctrl + S)
     {
         if (CurrentProjectID == -1)
         {
             //save as new project or cancel
-            ShowSaveAsNewProjectMenu();
+            ShowSaveAsNewProjectMenu(andClose);
         }
         else
         {
             //just save changes
             SaveChanges();
+            if (andClose)
+            {
+                NodeManager.ClearAll();
+                Mode = GameMode.Menu;
+            }
         }
     }
     public void OnClear()
     {
         NodeManager.ClearAll();
+    }
+    public void OnExitClick()
+    {
+        //[TODO] sprawdzic, czy s¹ wgl zmiany do zapisania!!
+        ShowSaveOnExitMenu();
     }
 
 
@@ -125,9 +184,11 @@ public class PlayerController : Singleton<PlayerController>
     {
         Instantiate(SaveAsNewBlockMenu, canvas.transform);
     }
-    public void ShowSaveAsNewProjectMenu()
+    public void ShowSaveAsNewProjectMenu(bool andClose = false)
     {
-        Instantiate(SaveAsNewProjectMenu, canvas.transform);
+        var savemenu = Instantiate(SaveAsNewProjectMenu, canvas.transform);
+        savemenu.GetComponentInChildren<SaveAsNewProjectMenuController>().SaveAndClose = andClose;
+        //troche syf no ale nwm jak inaczej to przes³aæ sprytnie
     }
     public void ShowSaveOnExitMenu()
     {
@@ -148,10 +209,15 @@ public class PlayerController : Singleton<PlayerController>
         LoadHUD();
     }
 
-    public void SaveAsNewProject(string name)
+    public void SaveAsNewProject(string name, bool andClose)
     {
         CurrentProjectID = NodeManager.SaveAsNewProject(name);
         Debug.Log($"New project ({name}) has been succesfully saved.");
+        if (andClose)
+        {
+            NodeManager.ClearAll();
+            Mode = GameMode.Menu;
+        }
     }
 
     public void SaveChanges()
@@ -161,17 +227,22 @@ public class PlayerController : Singleton<PlayerController>
     }
 
 
-
-
-
-
-    public void _dbg_OnLoadProject()
+    /// <summary>
+    /// £aduje zapisany projekt (lub nowy, jeœli id = -1)
+    /// </summary>
+    /// <param name="id">id projektu do za³adowania</param>
+    public void LoadProject(int id)
     {
-        //[TODO] clear or save curent project!!
-        Debug.Assert(AppSaveData.Projects.Count > 0);
-        AppSaveData.Projects.Last().BuildProjectFromTemplate(new Vector2(2, 5));
-        //[TODO]
+        NodeManager.ClearAll();
+        CurrentProjectID = id;
+        LoadHUD();
+        if (id == -1)
+            return;
+
+        AppSaveData.GetProject(id).BuildProjectFromTemplate();
     }
+
+
 
 
 

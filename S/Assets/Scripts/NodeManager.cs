@@ -294,7 +294,7 @@ public static class NodeManager //: Singleton<NodeManager>
         return newSave;
     }
 
-    public static int SaveAsNewProject(string name)
+    public static int SaveAsNewProject(string name, bool andClose = false)
     {
         int id = AppSaveData.ProjectCnt;
 

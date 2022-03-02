@@ -12,6 +12,7 @@ public class SaveAsNewProjectMenuController : MonoBehaviour
     private TextMeshProUGUI warning;
     [SerializeField]
     private Button createButton;
+    public bool SaveAndClose;
 
     //private RenderProperties rendprops = new();
 
@@ -36,13 +37,16 @@ public class SaveAsNewProjectMenuController : MonoBehaviour
 
     public void CreateTemplate()
     {
-        PlayerController.Instance.SaveAsNewProject(inputField.text);
+        PlayerController.Instance.SaveAsNewProject(inputField.text, SaveAndClose);
         Close();
     }
 
     public void Close()
     {
         Destroy(gameObject.transform.parent.gameObject);
-        PlayerController.Instance.LoadHUD();
+        if (SaveAndClose)
+            PlayerController.Instance.Mode = PlayerController.GameMode.Menu;
+        else
+            PlayerController.Instance.LoadHUD();
     }
 }

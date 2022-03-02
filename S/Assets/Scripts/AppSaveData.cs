@@ -114,7 +114,7 @@ public static class AppSaveData
             gateTemplates.SaveClass(gatePath);
         }
         GateTemplates = Helper.LoadClass<List<GateTemplate>>(gatePath);
-        Debug.Assert(GateTemplates == null);
+        Debug.Assert(GateTemplates != null);
 
         /* Projects files */
         if (!File.Exists(projectPath))

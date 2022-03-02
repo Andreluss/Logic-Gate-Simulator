@@ -258,8 +258,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 338452714694842351}
-        m_TargetAssemblyTypeName: SaveProjectChangesController, Assembly-CSharp
-        m_MethodName: Close
+        m_TargetAssemblyTypeName: SaveOnExitMenuController, Assembly-CSharp
+        m_MethodName: DontSaveChanges
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1038,9 +1038,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ad1bd44d40132b4c8d80a9067a1d6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 0}
-  warning: {fileID: 0}
-  createButton: {fileID: 0}
 --- !u!114 &8985653616401428034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1208,7 +1205,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 338452714694842351}
-        m_TargetAssemblyTypeName: SaveProjectChangesController, Assembly-CSharp
+        m_TargetAssemblyTypeName: SaveOnExitMenuController, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
         m_Arguments:
