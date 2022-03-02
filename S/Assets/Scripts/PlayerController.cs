@@ -56,12 +56,16 @@ public class PlayerController : Singleton<PlayerController>
             //wkurza mnie ten warning
             //Debug.Log("is over UI: " + IsPointerOverUIObject());
         }
-        var delta = -Input.mouseScrollDelta.y;
-        if (Mathf.Abs(delta) > 0)
+        if(EventSystem.current.IsPointerOverGameObject() == false)
         {
-            Debug.Log(Input.mouseScrollDelta);
-            m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
-            c_Camera.orthographicSize = m_Camera.orthographicSize;
+            var delta = -Input.mouseScrollDelta.y;
+            if (Mathf.Abs(delta) > 0)
+            {
+                Debug.Log(Input.mouseScrollDelta);
+                m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
+                c_Camera.orthographicSize = m_Camera.orthographicSize;
+            }
+
         }
     }
 

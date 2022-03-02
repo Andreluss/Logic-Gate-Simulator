@@ -48,6 +48,18 @@ public static class Helper
     {
         return (vector.x, vector.y);
     }
+    public static Texture2D LoadPNG(string filePath)
+    {
+        Texture2D texture2D = null;
+        if (File.Exists(filePath))
+        {
+            byte[] data = File.ReadAllBytes(filePath);
+            texture2D = new Texture2D(2, 2);
+            texture2D.LoadImage(data);
+        }
+        return texture2D;
+    }
+
     public static void SaveClass<T>(this T _Class, string FilePath)
     {
         FileStream fileStream = File.Create(FilePath);
