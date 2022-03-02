@@ -584,8 +584,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8041780205374316918}
-        m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
+      - m_Target: {fileID: 8767529083466083146}
+        m_TargetAssemblyTypeName: SaveAsNewProjectMenuController, Assembly-CSharp
         m_MethodName: TestName
         m_Mode: 1
         m_Arguments:
@@ -736,8 +736,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8041780205374316918}
-        m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
+      - m_Target: {fileID: 8767529083466083146}
+        m_TargetAssemblyTypeName: SaveAsNewProjectMenuController, Assembly-CSharp
         m_MethodName: CreateTemplate
         m_Mode: 1
         m_Arguments:
@@ -759,7 +759,6 @@ GameObject:
   - component: {fileID: 3721422740461937180}
   - component: {fileID: 4395545239913914456}
   - component: {fileID: 8158205039141127162}
-  - component: {fileID: 8041780205374316918}
   - component: {fileID: 8767529083466083146}
   - component: {fileID: 1747513217388276258}
   m_Layer: 5
@@ -831,23 +830,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8041780205374316918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3349955057161317989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab7473f63061344cb172590ac8dd7cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputField: {fileID: 8407118587667497816}
-  warning: {fileID: 7046318190971927068}
-  createButton: {fileID: 5304921332408658123}
-  colorPanel: {fileID: 0}
-  colorButtonPrefab: {fileID: 7861243098276382334, guid: d08c099dd4203f74d8a49b0bff07ff84, type: 3}
 --- !u!114 &8767529083466083146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,8 +845,6 @@ MonoBehaviour:
   inputField: {fileID: 8407118587667497816}
   warning: {fileID: 7046318190971927068}
   createButton: {fileID: 5304921332408658123}
-  colorPanel: {fileID: 0}
-  colorButtonPrefab: {fileID: 0}
 --- !u!114 &1747513217388276258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1031,8 +1011,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8041780205374316918}
-        m_TargetAssemblyTypeName: SaveBlockMenuController, Assembly-CSharp
+      - m_Target: {fileID: 8767529083466083146}
+        m_TargetAssemblyTypeName: SaveAsNewProjectMenuController, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
         m_Arguments:
@@ -1060,7 +1040,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1154493689501778355
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1079,7 +1059,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -52.3}
-  m_SizeDelta: {x: 245.33, y: 22.863}
+  m_SizeDelta: {x: 263.0909, y: 28.7833}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8447087621294754277
 CanvasRenderer:
@@ -1136,8 +1116,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

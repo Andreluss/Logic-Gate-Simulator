@@ -48,9 +48,9 @@ public static class AppSaveData
     }
     public static void AddProject(GateTemplate project)
     {
-        project.templateId = -1;
+        project.templateId = ProjectCnt;
         Projects.Add(project);
-        GateTemplates.SaveClass(projectPath);
+        Projects.SaveClass(projectPath);
     }
     public static void UpdateProject(int id, GateTemplate newProjectData)
     {

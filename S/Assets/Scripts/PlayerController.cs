@@ -151,6 +151,7 @@ public class PlayerController : Singleton<PlayerController>
     public void SaveAsNewProject(string name)
     {
         CurrentProjectID = NodeManager.SaveAsNewProject(name);
+        Debug.Log($"New project ({name}) has been succesfully saved.");
     }
 
     public void SaveChanges()
