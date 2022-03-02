@@ -65,13 +65,13 @@ public class PlayerController : Singleton<PlayerController>
                 m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
                 c_Camera.orthographicSize = m_Camera.orthographicSize;
 
+                ContextMenu.Instance.DestroyContextMenu();
                
                 //var pos = GetMousePosition();
                 //Vector3 newpos = new Vector3(pos.x, pos.y, m_Camera.transform.position.z);
                 
                 //m_Camera.transform.position = newpos;
             }
-
         }
     }
 
