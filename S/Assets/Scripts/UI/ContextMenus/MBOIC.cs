@@ -8,7 +8,7 @@ public class MBOIC : ItemController
     {
         base.Start();
 
-        contextMenuItems.Add(new ContextMenuItem("Switch Signed/Unsigned mode", sampleButton,
+        contextMenuItems.Add(new ContextMenuItem("Switch Signed/Unsigned", sampleButton,
             x => (x as MultibitControllerOutput).Signed = !(x as MultibitControllerOutput).Signed));
     }
 }
