@@ -52,7 +52,16 @@ public class MultibitControllerOutput : MultibitController //wlasciwie taki meta
     }
     public int MaxValue { get => (1 << (BitCount - Convert.ToInt32(Signed))) - 1; }
     public int MinValue { get => Signed ? -(1 << BitCount) : 0; }
-    public bool Signed { get; set; }//[TODO] ogarn¹æ guzik, który to zmienia
+    public bool Signed
+    {
+        get => signed; set
+        {
+            signed = value;
+            Calculate();
+        }
+    }
+    bool signed = false;
+
     public List<OutputNode> Outputs { get; }
 
 
