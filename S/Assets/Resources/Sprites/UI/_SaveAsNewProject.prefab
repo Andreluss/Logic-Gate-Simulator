@@ -738,7 +738,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8767529083466083146}
         m_TargetAssemblyTypeName: SaveAsNewProjectMenuController, Assembly-CSharp
-        m_MethodName: CreateTemplate
+        m_MethodName: CreateProject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -845,6 +845,7 @@ MonoBehaviour:
   inputField: {fileID: 8407118587667497816}
   warning: {fileID: 7046318190971927068}
   createButton: {fileID: 5304921332408658123}
+  SaveAndClose: 0
 --- !u!114 &1747513217388276258
 MonoBehaviour:
   m_ObjectHideFlags: 0

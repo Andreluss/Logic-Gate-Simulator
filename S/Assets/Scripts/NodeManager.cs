@@ -89,16 +89,18 @@ public static class NodeManager //: Singleton<NodeManager>
         {
             foreach (var inputNode in mcinput.Inputs)
             {
-                nodes.Remove(inputNode);
-                inputNodes.Remove(inputNode);
+                //nodes.Remove(inputNode);
+                //inputNodes.Remove(inputNode);
+                DeleteNode(inputNode);
             }
         }
         else if (node is MultibitControllerOutput mco)
         {
             foreach (var outnode in mco.Outputs)
             {
-                nodes.Remove(outnode);
-                outputNodes.Remove(outnode);
+                //nodes.Remove(outnode);
+                //outputNodes.Remove(outnode);
+                DeleteNode(outnode);
             }
         }
 
@@ -107,6 +109,11 @@ public static class NodeManager //: Singleton<NodeManager>
         Debug.Log($"Node {node} deleted");//msdlkjl
 
         if(recalc) CalculateAll();
+    }
+
+    public static void DeleteEdge()
+    {
+        throw new NotImplementedException();
     }
     
     public static void Connect(Node A, int outIdx, Node B, int inIdx)

@@ -34,6 +34,8 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject SaveOnExitMenu;
     [SerializeField]
     private GameObject SaveAsNewProjectMenu;
+    [SerializeField]
+    private Toggle _SnapToGrid;
 
 
     /* Dane aktualnego projektu */
@@ -105,7 +107,7 @@ public class PlayerController : Singleton<PlayerController>
             //wkurza mnie ten warning
             //Debug.Log("is over UI: " + IsPointerOverUIObject());
         }
-        if(EventSystem.current.IsPointerOverGameObject() == false && Mode != GameMode.Menu)
+        if(EventSystem.current.IsPointerOverGameObject() == false && Mode != GameMode.Menu && !IsPointerOutsideTheViewport())
         {
             var delta = -Input.mouseScrollDelta.y;
             if (Mathf.Abs(delta) > 0)
@@ -137,6 +139,7 @@ public class PlayerController : Singleton<PlayerController>
     public void OnToggleSnapping()
     {
         AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
+        //_SnapToGrid.isOn = AppSaveData.Settings.SnapObjects;
     }
     public void OnChangeDescriptionClick(Node node)
     {
@@ -645,7 +648,12 @@ public class PlayerController : Singleton<PlayerController>
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
     }
-
+    public bool IsPointerOutsideTheViewport()
+    {
+        var view = m_Camera.ScreenToViewportPoint(Input.mousePosition);
+        var isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+        return isOutside;
+    }
     public void InvokeNextFrame(Action function)
     {
         try

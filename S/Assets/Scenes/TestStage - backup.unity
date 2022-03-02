@@ -2839,7 +2839,7 @@ GameObject:
   - component: {fileID: 1192658362}
   m_Layer: 5
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: SnapToGrid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3163,6 +3163,7 @@ MonoBehaviour:
   SaveAsNewBlockMenu: {fileID: 4243898063870518386, guid: 452665bc84f1c7544a61707d45024252, type: 3}
   SaveOnExitMenu: {fileID: 6542667630588625255, guid: d20577bf6989e3b4ca7a7b50dc9c9667, type: 3}
   SaveAsNewProjectMenu: {fileID: 4243898063870518386, guid: 472395e2fae1d8d4eb89295d824e776a, type: 3}
+  _SnapToGrid: {fileID: 1281663270}
   BottomBarContent: {fileID: 416814443}
 --- !u!114 &1291405521
 MonoBehaviour:

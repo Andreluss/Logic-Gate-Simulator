@@ -29,6 +29,9 @@ public class SaveAsNewBlockMenuController : MonoBehaviour
             var button = b.GetComponent<Button>();
             button.onClick.AddListener(delegate { SetColorFromButton(button); });
         }
+        int randIdx = Random.Range(0, hex.Length);
+        Debug.Assert(colorPanel.transform.childCount >= hex.Length);
+        SetColorFromButton(colorPanel.transform.GetChild(randIdx).GetComponent<Button>());
     }
 
 
@@ -36,13 +39,9 @@ public class SaveAsNewBlockMenuController : MonoBehaviour
     {
         if(AppSaveData.TemplateExists(inputField.text))
         {
+            warning.text = "This name already exists!";
             warning.gameObject.SetActive(true);
             createButton.interactable = false;//??
-        }
-        else if(inputField.text.Length == 0)
-        {
-            warning.gameObject.SetActive(false);
-            createButton.interactable = false;
         }
         else
         {
@@ -53,6 +52,12 @@ public class SaveAsNewBlockMenuController : MonoBehaviour
 
     public void CreateTemplate()
     {
+        if (inputField.text.Length == 0)
+        {
+            warning.text = "Name cannot be empty!";
+            warning.gameObject.SetActive(true);
+            return;
+        }
         Debug.Log("nigga whass cracking?");//NodeManager.SaveAllAsTemplate(inputField.text, rendprops);
         PlayerController.Instance.SaveAllAsNewTemplate(inputField.text, rendprops);
         Close();

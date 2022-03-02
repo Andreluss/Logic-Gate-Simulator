@@ -201,7 +201,7 @@ public class GateTemplate
         List<T> res = new();
         foreach(var id in nodeIDs)
         {
-            Debug.Assert(Helper.InRange(id, 0, IDtoNode.Length) && IDtoNode[id] is OutputNode);
+            Debug.Assert(Helper.InRange(id, 0, IDtoNode.Length) && IDtoNode[id] is T);
             res.Add(IDtoNode[id] as T);
         }
         return res;

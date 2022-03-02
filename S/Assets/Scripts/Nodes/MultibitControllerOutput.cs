@@ -27,11 +27,14 @@ public class MultibitControllerOutput : MultibitController //wlasciwie taki meta
         Outputs = forOutputs;
         Hidden = isHidden;
 
-        for (int i = 0; i < BitCount; i++)
+        if (!Hidden)
         {
-            Outputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
-            Outputs[i].Controller = this;
-            Outputs[i].Description = "bit " + i;
+            for (int i = 0; i < BitCount; i++)
+            {
+                Outputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
+                Outputs[i].Controller = this;
+                Outputs[i].Description = "bit " + i;
+            } 
         }
     }
 

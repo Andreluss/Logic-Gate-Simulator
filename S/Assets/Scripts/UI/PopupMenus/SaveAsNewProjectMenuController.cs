@@ -35,7 +35,7 @@ public class SaveAsNewProjectMenuController : MonoBehaviour
         }
     }
 
-    public void CreateTemplate()
+    public void CreateProject()
     {
         PlayerController.Instance.SaveAsNewProject(inputField.text, SaveAndClose);
         Close();

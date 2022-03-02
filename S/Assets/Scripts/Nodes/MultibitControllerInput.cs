@@ -26,11 +26,14 @@ public class MultibitControllerInput : MultibitController
         Inputs = forInputs;
         Hidden = hidden;//bo inaczej renderer nie widzi inputow!!!
 
-        for (int i = 0; i < Inputs.Count; i++)
+        if (!Hidden)
         {
-            Inputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
-            Inputs[i].Controller = this;
-            Inputs[i].Description = "bit " + i;
+            for (int i = 0; i < Inputs.Count; i++)
+            {
+                Inputs[i].GetRenderer().transform.parent.SetParent(GetRenderer().transform.parent, false);
+                Inputs[i].Controller = this;
+                Inputs[i].Description = "bit " + i;
+            }
         }
         //chyba tyle [TODO] check czy faktycznie tyle
     }

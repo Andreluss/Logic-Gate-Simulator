@@ -14,12 +14,5 @@ public class XDebug : MonoBehaviour
 
         NodeManager.CreateNode(AppSaveData.AndTemplate);
         NodeManager.CreateNode(AppSaveData.NotTemplate);
-
-        Debug.Log("NANDx is set up");
     }
-
-    void Update()
-    {
-    }
-
 }

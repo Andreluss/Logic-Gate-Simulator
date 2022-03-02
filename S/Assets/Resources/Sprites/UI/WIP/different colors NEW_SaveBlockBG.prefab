@@ -6515,7 +6515,7 @@ GameObject:
   - component: {fileID: 6542667630588625253}
   - component: {fileID: 2973537369416002780}
   m_Layer: 5
-  m_Name: NEW_SaveBlockBG
+  m_Name: different colors NEW_SaveBlockBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
