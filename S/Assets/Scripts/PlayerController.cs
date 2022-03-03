@@ -38,6 +38,8 @@ public class PlayerController : Singleton<PlayerController>
     private Toggle _SnapToGrid;
     [SerializeField]
     private GameObject ChangeColorMenu;
+    [SerializeField]
+    private GameObject ChangeDescriptionMenu;
 
 
     /* Dane aktualnego projektu */
@@ -204,9 +206,11 @@ public class PlayerController : Singleton<PlayerController>
         var menu = Instantiate(ChangeColorMenu, forGateRenderer.node.Position + new Vector2(1.25f, 0), Quaternion.identity, canvas.transform);
         menu.GetComponentInChildren< ChangeColorMenuController>().gateRenderer = forGateRenderer;
     }
-
-
-
+    public void ShowChangeDescriptionMenu(Node inoutnode)
+    {
+        var menu = Instantiate(ChangeDescriptionMenu, inoutnode.Position + new Vector2(1f, 0), Quaternion.identity, canvas.transform);
+        menu.GetComponentInChildren<ChangeDescriptionMenuController>().node = inoutnode;
+    }
 
 
     /* w³aœciwe operacje ju¿ po wyklikaniu opcji z menu */

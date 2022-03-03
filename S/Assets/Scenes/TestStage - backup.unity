@@ -3164,6 +3164,8 @@ MonoBehaviour:
   SaveOnExitMenu: {fileID: 6542667630588625255, guid: d20577bf6989e3b4ca7a7b50dc9c9667, type: 3}
   SaveAsNewProjectMenu: {fileID: 4243898063870518386, guid: 472395e2fae1d8d4eb89295d824e776a, type: 3}
   _SnapToGrid: {fileID: 1281663270}
+  ChangeColorMenu: {fileID: 4243898063870518386, guid: 839392cbd31c9304b8cb0c91700b3a8d, type: 3}
+  ChangeDescriptionMenu: {fileID: 4243898063870518386, guid: 51537264299c48a4bbc7d19aa80de88d, type: 3}
   BottomBarContent: {fileID: 416814443}
 --- !u!114 &1291405521
 MonoBehaviour:

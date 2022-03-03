@@ -15,6 +15,6 @@ public class InputIC : ItemController
         contextMenuItems.Add(new ContextMenuItem("Flip bit", sampleButton,
             () => NodeManager.Flip(nodeOrEdgeObj as InputCollision)));
         contextMenuItems.Add(new ContextMenuItem("Change desc.", sampleButton,
-            () => PlayerController.Instance.OnChangeDescriptionClick(innode)));
+            () => PlayerController.Instance.ShowChangeDescriptionMenu(innode)));
     }
 }

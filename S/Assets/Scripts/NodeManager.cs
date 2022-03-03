@@ -85,6 +85,7 @@ public static class NodeManager //: Singleton<NodeManager>
                 (node.GetRenderer() as GateRenderer).Color = color;
             }
         }
+        PlayerController.Instance.LoadHUD(); //chyba serio lepiej zreloadowac projekt
     }
 
     public static void DeleteNode(Node node, bool recalc = true)

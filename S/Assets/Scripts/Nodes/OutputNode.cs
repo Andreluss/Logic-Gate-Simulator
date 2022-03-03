@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 public class OutputNode : Node
 {
     public OutputNode(bool hidden) : base(1, 0, "Output", hidden)
@@ -34,6 +35,7 @@ public class OutputNode : Node
     {
         Debug.Log("creating outnode rend");
         renderer = OutputRenderer.Make(this);
+        Description = renderer.transform.parent.GetChild(2).GetComponent<TextMeshPro>().text;
     }
     protected override void DestroyRenderer()
     {

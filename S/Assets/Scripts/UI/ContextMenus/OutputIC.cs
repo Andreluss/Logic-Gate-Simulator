@@ -12,7 +12,7 @@ public class OutputIC : ItemController
         if (outnode.Controlled) 
             contextMenuItems.RemoveAt(0);
 
-        contextMenuItems.Add(new ContextMenuItem("Change description", sampleButton,
-            () => PlayerController.Instance.OnChangeDescriptionClick(outnode)));
+        contextMenuItems.Add(new ContextMenuItem("Change desc.", sampleButton,
+            () => PlayerController.Instance.ShowChangeDescriptionMenu(outnode)));
     }
 }

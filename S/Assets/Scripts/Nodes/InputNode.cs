@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 public class InputNode : Node
 {
     public InputNode(bool hidden = true) : base(0, 1, "Input", hidden)
@@ -30,6 +31,7 @@ public class InputNode : Node
     {
         Debug.Log("creating innode rend");
         renderer = InputRenderer.Make(this);
+        Description = renderer.transform.parent.GetChild(2).GetComponent<TextMeshPro>().text;
     }
     protected override void DestroyRenderer()
     {
