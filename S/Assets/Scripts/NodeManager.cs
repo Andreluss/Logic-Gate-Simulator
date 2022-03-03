@@ -213,6 +213,8 @@ public static class NodeManager //: Singleton<NodeManager>
         template.TemplateIDsForEachNode = new int[template.N];
         template.PositionsForEachNode = new (float, float)[template.N];
 
+        template.descriptions = new();
+
         Dictionary<Node, int> ID = new();
         int k = 0;
         foreach (var node in nodes)//[TODO] check perf

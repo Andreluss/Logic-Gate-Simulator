@@ -142,9 +142,12 @@ public class GateTemplate
         }
 
         /* ----- descriptions ----- */
-        foreach (var (id, desc) in descriptions)
+        if(descriptions != null)
         {
-            IDtoNode[id].Description = desc;
+            foreach (var (id, desc) in descriptions)
+            {
+                IDtoNode[id].Description = desc;
+            }
         }
 
         /* ----- controllers ----- */
