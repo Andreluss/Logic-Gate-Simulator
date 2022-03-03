@@ -23,6 +23,7 @@ public class GateTemplate
     public int[] TemplateIDsForEachNode;
     public ValueTuple<float, float>[] PositionsForEachNode;
     public List<ValueTuple<int, bool>> inputValues;//nodeID, value
+    public List<ValueTuple<int, string>> descriptions;
     public int templateId;
 
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
@@ -138,6 +139,12 @@ public class GateTemplate
             int id = TemplateIDsForEachNode[i];
             GateTemplate template = AppSaveData.GetTemplate(id);
             IDtoNode[i] = NodeManager.CreateNode(template, PositionsForEachNode[i].ToVector2() + delta); //ma byc WIDOCZNY!
+        }
+
+        /* ----- descriptions ----- */
+        foreach (var (id, desc) in descriptions)
+        {
+            IDtoNode[id].Description = desc;
         }
 
         /* ----- controllers ----- */

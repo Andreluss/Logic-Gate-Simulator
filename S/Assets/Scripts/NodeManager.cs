@@ -223,10 +223,18 @@ public static class NodeManager //: Singleton<NodeManager>
             if (node is InputNode)
             {
                 template.inCnt++;
+                if(node.Description != null)
+                {
+                    template.descriptions.Add((ID[node], node.Description));
+                }
             }
             else if (node is OutputNode)
             {
                 template.outCnt++;
+                if(node.Description != null)
+                {
+                    template.descriptions.Add((ID[node], node.Description));
+                }
             }
         }
 
