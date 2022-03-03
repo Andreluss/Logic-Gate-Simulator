@@ -30,7 +30,7 @@ public class GateRenderer : NodeRenderer
 
         int id = forWho.GetTemplateID();
         var rendprops = AppSaveData.GetTemplate(id).renderProperties;
-        gateRend.SetColor(rendprops.Color);
+        gateRend.Color = rendprops.Color;
 
         int c = Mathf.Max(forWho.inCnt, forWho.outCnt);
         float y = 1.2f + (c - 1) * 0.5f;
@@ -78,8 +78,6 @@ public class GateRenderer : NodeRenderer
         return gateRend;
     }
 
-    void SetColor(Color color)
-    {
-        //[TODO]
-    }
+    private Color color;
+    public Color Color { get => color; set => color = transform.parent.GetChild(1).GetComponent<TextMeshPro>().color = value; }
 }

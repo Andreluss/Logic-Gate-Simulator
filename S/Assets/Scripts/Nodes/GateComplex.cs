@@ -42,9 +42,10 @@ public class GateComplex : Gate
     public List<OutputNode> internalOuts;
     private int templateID;
     public GateComplex(int inputCount, int outputCount, string name, bool hidden, int templ)
-         : base(inputCount, outputCount, name, hidden)
+         : base(inputCount, outputCount, name, true)
     {
         templateID = templ;
+        Hidden = hidden;//ahh
         internalIns = new();
         internalOuts = new();
     }

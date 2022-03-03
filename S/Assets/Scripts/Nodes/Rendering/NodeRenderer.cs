@@ -6,7 +6,7 @@ using TMPro;
 
 public class NodeRenderer : BaseRenderer
 {
-    private Node node;//!!! musi byc przypisany przy tworzeniu
+    public Node node;//!!! musi byc przypisany przy tworzeniu
     private int inCnt, outCnt;
     public OutSocketRenderer[] outSocketRends;
     public InSocketRenderer[] inSocketRends;

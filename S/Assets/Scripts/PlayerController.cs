@@ -36,6 +36,8 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject SaveAsNewProjectMenu;
     [SerializeField]
     private Toggle _SnapToGrid;
+    [SerializeField]
+    private GameObject ChangeColorMenu;
 
 
     /* Dane aktualnego projektu */
@@ -197,7 +199,11 @@ public class PlayerController : Singleton<PlayerController>
     {
         Instantiate(SaveOnExitMenu, canvas.transform);
     }
-
+    public void ShowChangeColorMenu(GateRenderer forGateRenderer)
+    {
+        var menu = Instantiate(ChangeColorMenu, forGateRenderer.node.Position + new Vector2(1.25f, 0), Quaternion.identity, canvas.transform);
+        menu.GetComponentInChildren< ChangeColorMenuController>().gateRenderer = forGateRenderer;
+    }
 
 
 

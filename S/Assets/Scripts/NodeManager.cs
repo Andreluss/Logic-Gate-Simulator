@@ -70,6 +70,23 @@ public static class NodeManager //: Singleton<NodeManager>
         CalculateAll();
     }
 
+    internal static void UpdateGateColor(int id, Color color)
+    {
+        var templ = AppSaveData.GetTemplate(id);
+        Debug.Assert(templ.renderProperties != null);
+        templ.renderProperties.Color = color;
+        AppSaveData.UpdateGate(id, templ);
+
+        //or just Reload Project, nwm w sumie
+        foreach(var node in nodes)
+        {
+            if(node is Gate && node.GetTemplateID() == id)
+            {
+                (node.GetRenderer() as GateRenderer).Color = color;
+            }
+        }
+    }
+
     public static void DeleteNode(Node node, bool recalc = true)
     {
         if (node is not MultibitController)

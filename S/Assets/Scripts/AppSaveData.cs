@@ -5,6 +5,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System;
+
 public static class AppSaveData
 {
     //0  -> Input
@@ -69,6 +71,12 @@ public static class AppSaveData
     private static List<GateTemplate> GateTemplates;
     private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
     private static readonly string projectPath = Application.dataPath + "/Projects.bin";
+
+    internal static void UpdateGate(int id, GateTemplate newTemplateData)
+    {
+        GateTemplates[id] = newTemplateData;
+        GateTemplates.SaveClass(gatePath);//chyba git ??
+    }
 
     public static List<GateTemplate> Projects;
 
