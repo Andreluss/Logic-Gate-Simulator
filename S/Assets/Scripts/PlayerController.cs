@@ -73,6 +73,7 @@ public class PlayerController : Singleton<PlayerController>
     }
 
 
+
     /* Funkcje zwi¹zane z trybem Gry (tryb >> stan) */
     private void ShowNormalUI(bool show)
     {
@@ -187,6 +188,16 @@ public class PlayerController : Singleton<PlayerController>
 
 
     /* wyœwietlacze menu itp. */
+    public GameObject CurrentPopUpWindow
+    {
+        get => currentPopUpWindow; set
+        {
+            if(currentPopUpWindow != null)
+                Destroy(currentPopUpWindow);
+            currentPopUpWindow = value;
+        }
+    }
+    private GameObject currentPopUpWindow;
     public void ShowSaveAsNewBlockMenu()
     {
         Instantiate(SaveAsNewBlockMenu, canvas.transform);
@@ -205,11 +216,15 @@ public class PlayerController : Singleton<PlayerController>
     {
         var menu = Instantiate(ChangeColorMenu, forGateRenderer.node.Position + new Vector2(1.25f, 0), Quaternion.identity, canvas.transform);
         menu.GetComponentInChildren< ChangeColorMenuController>().gateRenderer = forGateRenderer;
+
+        CurrentPopUpWindow = menu;
     }
     public void ShowChangeDescriptionMenu(Node inoutnode)
     {
         var menu = Instantiate(ChangeDescriptionMenu, inoutnode.Position + new Vector2(1f, 0), Quaternion.identity, canvas.transform);
         menu.GetComponentInChildren<ChangeDescriptionMenuController>().node = inoutnode;
+
+        CurrentPopUpWindow = menu;
     }
 
 

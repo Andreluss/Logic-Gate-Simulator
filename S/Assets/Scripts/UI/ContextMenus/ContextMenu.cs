@@ -39,6 +39,7 @@ public class ContextMenu : Singleton<ContextMenu>
     }
     public void CreateContextMenu(List<ContextMenuItem> items, Vector2 position)
     {
+        PlayerController.Instance.CurrentPopUpWindow = null;//[DESIGN] taki hack troszke syfny
         DestroyContextMenu();
 
         panel = Instantiate(contentPanelPrefab/*, Vector3.zero, Quaternion.identity*/);
