@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class SaveOnExitMenuController : MonoBehaviour
+public class SaveOnExitEDITMENUController : MonoBehaviour
 {
     public void SaveChanges()
     {
-        PlayerController.Instance.OnSaveClick(true);
+        PlayerController.Instance.OnSaveEditModeClick(true);
         Close();
     }
 
     public void DontSaveChanges()
     {
-        PlayerController.Instance.Mode = PlayerController.GameMode.Menu;
+        PlayerController.Instance.Mode = PlayerController.GameMode.Normal;
         Close();
     }
 

@@ -156,11 +156,6 @@ public class GateTemplate
             foreach (var (pos, cinputs) in inputControllers)
             {
                 List<InputNode> controlledInputNodes = GetControlledNodes<InputNode>(cinputs, IDtoNode);
-                //foreach (var c in cinputs)
-                //{
-                //    Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length) && IDtoNode[c] is OutputNode);
-                //    controlledInputNodes.Add(IDtoNode[c] as InputNode);
-                //}
                 var controller = new MultibitControllerInput(controlledInputNodes, false);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(controller.GetRenderer().transform.parent.GetComponent<RectTransform>());
                 controller.Position = pos.ToVector2() + delta;
@@ -174,11 +169,6 @@ public class GateTemplate
             foreach (var (pos, coutputs) in outputControllers)
             {
                 List<OutputNode> controlledOutputNodes = GetControlledNodes<OutputNode>(coutputs, IDtoNode);
-                //foreach (var c in coutputs)
-                //{
-                //    Debug.Assert(Helper.InRange(c, 0, IDtoNode.Length) && IDtoNode[c] is OutputNode);
-                //    controlledOutputNodes.Add(IDtoNode[c] as OutputNode);
-                //}
                 var controller = new MultibitControllerOutput(controlledOutputNodes, false);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(controller.GetRenderer().transform.parent.GetComponent<RectTransform>());
                 controller.Position = pos.ToVector2() + delta;
@@ -186,10 +176,12 @@ public class GateTemplate
             }
         }
 
-        Debug.Assert(inputValues != null);
-        foreach (var (inputID, value) in inputValues)
+        if (inputValues != null)//Debug.Assert(inputValues != null);
         {
-            (IDtoNode[inputID] as InputNode).SetValue(value);
+            foreach (var (inputID, value) in inputValues)
+            {
+                (IDtoNode[inputID] as InputNode).SetValue(value);
+            }
         }
 
         foreach (var edge in edges)
@@ -205,6 +197,8 @@ public class GateTemplate
         NodeManager.CalculateAll();
     }
     
+
+
     /* Pomocnicze funkcje odsyfiające resztę kodu: */
     private List<T> GetControlledNodes<T> (List<int> nodeIDs, Node[] IDtoNode) where T : Node
     {

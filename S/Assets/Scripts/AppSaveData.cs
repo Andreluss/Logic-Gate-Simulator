@@ -58,6 +58,7 @@ public static class AppSaveData
     {
         Debug.Assert(Helper.InRange(id, 0, ProjectCnt));
         Projects[id] = newProjectData;
+        Projects.SaveClass(projectPath);
     }
     public static bool ProjectExists(string name)
     {

@@ -16,22 +16,37 @@ public class PlayerController : Singleton<PlayerController>
 
     public enum GameMode
     {
-        Menu, Normal, StrictEdit, FreeEdit
+        Menu, Normal, Edit
     }
+
+    internal void SwitchToEditMode(int id)
+    {
+        CurrentlyEditedBlockID = id;
+        Mode = GameMode.Edit;
+    }
+    internal void SwitchBackToNormalMode()
+    {
+        Mode = GameMode.Normal;   
+    }
+
+
     private GameMode mode = GameMode.Normal;
 
 
     /* okienka */
     [SerializeField]
-    private Canvas canvas;
-    [SerializeField]
     private GameObject NormalUI;
+    [SerializeField]
+    private GameObject EditUI;
+
     [SerializeField]
     private GameObject Menu;
     [SerializeField]
     private GameObject SaveAsNewBlockMenu;
     [SerializeField]
     private GameObject SaveOnExitMenu;
+    [SerializeField]
+    private GameObject SaveOnExitEditModeMenu;//!
     [SerializeField]
     private GameObject SaveAsNewProjectMenu;
     [SerializeField]
@@ -41,31 +56,66 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject ChangeDescriptionMenu;
 
+    [SerializeField]
+    private Canvas canvas;
+    [SerializeField]
+    private GameObject BottomBarContent;
+
 
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
+    public int CurrentlyEditedBlockID { get; set; }
     public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
+    public GateTemplate TemporaryProjectSave { get; private set; }
     public GameMode Mode
     {
         get => mode; set
         {
             if(mode == value) return;
+
+            //destruct
+            switch (mode)
+            {
+                case GameMode.Menu:
+                    break;
+
+                case GameMode.Normal:
+                    ShowNormalUI(false);
+                    break;
+
+                case GameMode.Edit:
+                    ShowEditUI(false);
+                    CurrentlyEditedBlockID = -1;
+                    break;
+            }
+
+
+            //construct
             switch (value)
             {
+                case GameMode.Menu:
+                    ShowMenu();
+                    TemporaryProjectSave = null;//??
+                    break;
+
                 case GameMode.Normal:
                     ShowNormalUI(true);
-                    //[TODO] update and unlock some buttons 
+                    if(TemporaryProjectSave != null)
+                    {
+                        TemporaryProjectSave.BuildProjectFromTemplate();
+                        TemporaryProjectSave = null;
+                    }
+                    LoadHUD();
                     break;
-                case GameMode.Menu:
-                    ShowNormalUI(false);
-                    ShowMenu();
-                    break;
-                case GameMode.StrictEdit:
-                    //[TODO] 
-                    //block and change some buttons
-                    break;
-                case GameMode.FreeEdit:
-                    //[TODO] same jak wy¿ej
+
+                case GameMode.Edit:
+                    TemporaryProjectSave = NodeManager.SaveAllAsProject("Last opened project's state");
+                    NodeManager.ClearAll();
+
+                    ShowEditUI(true); Debug.Assert(CurrentlyEditedBlockID != -1);
+                    LoadHUD(CurrentlyEditedBlockID);
+                    var t = AppSaveData.GetTemplate(CurrentlyEditedBlockID);
+                    t.BuildProjectFromTemplate(); //load block as project !! [BUG??]
                     break;
             }
             mode = value;
@@ -78,6 +128,12 @@ public class PlayerController : Singleton<PlayerController>
     private void ShowNormalUI(bool show)
     {
         NormalUI.SetActive(show);
+        BottomBarContent.SetActive(show);
+    }
+    private void ShowEditUI(bool show)
+    {
+        EditUI.SetActive(show);
+        BottomBarContent.SetActive(show);
     }
     private void ShowMenu()
     {
@@ -171,6 +227,10 @@ public class PlayerController : Singleton<PlayerController>
                 Mode = GameMode.Menu;
             }
         }
+    }
+    internal void OnSaveEditModeClick(bool andExit)
+    {
+        throw new NotImplementedException();
     }
     public void OnClear()
     {
@@ -269,7 +329,6 @@ public class PlayerController : Singleton<PlayerController>
 
         AppSaveData.GetProject(id).BuildProjectFromTemplate();
     }
-
 
 
 
@@ -696,7 +755,6 @@ public class PlayerController : Singleton<PlayerController>
         function();
     }
 
-    [SerializeField]
-    private GameObject BottomBarContent;
+
     private int currentProjectID = -1;
 }

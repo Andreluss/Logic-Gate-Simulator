@@ -12,5 +12,14 @@ public class GateIC : ItemController
 
         contextMenuItems.Add(new ContextMenuItem("Change color", sampleButton,
             () =>  PlayerController.Instance.ShowChangeColorMenu(gateRend)));
+
+        if(gateRend.node is GateComplex)
+        {
+            if(PlayerController.Instance.Mode != PlayerController.GameMode.Edit)
+            {
+                contextMenuItems.Add(new ContextMenuItem("Edit", sampleButton,
+                () => PlayerController.Instance.SwitchToEditMode((nodeOrEdgeObj as GateCollision).node.GetTemplateID())));
+            }
+        }
     }
 }
