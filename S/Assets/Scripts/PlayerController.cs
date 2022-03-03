@@ -603,13 +603,13 @@ public class PlayerController : Singleton<PlayerController>
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
-    public void LoadHUD()
+    public void LoadHUD(int endGateID = int.MaxValue)
     {
         for (int i = 0; i < BottomBarContent.transform.childCount; i++)
         {
             Destroy(BottomBarContent.transform.GetChild(i).gameObject);
         }
-        for (int i = 0; i < AppSaveData.TemplateCnt; i++)
+        for (int i = 0; i < Mathf.Min(AppSaveData.TemplateCnt, endGateID); i++)
         {
             var template = AppSaveData.GetTemplate(i);
             var coll = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform).GetComponent<NodeTemplateCollision>();
