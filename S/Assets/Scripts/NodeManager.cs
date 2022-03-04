@@ -334,6 +334,7 @@ public static class NodeManager //: Singleton<NodeManager>
 
         newSave.defaultName = oldSave.defaultName;
         newSave.renderProperties = oldSave.renderProperties;
+        newSave.templateId = currentlyEditedBlockID;//haha jest bug
 
         AppSaveData.UpdateGate(currentlyEditedBlockID, newSave);
 
