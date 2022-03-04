@@ -185,7 +185,11 @@ public class PlayerController : Singleton<PlayerController>
             if (Mathf.Abs(delta) > 0)
             {
                 Debug.Log(Input.mouseScrollDelta);
+                var mouse1 = GetMousePosition();
                 m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
+                var mouse2 = GetMousePosition();
+                m_Camera.transform.position += (Vector3)(mouse1 - mouse2);
+
                 c_Camera.orthographicSize = m_Camera.orthographicSize;
 
                 ContextMenu.Instance.DestroyContextMenu();
