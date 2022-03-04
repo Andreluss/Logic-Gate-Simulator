@@ -13,6 +13,12 @@ public class NodeRenderer : BaseRenderer
     public List<EdgeRenderer>[] outEdgeRenderers;
     public EdgeRenderer[] inEdgeRenderers;
 
+
+
+    protected GameObject outline;
+
+
+
     protected Node Node
     {
         get => node;

@@ -6,6 +6,18 @@ using TMPro;
 
 public class MBIRenderer : NodeRenderer //to jest taki node ale bez inputow i outputow
 {                                       //moze jak sie uda zrefaktoryzowac kod to to jakos ogarne
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(2).gameObject;
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     private TextMeshPro text;
     public static MBIRenderer Make(MultibitControllerInput forWho)
     {
@@ -20,6 +32,8 @@ public class MBIRenderer : NodeRenderer //to jest taki node ale bez inputow i ou
         var rend = GO.GetComponent<MBIRenderer>();
         rend.text = rootGO.GetComponentInChildren<TextMeshPro>();
         rend.Node = forWho;//??
+
+        rend.outline.transform.localScale = (Vector3)dim + (Vector3)Vector2.one * 0.05f;
 
         var coll = GO.GetComponent<MBICollision>();
         coll.node = forWho;

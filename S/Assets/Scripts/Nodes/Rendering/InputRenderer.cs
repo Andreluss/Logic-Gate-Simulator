@@ -8,6 +8,18 @@ public class InputRenderer : NodeRenderer
 {
     private TextMeshPro text;
     private TextMeshPro description;
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(3).gameObject;
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     public static InputRenderer Make(InputNode forWho)
     {
         var inputRootGO = Instantiate(Resources.Load<GameObject>

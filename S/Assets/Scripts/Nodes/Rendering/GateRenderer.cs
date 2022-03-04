@@ -5,6 +5,18 @@ using TMPro;
 
 public class GateRenderer : NodeRenderer
 {
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(2).gameObject;
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     public static GateRenderer Make(Gate forWho)
     {
         var gateRootGO = Instantiate(Resources.Load("Sprites/GateRoot")) as GameObject; 
@@ -36,6 +48,8 @@ public class GateRenderer : NodeRenderer
         float y = 1.2f + (c - 1) * 0.5f;
         var dim = gateRend.transform.localScale = new Vector2(2, y);
 
+
+        gateRend.outline.transform.localScale = dim + (Vector3)Vector2.one * 0.05f;
 
 
 

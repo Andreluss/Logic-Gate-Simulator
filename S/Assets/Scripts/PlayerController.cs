@@ -400,7 +400,10 @@ public class PlayerController : Singleton<PlayerController>
             var obj = GetObjectUnderMouse();
             //Debug.Log(EventSystem.current.currentSelectedGameObject);
             if (obj == null)
+            {
                 ContextMenu.Instance.DestroyContextMenu();
+                ChangeSelectionTo(null);//[BUG?]
+            }
             if (obj != null)
             {
                 Debug.Log("clicked " + GetObjectUnderMouse());

@@ -7,6 +7,18 @@ public class OutputRenderer : NodeRenderer
 {
     private TextMeshPro text;
     private TextMeshPro description;
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(3).gameObject;
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     public static OutputRenderer Make(OutputNode forWho)
     {
         var outputRootGO = Instantiate(Resources.Load<GameObject>
