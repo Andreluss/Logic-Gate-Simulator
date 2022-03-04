@@ -69,6 +69,8 @@ public class PlayerController : Singleton<PlayerController>
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
     public int CurrentlyEditedBlockID { get; set; }
     public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
+    public string CurrentlyEditedBlockName { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).defaultName; }
+    public RenderProperties CurrentlyEditedBlockRendProps { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).renderProperties; }
     public GateTemplate TemporaryProjectSave { get; private set; }
     public GameMode Mode
     {
@@ -113,7 +115,7 @@ public class PlayerController : Singleton<PlayerController>
                     break;
 
                 case GameMode.Edit:
-                    TemporaryProjectSave = NodeManager.SaveAllAsProject("Last opened project's state");
+                    TemporaryProjectSave = NodeManager.GetProjectSaveFromAll("Last opened project's state");
                     NodeManager.ClearAll();
 
                     ShowEditUI(true); Debug.Assert(CurrentlyEditedBlockID != -1);
@@ -277,6 +279,8 @@ public class PlayerController : Singleton<PlayerController>
             currentPopUpWindow = value;
         }
     }
+
+
     private GameObject currentPopUpWindow;
     public void ShowSaveAsNewBlockMenu()
     {
@@ -311,15 +315,14 @@ public class PlayerController : Singleton<PlayerController>
     /* w³aœciwe operacje ju¿ po wyklikaniu opcji z menu */
     public void SaveAllAsNewTemplate(string name, RenderProperties rendprops)
     {
-        NodeManager.SaveAllAsTemplate(name, rendprops);
+        NodeManager.SaveAllAsNewTemplate(name, rendprops);
         NodeManager.ClearAll();
         Debug.Log($"New block ({name}) has been succesfully saved.");
         LoadHUD();
     }
-
     public void SaveAsNewProject(string name, bool andClose)
     {
-        CurrentProjectID = NodeManager.SaveAsNewProject(name);
+        CurrentProjectID = NodeManager.SaveAllAsNewProject(name);
         Debug.Log($"New project ({name}) has been succesfully saved.");
         if (andClose)
         {
@@ -327,19 +330,6 @@ public class PlayerController : Singleton<PlayerController>
             Mode = GameMode.Menu;
         }
     }
-
-    public void SaveChanges()
-    {
-        NodeManager.SaveChangesToProject(CurrentProjectID);
-        Debug.Log($"Changes saved to project {CurrentProjectName}");
-    }
-    private void SaveEMChanges()
-    {
-        Debug.Assert(CurrentlyEditedBlockID != -1);
-        NodeManager.SaveChangesToTemplate(CurrentlyEditedBlockID);
-        Debug.Log($"Changes saved to edited block");
-    }
-
 
     /// <summary>
     /// £aduje zapisany projekt (lub nowy, jeœli id = -1)
@@ -356,7 +346,31 @@ public class PlayerController : Singleton<PlayerController>
         AppSaveData.GetProject(id).BuildProjectFromTemplate();
     }
 
+    public void SaveChanges()
+    {
+        NodeManager.SaveChangesToProject(CurrentProjectID);
+        Debug.Log($"Changes saved to project {CurrentProjectName}");
+    }
+    private void SaveEMChanges()
+    {
+        Debug.Assert(CurrentlyEditedBlockID != -1);
+        NodeManager.SaveChangesToTemplate(CurrentlyEditedBlockID);
+        Debug.Log($"Changes saved to edited block");
+    }
 
+    //public bool UnsavedChanges()
+    //{
+
+    //    if (Mode == GameMode.Normal)
+    //    {
+    //        var t = NodeManager.GetProjectSaveFromAll(CurrentProjectName);
+    //        if(AppSaveData.GetProject(currentProjectID)
+    //    }
+    //    else if(Mode == GameMode.Edit)
+    //    {
+    //        var t = NodeManager.GetBlockSaveFromAll(CurrentlyEditedBlockName, CurrentlyEditedBlockRendProps);
+    //    }
+    //}
 
 
     /* Stany i zmienne potrzebne do ró¿nych stanów: */

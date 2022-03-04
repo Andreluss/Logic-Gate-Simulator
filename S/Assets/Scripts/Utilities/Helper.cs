@@ -7,6 +7,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class Helper
 {
+    public static Vector2 Rot90CCW(this Vector2 vector)
+    {
+        return new Vector2(-vector.y, vector.x);
+    }
+    public static Vector2 Rot90CW(this Vector2 vector)
+    {
+        return new Vector2(vector.y, -vector.x);
+    }
     public static bool InRange(int x, int a, int b) 
     {
         //czy x jest w przedziale [a, b)

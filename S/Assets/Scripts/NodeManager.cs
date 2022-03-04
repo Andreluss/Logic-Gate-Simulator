@@ -291,23 +291,43 @@ public static class NodeManager //: Singleton<NodeManager>
 
         return template;
     }
-    public static GateTemplate SaveAllAsTemplate(string newName, RenderProperties renderProperties) // TODO: ### jeszcze color i size !!!
+    public static GateTemplate SaveAllAsNewTemplate(string newName, RenderProperties renderProperties) // TODO: ### jeszcze color i size !!!
     {
-        var template = GetTemplateFromAll();
-        template.defaultName = newName;
-        template.renderProperties = renderProperties;
+        var template = GetBlockSaveFromAll(newName, renderProperties);
         AppSaveData.AddTemplate(template);
         return template;
     }
+    public static int SaveAllAsNewProject(string name, bool andClose = false)
+    {
+        int id = AppSaveData.ProjectCnt;
 
+        var newSave = GetProjectSaveFromAll(name);
 
-    public static GateTemplate SaveAllAsProject(string projectName)
+        //var newSave = GetTemplateFromAll(true);
+        //newSave.defaultName = name;
+        //newSave.renderProperties = new RenderProperties();
+
+        AppSaveData.AddProject(newSave);
+
+        return id;
+    }
+
+    public static GateTemplate GetProjectSaveFromAll(string projectName)
     {
         var template = GetTemplateFromAll(true);
         template.defaultName = projectName;
         template.renderProperties = new RenderProperties();
 
         return template;
+    }
+
+    public static GateTemplate GetBlockSaveFromAll(string gateName, RenderProperties rendprops)
+    {
+        var t = GetTemplateFromAll();
+        t.defaultName = gateName;
+        t.renderProperties = rendprops;
+
+        return t;
     }
 
     public static GateTemplate SaveChangesToProject(int id)
@@ -341,18 +361,6 @@ public static class NodeManager //: Singleton<NodeManager>
         return newSave;
     }
 
-    public static int SaveAsNewProject(string name, bool andClose = false)
-    {
-        int id = AppSaveData.ProjectCnt;
-
-        var newSave = GetTemplateFromAll(true);
-        newSave.defaultName = name;
-        newSave.renderProperties = new RenderProperties();
-
-        AppSaveData.AddProject(newSave);
-
-        return id;
-    }
 
     public static GateTemplate SaveNodesAsTemplateALPHA(List<Node> nodes, string templateName)
     {
