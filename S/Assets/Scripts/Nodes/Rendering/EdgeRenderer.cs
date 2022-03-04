@@ -59,6 +59,13 @@ public class EdgeRenderer : BaseRenderer
     private LineRenderer LR;
     private EdgeCollision edgeColl;
 
+    /* bardzo pomocnicze? funkcje */
+    private float GetBorderY(Node node, float dir)
+    {
+        Transform obj = from.GetRenderer().transform;
+        return obj.position.y + obj.localScale.y / 2 * dir;
+    }
+
     private void UpdateRenderer()
     {
         SetProperZIndex();
@@ -66,14 +73,14 @@ public class EdgeRenderer : BaseRenderer
         positions.Add(start);
 
        
-        if(start.x > end.x)
+        if(start.x > end.x + 0.1f)
         {
-            float offset = 0.5f;
+            float offsetX = 0.4f, offsetY = 0.4f;
             
             
-            positions.Add(start + Vector3.right * offset);
+            positions.Add(start + Vector3.right * offsetX);
 
-            
+
             //if (start.y > end.y)
             //{
             //    float top_y = obj.position.y + obj.localScale.y / 2;
@@ -85,23 +92,79 @@ public class EdgeRenderer : BaseRenderer
             //    ypos = bottom_y;
             //}
 
+            //float ypos = 0;
+            //if(start.y < end.y)
+            //{
+            //    float topA = GetBorderY(from, 1f),
+            //          bottomA = GetBorderY(from, -1f);
+            //    if(to != null)
+            //    {
+            //        float topB = GetBorderY(to, 1f),
+            //              bottomB = GetBorderY(to, -1f);
+
+            //        if(topA < bottomB)
+            //        {
+            //            //git
+            //            ypos = (topA + bottomB) / 2;
+            //        }
+            //        else
+            //        {
+            //            ypos = topB + offsetY;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if(topA < end.y)
+            //        {
+            //            ypos = (topA + end.y) / 2;
+            //        }
+            //        else
+            //        {
+            //            ypos = end.y + offsetY;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    if (to != null)
+            //    {
+
+            //    }
+            //    else
+            //    {
+
+            //    }
+            //}
+
+            var dir = (start.y > end.y ? 1 : -1);
+
             Transform obj = from.GetRenderer().transform;
-            float ypos = obj.position.y + (start.y > end.y ? -1 : 1) * (offset + obj.localScale.y / 2);
-            
-            var next = start + Vector3.right * offset;
+            float ypos = obj.position.y + dir * (offsetY + obj.localScale.y / 2);
+
+            if (Mathf.Abs(ypos - end.y) < offsetY)
+            {
+                ypos = obj.position.y + (end.y - start.y) / 2;
+            }
+
+
+
+
+
+
+            var next = start + Vector3.right * offsetX;
             next.y = ypos;
 
             positions.Add(next);
 
 
-            next = end - Vector3.right * offset;
+            next = end - Vector3.right * offsetX;
             next.y = ypos;
 
             positions.Add(next);
 
 
 
-            positions.Add(end - Vector3.right * offset);
+            positions.Add(end - Vector3.right * offsetX);
 
             //cos nie tak
             //Mathf.Pow(start.x, 0.5f);
