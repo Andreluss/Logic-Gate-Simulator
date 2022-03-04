@@ -9,7 +9,7 @@ public class OutputIC : ItemController
         base.Start();
 
         var outnode = (nodeOrEdgeObj as OutputCollision).OutputNode;
-        if (outnode.Controlled) 
+        if (outnode.Controlled || PlayerController.Instance.Mode == PlayerController.GameMode.Edit) 
             contextMenuItems.RemoveAt(0);
 
         contextMenuItems.Add(new ContextMenuItem("Change desc.", sampleButton,

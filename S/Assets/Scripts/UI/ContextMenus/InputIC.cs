@@ -9,7 +9,7 @@ public class InputIC : ItemController
         base.Start();
 
         var innode = (nodeOrEdgeObj as InputCollision).InputNode;
-        if(innode.Controlled) 
+        if(innode.Controlled || PlayerController.Instance.Mode == PlayerController.GameMode.Edit) 
             contextMenuItems.RemoveAt(0);
 
         contextMenuItems.Add(new ContextMenuItem("Flip bit", sampleButton,
