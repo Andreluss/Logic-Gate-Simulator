@@ -8,7 +8,7 @@ public class SaveOnExitEDITMENUController : MonoBehaviour
 {
     public void SaveChanges()
     {
-        PlayerController.Instance.OnSaveEditModeClick(true);
+        PlayerController.Instance.OnEMSaveClick(true);
         Close();
     }
 

@@ -17,8 +17,9 @@ public class GateIC : ItemController
         {
             if(PlayerController.Instance.Mode != PlayerController.GameMode.Edit)
             {
+                var id = (nodeOrEdgeObj as GateCollision).node.GetTemplateID();
                 contextMenuItems.Add(new ContextMenuItem("Edit", sampleButton,
-                () => PlayerController.Instance.SwitchToEditMode((nodeOrEdgeObj as GateCollision).node.GetTemplateID())));
+                () => PlayerController.Instance.SwitchToEditMode(id)));
             }
         }
     }

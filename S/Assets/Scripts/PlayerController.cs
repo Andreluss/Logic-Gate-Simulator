@@ -26,7 +26,7 @@ public class PlayerController : Singleton<PlayerController>
     }
     internal void SwitchBackToNormalMode()
     {
-        Mode = GameMode.Normal;   
+        Mode = GameMode.Normal;
     }
 
 
@@ -55,6 +55,9 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject ChangeColorMenu;
     [SerializeField]
     private GameObject ChangeDescriptionMenu;
+
+    [SerializeField]
+    private GameObject EMSaveOnExitMenu;
 
     [SerializeField]
     private Canvas canvas;
@@ -86,6 +89,7 @@ public class PlayerController : Singleton<PlayerController>
                 case GameMode.Edit:
                     ShowEditUI(false);
                     CurrentlyEditedBlockID = -1;
+                    NodeManager.ClearAll();
                     break;
             }
 
@@ -140,8 +144,13 @@ public class PlayerController : Singleton<PlayerController>
         Instantiate(Menu, canvas.transform);
     }
 
+    private void ShowEMSaveOnExitMenu()
+    {
+        Instantiate(EMSaveOnExitMenu, canvas.transform);
+    }
 
-    /*     === Unity funkcje ===     */ 
+
+    /*     === Unity funkcje ===     */
     private void Awake()
     {
         m_Camera = Camera.main;
@@ -202,14 +211,16 @@ public class PlayerController : Singleton<PlayerController>
         AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
         //_SnapToGrid.isOn = AppSaveData.Settings.SnapObjects;
     }
-    public void OnChangeDescriptionClick(Node node)
+    public void OnClear()
     {
-        throw new System.NotImplementedException();
+        NodeManager.ClearAll();
     }
     public void OnTypeValue(MultibitController controller)
     {
         throw new System.NotImplementedException();
     }
+
+    // NormalMode
     public void OnSaveClick(bool andClose) //(Ctrl + S)
     {
         if (CurrentProjectID == -1)
@@ -228,19 +239,28 @@ public class PlayerController : Singleton<PlayerController>
             }
         }
     }
-    internal void OnSaveEditModeClick(bool andExit)
-    {
-        throw new NotImplementedException();
-    }
-    public void OnClear()
-    {
-        NodeManager.ClearAll();
-    }
     public void OnExitClick()
     {
         //[TODO] sprawdzic, czy s¹ wgl zmiany do zapisania!!
         ShowSaveOnExitMenu();
     }
+
+
+    // EditMode (EM)
+    public void OnEMSaveClick(bool andExitToNormal = false)
+    {
+        SaveEMChanges();
+        if(andExitToNormal)
+        {
+            Mode = GameMode.Normal;
+        }
+    }
+
+    public void OnEMExitClick()
+    {
+        ShowEMSaveOnExitMenu();
+    }
+
 
 
 
@@ -312,6 +332,12 @@ public class PlayerController : Singleton<PlayerController>
     {
         NodeManager.SaveChangesToProject(CurrentProjectID);
         Debug.Log($"Changes saved to project {CurrentProjectName}");
+    }
+    private void SaveEMChanges()
+    {
+        Debug.Assert(CurrentlyEditedBlockID != -1);
+        NodeManager.SaveChangesToTemplate(CurrentlyEditedBlockID);
+        Debug.Log($"Changes saved to edited block");
     }
 
 
@@ -668,7 +694,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             Destroy(BottomBarContent.transform.GetChild(i).gameObject);
         }
-        for (int i = 0; i < Mathf.Min(AppSaveData.TemplateCnt, endGateID); i++)
+        for (int i = (endGateID == int.MaxValue ? 0 : 8); i < Mathf.Min(AppSaveData.TemplateCnt, endGateID); i++)
         {
             var template = AppSaveData.GetTemplate(i);
             var coll = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform).GetComponent<NodeTemplateCollision>();

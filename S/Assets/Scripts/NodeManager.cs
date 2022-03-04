@@ -300,6 +300,7 @@ public static class NodeManager //: Singleton<NodeManager>
         return template;
     }
 
+
     public static GateTemplate SaveAllAsProject(string projectName)
     {
         var template = GetTemplateFromAll(true);
@@ -321,6 +322,21 @@ public static class NodeManager //: Singleton<NodeManager>
         
         AppSaveData.UpdateProject(id, newSave);
         
+        return newSave;
+    }
+
+    internal static GateTemplate SaveChangesToTemplate(int currentlyEditedBlockID)
+    {
+        Debug.Assert(currentlyEditedBlockID < AppSaveData.TemplateCnt);
+
+        var oldSave = AppSaveData.GetTemplate(currentlyEditedBlockID);
+        var newSave = GetTemplateFromAll(true);
+
+        newSave.defaultName = oldSave.defaultName;
+        newSave.renderProperties = oldSave.renderProperties;
+
+        AppSaveData.UpdateGate(currentlyEditedBlockID, newSave);
+
         return newSave;
     }
 

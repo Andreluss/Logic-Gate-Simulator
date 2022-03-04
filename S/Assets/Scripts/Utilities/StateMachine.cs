@@ -17,7 +17,7 @@ public class StateMachine : MonoBehaviour
         }
         else
         {
-            Debug.LogError("State Machine not initialized with a state, please initialize State Machine on the Awake or Start method with a state.");
+;            Debug.LogError("State Machine not initialized with a state, please initialize State Machine on the Awake or Start method with a state.");
         }
         //try
         //{
