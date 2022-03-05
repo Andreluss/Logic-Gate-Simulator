@@ -262,6 +262,7 @@ public class PlayerController : Singleton<PlayerController>
     public void OnExitClick()
     {
         //[TODO] sprawdzic, czy s¹ wgl zmiany do zapisania!!
+        Debug.LogWarning("unsaved in proj: " + NodeManager.UnsavedChangesInProject);
         ShowSaveOnExitMenu();
     }
 
@@ -278,6 +279,7 @@ public class PlayerController : Singleton<PlayerController>
 
     public void OnEMExitClick()
     {
+        Debug.LogWarning("unsaved in block: " + NodeManager.UnsavedChangesInBlock);
         ShowEMSaveOnExitMenu();
     }
 
@@ -359,8 +361,12 @@ public class PlayerController : Singleton<PlayerController>
         CurrentProjectID = id;
         LoadHUD();
         if (id == -1)
+        {
+            NodeManager.UnsavedChangesInProject = true;
             return;
+        }
 
+        NodeManager.UnsavedChangesInProject = false;
         AppSaveData.GetProject(id).BuildProjectFromTemplate();
     }
 
@@ -576,6 +582,7 @@ public class PlayerController : Singleton<PlayerController>
             Debug.Log(newPos);
         }
         selectedNode.Position = newPos;
+        NodeManager.UnsavedChanges = true;
 
         if (!Input.GetMouseButton(0))
         {
@@ -731,7 +738,10 @@ public class PlayerController : Singleton<PlayerController>
                 newPos.y = Mathf.Round(newPos.y / dist) * dist;
                 //Debug.Log(newPos);
             }
-            selectedNode.Position = newPos;
+            
+            selectedNode.Position = newPos;//nodemanager.move()?/
+            NodeManager.UnsavedChanges = true;
+
         }
 
         if (!Input.GetMouseButton(0)) //jesli juz nie trzymamy LPM

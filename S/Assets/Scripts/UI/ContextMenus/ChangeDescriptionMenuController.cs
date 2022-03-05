@@ -13,20 +13,26 @@ public class ChangeDescriptionMenuController : MonoBehaviour
     public Node node;
     private string backup;
 
+
+    bool changes;
+
     private void Start()
     {
         backup = node.Description;
         inputField.text = backup;//[DESIGN]
+        changes = NodeManager.UnsavedChanges;
     }
 
     public void UpdateDescription()
     {
         node.Description = inputField.text;
+        NodeManager.UnsavedChanges = true;
     }
 
     public void Cancel()
     {
         node.Description = backup;
+        NodeManager.UnsavedChanges = changes;
         Close();
     }
 

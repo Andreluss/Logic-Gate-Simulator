@@ -35,6 +35,8 @@ public class ScreenShotManager : MonoBehaviour
         catch {
             Debug.LogError("Saving failed");
         }
+
+        yield break;
     }
 
 }

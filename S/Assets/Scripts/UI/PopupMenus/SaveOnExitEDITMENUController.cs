@@ -15,6 +15,7 @@ public class SaveOnExitEDITMENUController : MonoBehaviour
     public void DontSaveChanges()
     {
         PlayerController.Instance.Mode = PlayerController.GameMode.Normal;
+        NodeManager.UnsavedChangesInBlock = false;
         Close();
     }
 

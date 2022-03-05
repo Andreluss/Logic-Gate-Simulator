@@ -13,6 +13,30 @@ public static class NodeManager //: Singleton<NodeManager>
     static readonly HashSet<Node> controllers = new();//widzialne controllery
     static readonly HashSet<InputNode> inputNodes = new();
     static readonly HashSet<OutputNode> outputNodes = new();
+
+    public static bool UnsavedChangesInBlock { get; set; }
+    public static bool UnsavedChangesInProject { get; set; }
+
+    public static bool UnsavedChanges
+    {
+        get
+        {
+            if (PlayerController.Instance.Mode == PlayerController.GameMode.Normal)
+                return UnsavedChangesInProject;
+            else if(PlayerController.Instance.Mode == PlayerController.GameMode.Edit)
+                return UnsavedChangesInBlock;
+            else 
+                return false;
+        }
+        set
+        {
+            if (PlayerController.Instance.Mode == PlayerController.GameMode.Normal)
+                UnsavedChangesInProject = value;
+            else if (PlayerController.Instance.Mode == PlayerController.GameMode.Edit)
+                UnsavedChangesInBlock = value;
+        }
+    }
+
     /// <summary>
     /// Funkcja, która tworzy i rejestruje w menedzerze nowy klocek z danego template'u
     /// </summary>
@@ -23,7 +47,7 @@ public static class NodeManager //: Singleton<NodeManager>
     {
         Node node = template.BuildNodeFromTemplate();
         node.Hidden = false;
-        if(where != null) 
+        if (where != null)
             node.Position = (Vector2)where;
 
         RegisterNode(node);
@@ -103,9 +127,9 @@ public static class NodeManager //: Singleton<NodeManager>
         AppSaveData.UpdateGate(id, templ);
 
         //or just Reload Project, nwm w sumie
-        foreach(var node in nodes)
+        foreach (var node in nodes)
         {
-            if(node is Gate && node.GetTemplateID() == id)
+            if (node is Gate && node.GetTemplateID() == id)
             {
                 (node.GetRenderer() as GateRenderer).Color = color;
             }
@@ -124,7 +148,7 @@ public static class NodeManager //: Singleton<NodeManager>
         {
             inputNodes.Remove(node as InputNode);
         }
-        else if(node is OutputNode)
+        else if (node is OutputNode)
         {
             outputNodes.Remove(node as OutputNode);
         }
@@ -151,20 +175,20 @@ public static class NodeManager //: Singleton<NodeManager>
 
         Debug.Log($"Node {node} deleted");//msdlkjl
 
-        if(recalc) CalculateAll();
+        if (recalc) CalculateAll();
     }
-    
+
     public static void Connect(Node A, int outIdx, Node B, int inIdx)
     {
         // ### Assuming the B.ins[inIdx] is free ###
         // ??? [DESIGN] ???
         // UPDATE: jesli socket B.ins[inIdx] jest wolny, to nic nie robimy....
         //  ........ALBO usuwamy poprzedni¹ krawêdŸ i tworzymy t¹ now¹??? 
-        
+
         A.ConnectTo(outIdx, B, inIdx);
         // some extra actions itp. itd. 
         // update renderers and shit
-        
+
         CalculateAll();
     }
     public static void Disconnect(Node A, int outIdx, Node B, int inIdx)
@@ -184,24 +208,27 @@ public static class NodeManager //: Singleton<NodeManager>
 
         //(B)
         List<Node> readyNodes = new();
-        foreach(var node in nodes)
+        foreach (var node in nodes)
         {
-            if(node.totalInputEdgesCount == 0) 
+            if (node.totalInputEdgesCount == 0)
                 readyNodes.Add(node);
         }
         NodeSearch.RunSearchAndCalculateAllNodes(readyNodes, controllers);
         NodeSearch.CurrentSearchId += 1;
+
+        UnsavedChanges = true;// !!!!!
     }
 
     private static bool descriptionsEnabled = true;
+
     public static void ToggleDestriptions()
     {
         descriptionsEnabled = !descriptionsEnabled;
         foreach (var node in nodes)
         {
-            if(node is InputNode)
+            if (node is InputNode)
                 (node as InputNode).GetRenderer().ShowDescription(descriptionsEnabled);
-            else if(node is OutputNode)
+            else if (node is OutputNode)
                 (node as OutputNode).GetRenderer().ShowDescription(descriptionsEnabled);
         }
     }
@@ -215,17 +242,19 @@ public static class NodeManager //: Singleton<NodeManager>
     public static void ClearAll()
     {
         var nodesCopy = new HashSet<Node>(nodes);
-        foreach(var node in nodesCopy)
+        foreach (var node in nodesCopy)
             NodeManager.DeleteNode(node, false);
         nodes.Clear();
 
         var controllersCopy = new HashSet<Node>(controllers);
-        foreach(var controller in controllersCopy)
+        foreach (var controller in controllersCopy)
             DeleteNode(controller);
         controllers.Clear();
 
         inputNodes.Clear();
         outputNodes.Clear();//na wszelki wypadek ale to i tak jest niby juz puste
+
+        UnsavedChanges = true;
     }
     private static GateTemplate GetTemplateFromAll(bool saveInputVals = false)
     {
@@ -256,7 +285,7 @@ public static class NodeManager //: Singleton<NodeManager>
             if (node is InputNode)
             {
                 template.inCnt++;
-                if(node.Description != null)
+                if (node.Description != null)
                 {
                     template.descriptions.Add((ID[node], node.Description));
                 }
@@ -264,7 +293,7 @@ public static class NodeManager //: Singleton<NodeManager>
             else if (node is OutputNode)
             {
                 template.outCnt++;
-                if(node.Description != null)
+                if (node.Description != null)
                 {
                     template.descriptions.Add((ID[node], node.Description));
                 }
@@ -309,7 +338,7 @@ public static class NodeManager //: Singleton<NodeManager>
         }
         template.edges = edges.ToArray();
 
-        if(saveInputVals)
+        if (saveInputVals)
         {
             template.inputValues = new();
             foreach (var inputNode in inputNodes)
@@ -326,6 +355,7 @@ public static class NodeManager //: Singleton<NodeManager>
     {
         var template = GetBlockSaveFromAll(newName, renderProperties);
         AppSaveData.AddTemplate(template);
+
         return template;
     }
     public static int SaveAllAsNewProject(string name, bool andClose = false)
@@ -339,6 +369,8 @@ public static class NodeManager //: Singleton<NodeManager>
         //newSave.renderProperties = new RenderProperties();
 
         AppSaveData.AddProject(newSave);
+
+        UnsavedChanges = false;
 
         return id;
     }
@@ -364,15 +396,17 @@ public static class NodeManager //: Singleton<NodeManager>
     public static GateTemplate SaveChangesToProject(int id)
     {
         Debug.Assert(id < AppSaveData.ProjectCnt);
-        
+
         var oldSave = AppSaveData.GetProject(id);
         var newSave = GetTemplateFromAll(true);
 
         newSave.defaultName = oldSave.defaultName;
         newSave.renderProperties = oldSave.renderProperties;
-        
+
         AppSaveData.UpdateProject(id, newSave);
-        
+
+        UnsavedChanges = false;
+
         return newSave;
     }
 
@@ -388,6 +422,8 @@ public static class NodeManager //: Singleton<NodeManager>
         newSave.templateId = currentlyEditedBlockID;//haha jest bug
 
         AppSaveData.UpdateGate(currentlyEditedBlockID, newSave);
+
+        UnsavedChanges = false;
 
         return newSave;
     }
