@@ -24,8 +24,8 @@ public class NodeTemplateCollision : CollisionData
         get => color; set
         {
             color = value;
-            //troszke ciemniejszy wyswietlamy ? [DESIGN]
-            GetComponent<Image>().color = color.Dim(0.9f);
+            //GetComponent<Image>().color = color.Dim(0.9f);
+            transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = color;/* = $"<color=#{ColorUtility.ToHtmlStringRGB(value)}>{NodeName}</color>";*/
         }
     }
 }

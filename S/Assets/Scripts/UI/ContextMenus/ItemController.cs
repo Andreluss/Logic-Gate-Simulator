@@ -42,7 +42,20 @@ public class ItemController : MonoBehaviour
         //[TODO] copy node (moze nawet selected nodes)
     }
 
-    void OnMouseOver()
+
+    private bool syf = false;
+
+    public bool Syf { get => syf; set => syf = value; }
+
+    private void Update()
+    {
+        if(Syf)
+        {
+            CheckRMBClick();
+        }
+    }
+
+    public void CheckRMBClick()
     {
         if (Input.GetMouseButtonDown(1))
         {
@@ -50,7 +63,11 @@ public class ItemController : MonoBehaviour
             Vector3 pos = GetMousePosition();
             ContextMenu.Instance.CreateContextMenu(contextMenuItems, new Vector2(pos.x, pos.y));
         }
+    }
 
+    void OnMouseOver()
+    {
+        CheckRMBClick();
     }
 
     private Vector2 GetMousePosition()
