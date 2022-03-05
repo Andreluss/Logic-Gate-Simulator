@@ -65,6 +65,8 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject BottomBarContent;
     [SerializeField]
     private GameObject HideTemplateMenu;
+    [SerializeField]
+    private GameObject DeleteProjectMenu;
 
     [HideInInspector]
     public ScreenShotManager screenShotManager;
@@ -76,6 +78,7 @@ public class PlayerController : Singleton<PlayerController>
     public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
     public string CurrentlyEditedBlockName { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).defaultName; }
     public RenderProperties CurrentlyEditedBlockRendProps { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).renderProperties; }
+
     public GateTemplate TemporaryProjectSave { get; private set; }
     public GameMode Mode
     {
@@ -362,6 +365,11 @@ public class PlayerController : Singleton<PlayerController>
     {
         var menu = Instantiate(HideTemplateMenu, canvas.transform);
         menu.transform.GetChild(0).GetComponent<HideTemplateMenuController>().WhatTemplate = id;
+    }
+    internal void ShowDeleteProjectMenu(int id)
+    {
+        var menu = Instantiate(DeleteProjectMenu, canvas.transform);
+        menu.transform.GetChild(0).GetComponent<DeleteProjectMenuController>().WhatProject = id;
     }
 
     /* w³aœciwe operacje ju¿ po wyklikaniu opcji z menu */

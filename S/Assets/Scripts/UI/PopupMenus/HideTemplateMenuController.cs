@@ -15,7 +15,7 @@ public class HideTemplateMenuController : MonoBehaviour
         {
             whatTemplate = value;
             var t = AppSaveData.GetTemplate(WhatTemplate);
-            title.text = $"Do you really want to remove <color=#{ColorUtility.ToHtmlStringRGB(t.renderProperties.Color)}>{t.defaultName}</color> gate from the list?";
+            title.text = $"Do you really want to remove\nthe <color=#{ColorUtility.ToHtmlStringRGB(t.renderProperties.Color)}>{t.defaultName}</color> gate from the list?";
         }
     }
 

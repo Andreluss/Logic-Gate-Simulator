@@ -41,6 +41,13 @@ public class ItemController : MonoBehaviour
             contextMenuItems.Add(new ContextMenuItem("Remove from list", sampleButton,
             () => PlayerController.Instance.ShowHideTemplateMenu(id)));
         }
+        else if (rClickableObj as ProjectButtonCollision)
+        {
+            var id = (rClickableObj as ProjectButtonCollision).ProjectID;
+
+            contextMenuItems.Add(new ContextMenuItem("Delete project", sampleButton,
+            () => PlayerController.Instance.ShowDeleteProjectMenu(id)));
+        }
 
         //[TODO] copy node (moze nawet selected nodes)
     }

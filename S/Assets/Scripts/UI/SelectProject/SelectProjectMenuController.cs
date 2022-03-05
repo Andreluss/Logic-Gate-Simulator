@@ -19,6 +19,7 @@ public class SelectProjectMenuController : MonoBehaviour
             var project = AppSaveData.GetProject(id);
             var button = Instantiate(ProjectButtonPrefab, ProjectsContentPanel.transform);
             button.GetComponentInChildren<TextMeshProUGUI>().text = project.defaultName;
+            button.GetComponent<ProjectButtonCollision>().ProjectID = id;
 
 
             //var tex = Helper.LoadPNG(Application.dataPath + $"/thumb/thumb{id}.jpg");
