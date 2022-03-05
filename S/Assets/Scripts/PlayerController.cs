@@ -92,28 +92,32 @@ public class PlayerController : Singleton<PlayerController>
                     break;
 
                 case GameMode.Edit:
+                    NodeManager.ClearAll();
                     ShowEditUI(false);
                     CurrentlyEditedBlockID = -1;
-                    NodeManager.ClearAll();
                     break;
             }
 
+            mode = value;
 
             //construct
             switch (value)
             {
                 case GameMode.Menu:
+                    NodeManager.ClearAll();
                     ShowMenu();
                     TemporaryProjectSave = null;//??
                     break;
 
                 case GameMode.Normal:
                     ShowNormalUI(true);
-                    if(TemporaryProjectSave != null)
+                    bool changes = NodeManager.UnsavedChangesInProject;
+                    if (TemporaryProjectSave != null)
                     {
                         TemporaryProjectSave.BuildProjectFromTemplate();
                         TemporaryProjectSave = null;
                     }
+                    NodeManager.UnsavedChangesInProject = changes;
                     LoadHUD();
                     break;
 
@@ -125,9 +129,9 @@ public class PlayerController : Singleton<PlayerController>
                     LoadHUD(CurrentlyEditedBlockID);
                     var t = AppSaveData.GetTemplate(CurrentlyEditedBlockID);
                     t.BuildProjectFromTemplate(); //load block as project !! [BUG??]
+                    NodeManager.UnsavedChanges = false;
                     break;
             }
-            mode = value;
         }
     }
 
@@ -233,6 +237,8 @@ public class PlayerController : Singleton<PlayerController>
         CurrentPopUpWindow = null;
         ContextMenu.Instance.DestroyContextMenu();
         NodeManager.ClearAll();
+
+        NodeManager.UnsavedChanges = true;
     }
     public void OnTypeValue(MultibitController controller)
     {
@@ -261,9 +267,16 @@ public class PlayerController : Singleton<PlayerController>
     }
     public void OnExitClick()
     {
-        //[TODO] sprawdzic, czy s¹ wgl zmiany do zapisania!!
-        Debug.LogWarning("unsaved in proj: " + NodeManager.UnsavedChangesInProject);
-        ShowSaveOnExitMenu();
+        if(NodeManager.UnsavedChanges)
+        {
+            Debug.LogWarning("unsaved in proj: " + NodeManager.UnsavedChangesInProject);
+            ShowSaveOnExitMenu();
+        }//OK sprawdzic, czy s¹ wgl zmiany do zapisania!!
+        else {
+            PlayerController.Instance.Mode = PlayerController.GameMode.Menu;
+            NodeManager.UnsavedChangesInBlock = false;
+            NodeManager.UnsavedChangesInProject = false;
+        }
     }
 
 
@@ -279,8 +292,16 @@ public class PlayerController : Singleton<PlayerController>
 
     public void OnEMExitClick()
     {
-        Debug.LogWarning("unsaved in block: " + NodeManager.UnsavedChangesInBlock);
-        ShowEMSaveOnExitMenu();
+        if(NodeManager.UnsavedChanges)
+        {
+            Debug.LogWarning("unsaved in block: " + NodeManager.UnsavedChangesInBlock);
+            ShowEMSaveOnExitMenu();
+        }
+        else
+        {
+            PlayerController.Instance.Mode = PlayerController.GameMode.Normal;
+            NodeManager.UnsavedChangesInBlock = false;
+        }
     }
 
 

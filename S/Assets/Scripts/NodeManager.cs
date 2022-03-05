@@ -253,8 +253,6 @@ public static class NodeManager //: Singleton<NodeManager>
 
         inputNodes.Clear();
         outputNodes.Clear();//na wszelki wypadek ale to i tak jest niby juz puste
-
-        UnsavedChanges = true;
     }
     private static GateTemplate GetTemplateFromAll(bool saveInputVals = false)
     {

@@ -21,16 +21,17 @@ public class SelectProjectMenuController : MonoBehaviour
             button.GetComponentInChildren<TextMeshProUGUI>().text = project.defaultName;
 
 
-            var tex = Helper.LoadPNG(Application.dataPath + $"/thumb/thumb{id}.jpg");
-            if (tex != null)
-            {
-                var img = button.transform.GetChild(0).GetComponent<Image>();
-                var spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                img.overrideSprite = spr;
-                img.type = Image.Type.Filled;
-                img.preserveAspect = true;
-                img.color = Color.white;
-            }
+            //var tex = Helper.LoadPNG(Application.dataPath + $"/thumb/thumb{id}.jpg");
+            //if (tex != null)
+            //{
+            //    var img = button.transform.GetChild(0).GetComponent<Image>();
+            //    var spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            //    img.overrideSprite = spr;
+            //    img.type = Image.Type.Filled;
+            //    img.preserveAspect = true;
+            //    img.color = Color.white;
+            //}
+
             //var img = button.transform.GetChild(0).GetComponent<Image>(); [TODO] ewentualnie
 
 
