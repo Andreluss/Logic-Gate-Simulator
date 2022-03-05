@@ -230,6 +230,8 @@ public class PlayerController : Singleton<PlayerController>
     }
     public void OnClear()
     {
+        CurrentPopUpWindow = null;
+        ContextMenu.Instance.DestroyContextMenu();
         NodeManager.ClearAll();
     }
     public void OnTypeValue(MultibitController controller)

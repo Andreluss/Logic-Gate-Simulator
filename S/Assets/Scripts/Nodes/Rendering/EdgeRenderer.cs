@@ -29,6 +29,7 @@ public class EdgeRenderer : BaseRenderer
         edgeRend.edgeColl.Initialize(A, outIdx, endpoint, edgeRend);
 
         edgeRend.UpdateRenderer();
+        edgeRend.HandleState(A.outVals[outIdx]);//[BUG?] 
         return edgeRend;
     }
     public static EdgeRenderer Make(Node A, int outIdx, Node B, int inIdx)
