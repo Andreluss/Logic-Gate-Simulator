@@ -65,7 +65,7 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject BottomBarContent;
 
     [SerializeField]
-    private ScreenShotManager screenShotManager;
+    public ScreenShotManager screenShotManager;
 
 
     /* Dane aktualnego projektu */
@@ -249,6 +249,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             //just save changes
             SaveChanges();
+            screenShotManager.SaveScreenShot(CurrentProjectID);
             if (andClose)
             {
                 NodeManager.ClearAll();
@@ -451,61 +452,65 @@ public class PlayerController : Singleton<PlayerController>
                 }
             }
         }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            //Debug.Log(EventSystem.current.currentSelectedGameObject);
-            var obj = GetObjectUnderMouse();
-            if (obj == null)
-            {
-                ContextMenu.Instance.DestroyContextMenu();
-                ChangeSelectionTo(null);//[BUG?]
-            }
-            if (obj != null)
-            {
-                Debug.Log("clicked " + GetObjectUnderMouse());
-                ChangeSelectionTo(obj.GetComponent<CollisionData>());
-
-                if (selectedObject != null)
-                    ContextMenu.Instance.DestroyContextMenu();
-                //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
-
-                if (selectedObject is NodeCollision)
-                {
-                    selectedNode = (selectedObject as NodeCollision).node;
-                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeInteract));
-                }
-                else if (selectedObject is OutSocketCollision)
-                {
-                    var info = selectedObject as OutSocketCollision;
-                    edgeNewRend = EdgeRenderer.Make(info.sourceNode, info.outIdx, GetMousePosition());
-                    StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
-                }
-                else if (selectedObject is InSocketCollision)
-                {
-                    inSocket = selectedObject as InSocketCollision;
-                    StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
-                }
-                else if (selectedObject is NodeTemplateCollision)
-                {
-                    //...
-                    newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
-                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
-                }
-            }
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            var obj = GetObjectUnderMouse();
-            if (obj != null)
-            {
-                Debug.Log("[TODO] Tutaj bedzie menu kontekstowe -> opcje danej bramki/krawedzi...");
-            }
-        }
         else if (Input.GetMouseButtonDown(2))
         {
             StateMachine.ChangeState(StateCameraPan);
         }
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    //Debug.Log(EventSystem.current.currentSelectedGameObject);
+        //    var obj = GetObjectUnderMouse();
+        //    if (obj == null)
+        //    {
+        //        ContextMenu.Instance.DestroyContextMenu();
+        //        ChangeSelectionTo(null);//[BUG?]
+        //    }
+        //    if (obj != null)
+        //    {
+        //        Debug.Log("clicked " + GetObjectUnderMouse());
+        //        ChangeSelectionTo(obj.GetComponent<CollisionData>());
+
+        //        if (selectedObject != null)
+        //            ContextMenu.Instance.DestroyContextMenu();
+        //        //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
+
+        //        if (selectedObject is NodeCollision)
+        //        {
+        //            selectedNode = (selectedObject as NodeCollision).node;
+        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeInteract));
+        //        }
+        //        else if (selectedObject is OutSocketCollision)
+        //        {
+        //            var info = selectedObject as OutSocketCollision;
+        //            edgeNewRend = EdgeRenderer.Make(info.sourceNode, info.outIdx, GetMousePosition());
+        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
+        //        }
+        //        else if (selectedObject is InSocketCollision)
+        //        {
+        //            inSocket = selectedObject as InSocketCollision;
+        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
+        //        }
+        //        else if (selectedObject is NodeTemplateCollision)
+        //        {
+        //            //...
+        //            newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
+        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
+        //        }
+        //    }
+        //}
+        //else if (Input.GetMouseButtonDown(1))
+        //{
+        //    var obj = GetObjectUnderMouse();
+        //    if (obj != null)
+        //    {
+        //        Debug.Log("[TODO] Tutaj bedzie menu kontekstowe -> opcje danej bramki/krawedzi...");
+        //    }
+        //}
+        //else if (Input.GetMouseButtonDown(2))
+        //{
+        //    StateMachine.ChangeState(StateCameraPan);
+        //}
     }
     private void StateIdleEnd()
     {

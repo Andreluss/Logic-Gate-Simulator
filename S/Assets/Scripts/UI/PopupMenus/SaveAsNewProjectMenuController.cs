@@ -39,6 +39,7 @@ public class SaveAsNewProjectMenuController : MonoBehaviour
     {
         PlayerController.Instance.SaveAsNewProject(inputField.text, SaveAndClose);
         Close();
+        PlayerController.Instance.screenShotManager.SaveScreenShot(AppSaveData.ProjectCnt-1);//[bug?] troche syf ale to nie taka wazna rrzecz
     }
 
     public void Close()
