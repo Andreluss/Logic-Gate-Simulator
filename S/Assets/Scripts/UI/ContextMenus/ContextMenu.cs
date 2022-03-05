@@ -51,6 +51,7 @@ public class ContextMenu : Singleton<ContextMenu>
         foreach (var item in items)
         {
             //ContextMenuItem tempReference = item;
+            Debug.Log(item.text);
             Button button = Instantiate(item.button) as Button;
             var buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
             //var buttonText = button.GetComponentInChildren<Text>();
