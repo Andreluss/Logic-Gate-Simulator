@@ -31,6 +31,7 @@ public class ItemController : MonoBehaviour
         {
             var edge = (EdgeCollision)nodeOrEdgeObj;
             contextMenuItems.Add(new("Delete edge", sampleButton, () => NodeManager.Disconnect(edge.from, edge.outIdx, edge.to, edge.inIdx)));
+            contextMenuItems.Add(new("Split edge", sampleButton, () => NodeManager.SplitEdge(edge, GetMousePosition())));
         }
         else
             throw new Exception("wrong object for context menu");//[CHECK] this 

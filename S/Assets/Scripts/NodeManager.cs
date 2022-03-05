@@ -70,6 +70,31 @@ public static class NodeManager //: Singleton<NodeManager>
         CalculateAll();
     }
 
+    internal static void SplitEdge(EdgeCollision edge, Vector2 pos)
+    {
+        //copy na wszelki wypadek
+        var (A, outidx, B, inidx) = (edge.from, edge.outIdx, edge.to, edge.inIdx);
+        Disconnect(A, outidx, B, inidx);
+
+        var split = CreateNode(AppSaveData.SplitTemplate, pos);
+        Connect(A, outidx, split, 0);
+        Connect(split, 0, B, inidx);
+    }
+
+    internal static void DissolveSplit(Split split)
+    {
+        Node A = split.ins[0].st;
+        var outidx = split.ins[0].nd;
+
+        var outs_copy = new List<ValueTuple<Node, int>>(split.outs[0]);
+        foreach (var (B, inidx) in outs_copy)
+        {
+            Debug.Assert(B != null);
+            Connect(A, outidx, B, inidx);
+        }
+
+        DeleteNode(split);
+    }
     internal static void UpdateGateColor(int id, Color color)
     {
         var templ = AppSaveData.GetTemplate(id);

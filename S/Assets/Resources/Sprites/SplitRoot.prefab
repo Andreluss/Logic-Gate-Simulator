@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6911255840066380361
 Transform:
   m_ObjectHideFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6114423618911607987}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1971053207 &6577587746097135067
 SpriteShapeRenderer:
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 6808365635255609896}
   - component: {fileID: 8179232351753212180}
   - component: {fileID: 3639730097130288431}
-  - component: {fileID: 242505080239335400}
+  - component: {fileID: 7956400695429996040}
   m_Layer: 0
   m_Name: Split
   m_TagString: Untagged
@@ -457,7 +457,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &242505080239335400
+--- !u!114 &7956400695429996040
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -466,7 +466,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3816291349430810906}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b2e5cb0b767da141932a3ebec3525e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 17956da14ea60a345b37d2b7691b7fbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sampleButton: {fileID: 0}
@@ -500,9 +500,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4629541421064743508}
-  - {fileID: 3533402523905277538}
-  - {fileID: 8084448879920628275}
   - {fileID: 6911255840066380361}
+  - {fileID: 8084448879920628275}
+  - {fileID: 3533402523905277538}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -523,7 +523,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3533402523905277538
 Transform:
   m_ObjectHideFlags: 0
@@ -537,7 +537,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6114423618911607987}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1971053207 &6512609290019965076
 SpriteShapeRenderer:
