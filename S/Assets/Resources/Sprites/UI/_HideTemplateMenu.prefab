@@ -575,7 +575,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 33.22699}
-  m_SizeDelta: {x: 562.72, y: 98.209}
+  m_SizeDelta: {x: 585.9, y: 98.209}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6070391399504872350
 CanvasRenderer:
@@ -605,7 +605,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Do you really want to remove <color="green">XOR</color> gate from the list?
+  m_text: "Do you really want to remove \nthe <color=\"green\">XOR</color> gate from
+    the list?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -632,8 +633,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29
-  m_fontSizeBase: 29
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1082,7 +1083,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a64b8a689959864dafdf9fd1b5ad753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whatTemplate: 0
   title: {fileID: 6461297388545913700}
 --- !u!1 &6542667630588625255
 GameObject:

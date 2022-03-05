@@ -36,7 +36,10 @@ public class ItemController : MonoBehaviour
         else if (rClickableObj is NodeTemplateCollision)
         {
             var id = (rClickableObj as NodeTemplateCollision).TemplateID;
-            contextMenuItems.Add(new ContextMenuItem("Remove from this list", sampleButton, () => PlayerController.Instance.ShowHideTemplateMenu(id)));
+            //contextMenuItems.Add(new ContextMenuItem("Remove from this list", sampleButton, () => PlayerController.Instance.ShowHideTemplateMenu(id)));
+
+            contextMenuItems.Add(new ContextMenuItem("Remove from list", sampleButton,
+            () => PlayerController.Instance.ShowHideTemplateMenu(id)));
         }
 
         //[TODO] copy node (moze nawet selected nodes)
@@ -47,7 +50,7 @@ public class ItemController : MonoBehaviour
 
     public bool Syf { get => syf; set => syf = value; }
 
-    private void Update()
+    private void LateUpdate()
     {
         if(Syf)
         {

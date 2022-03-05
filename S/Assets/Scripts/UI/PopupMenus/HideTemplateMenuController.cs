@@ -5,19 +5,24 @@ using TMPro;
 
 public class HideTemplateMenuController : MonoBehaviour
 {
-    public int whatTemplate;
+    private int whatTemplate;
     [SerializeField]
     private TextMeshProUGUI title;
 
-    private void Awake()
+    public int WhatTemplate
     {
-        title.text = $"Do you really want to remove <color=#{ColorUtility.ToHtmlStringRGB(AppSaveData.GetTemplate(whatTemplate).renderProperties.Color)}>XOR</color> gate from the list?";
+        get => whatTemplate; set
+        {
+            whatTemplate = value;
+            var t = AppSaveData.GetTemplate(WhatTemplate);
+            title.text = $"Do you really want to remove <color=#{ColorUtility.ToHtmlStringRGB(t.renderProperties.Color)}>{t.defaultName}</color> gate from the list?";
+        }
     }
 
     public void HideTemplate()
     {
-        PlayerController.Instance.HideTemplateForever(whatTemplate);
-        Debug.Log($"Template {AppSaveData.GetTemplate(whatTemplate).defaultName} succesfully hidden.");
+        PlayerController.Instance.HideTemplateForever(WhatTemplate);
+        Debug.Log($"Template {AppSaveData.GetTemplate(WhatTemplate).defaultName} succesfully hidden.");
         Close();
     }
 

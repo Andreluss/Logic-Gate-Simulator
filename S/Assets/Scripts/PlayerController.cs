@@ -275,7 +275,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         if(NodeManager.UnsavedChanges)
         {
-            Debug.LogWarning("unsaved in proj: " + NodeManager.UnsavedChangesInProject);
+            //Debug.LogWarning("unsaved in proj: " + NodeManager.UnsavedChangesInProject);
             ShowSaveOnExitMenu();
         }//OK sprawdzic, czy s¹ wgl zmiany do zapisania!!
         else {
@@ -300,7 +300,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         if(NodeManager.UnsavedChanges)
         {
-            Debug.LogWarning("unsaved in block: " + NodeManager.UnsavedChangesInBlock);
+            //Debug.LogWarning("unsaved in block: " + NodeManager.UnsavedChangesInBlock);
             ShowEMSaveOnExitMenu();
         }
         else
@@ -361,7 +361,7 @@ public class PlayerController : Singleton<PlayerController>
     public void ShowHideTemplateMenu(int id)
     {
         var menu = Instantiate(HideTemplateMenu, canvas.transform);
-        menu.GetComponent<HideTemplateMenuController>().whatTemplate = id;
+        menu.transform.GetChild(0).GetComponent<HideTemplateMenuController>().WhatTemplate = id;
     }
 
     /* w³aœciwe operacje ju¿ po wyklikaniu opcji z menu */
