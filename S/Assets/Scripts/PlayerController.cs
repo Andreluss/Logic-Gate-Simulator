@@ -64,7 +64,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject BottomBarContent;
 
-    [SerializeField]
+    //[SerializeField]
     public ScreenShotManager screenShotManager;
 
 
