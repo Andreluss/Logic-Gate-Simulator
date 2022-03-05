@@ -406,10 +406,56 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void StateIdle()
     {
-        if (Input.GetMouseButtonDown(0))
+        //handle selection
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             var obj = GetObjectUnderMouse();
+            if (obj == null)
+            {
+                ContextMenu.Instance.DestroyContextMenu();
+                ChangeSelectionTo(null);//[BUG?]
+            }
+            else if (obj != null)
+            {
+                Debug.Log("clicked " + GetObjectUnderMouse());
+                ChangeSelectionTo(obj.GetComponent<CollisionData>());
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (selectedObject != null)
+                    ContextMenu.Instance.DestroyContextMenu();
+                //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
+
+                if (selectedObject is NodeCollision)
+                {
+                    selectedNode = (selectedObject as NodeCollision).node;
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeInteract));
+                }
+                else if (selectedObject is OutSocketCollision)
+                {
+                    var info = selectedObject as OutSocketCollision;
+                    edgeNewRend = EdgeRenderer.Make(info.sourceNode, info.outIdx, GetMousePosition());
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
+                }
+                else if (selectedObject is InSocketCollision)
+                {
+                    inSocket = selectedObject as InSocketCollision;
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
+                }
+                else if (selectedObject is NodeTemplateCollision)
+                {
+                    //...
+                    newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
+                    StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
             //Debug.Log(EventSystem.current.currentSelectedGameObject);
+            var obj = GetObjectUnderMouse();
             if (obj == null)
             {
                 ContextMenu.Instance.DestroyContextMenu();

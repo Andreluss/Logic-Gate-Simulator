@@ -218,7 +218,12 @@ public static class NodeManager //: Singleton<NodeManager>
 
         Dictionary<Node, int> ID = new();
         int k = 0;
-        foreach (var node in nodes)//[TODO] check perf
+
+        // BARDZO WA¯NY MOMENT
+        var sorted_nodes = nodes.OrderByDescending(node => node.Position.y);
+
+
+        foreach (var node in sorted_nodes)//[TODO] check perf
         {
             template.TemplateIDsForEachNode[k] = node.GetTemplateID();
             template.PositionsForEachNode[k] = node.Position.ToFloat2();

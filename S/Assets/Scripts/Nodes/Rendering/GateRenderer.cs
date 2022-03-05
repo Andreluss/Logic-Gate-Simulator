@@ -65,12 +65,12 @@ public class GateRenderer : NodeRenderer
         gateRend.inSocketRends = new InSocketRenderer[forWho.inCnt];
         for (int i = 0; i < gateRend.inSocketRends.Length; i++)
         {
-            var socket = InSocketRenderer.Make(forWho, i);
+            var socket = InSocketRenderer.Make(forWho, i); int n = gateRend.inSocketRends.Length;
             //relative position
             socket.transform.SetParent(gateRootGO.transform, false);
             float zIndex = socket.transform.localPosition.z;
             socket.transform.localPosition = new Vector3(-width / 2,
-                                                         -height / 2 + distIn * (i + 1),
+                                                         height / 2 - distIn * (i + 1),//daaaaammmnnn ale bug (bylo -height / 2 + distIn * (i + 1))
                                                          zIndex);
             gateRend.inSocketRends[i] = socket;
         }
@@ -82,7 +82,7 @@ public class GateRenderer : NodeRenderer
             socket.transform.SetParent(gateRootGO.transform, false);
             float zIndex = socket.transform.localPosition.z;
             socket.transform.localPosition = new Vector3(width / 2,
-                                                         -height / 2 + distOut * (i + 1),
+                                                         height / 2 - distOut * (i + 1),//tak samo -height / 2 + distOut
                                                          zIndex);
             gateRend.outSocketRends[i] = socket;
         }
