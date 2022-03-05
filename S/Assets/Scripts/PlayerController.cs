@@ -64,6 +64,9 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject BottomBarContent;
 
+    [SerializeField]
+    private ScreenShotManager screenShotManager;
+
 
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
@@ -158,6 +161,8 @@ public class PlayerController : Singleton<PlayerController>
         m_Camera = Camera.main;
         c_Camera = GameObject.Find("Const Camera").GetComponent<Camera>();
 
+        screenShotManager = GetComponent<ScreenShotManager>();
+
         AppSaveData.Load();
         AppSaveData.Settings.SnapObjects = false;//[CHANGE] on release
         LoadHUD();
@@ -173,6 +178,12 @@ public class PlayerController : Singleton<PlayerController>
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            screenShotManager.SaveScreenShot(CurrentProjectID);
+        }
+
+
         StateMachine.UpdateStateMachine();
         if (PlayerState == State.Idle)
         {

@@ -165,6 +165,7 @@ public static class NodeManager //: Singleton<NodeManager>
                 readyNodes.Add(node);
         }
         NodeSearch.RunSearchAndCalculateAllNodes(readyNodes, controllers);
+        NodeSearch.CurrentSearchId += 1;
     }
 
     private static bool descriptionsEnabled = true;
@@ -421,7 +422,7 @@ public static class NodeManager //: Singleton<NodeManager>
 
 public static class NodeSearch
 {
-    private static int CurrentSearchId = 0;
+    public static int CurrentSearchId = 0;
     public static void RunSearchAndCalculateAllNodes(IEnumerable<Node> inputs, IEnumerable<Node> controllers)
     {
         Queue<Node> queue = new();
@@ -476,6 +477,6 @@ public static class NodeSearch
         }
 
         //zeby nastepnym razem inputy sie tez zerowaly
-        CurrentSearchId += 1;
+        //CurrentSearchId += 1;
     }
 }

@@ -4585,6 +4585,7 @@ GameObject:
   - component: {fileID: 1291405521}
   - component: {fileID: 1291405520}
   - component: {fileID: 1291405519}
+  - component: {fileID: 1291405523}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -4629,6 +4630,7 @@ MonoBehaviour:
   EMSaveOnExitMenu: {fileID: 6542667630588625255, guid: 9f00a778b5adb8b43850b503f2e6be25, type: 3}
   canvas: {fileID: 673037288}
   BottomBarContent: {fileID: 416814443}
+  screenShotManager: {fileID: 0}
 --- !u!114 &1291405521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4656,6 +4658,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1291405523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291405518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca7c4706517fe94da75168381f51178, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1328875777
 GameObject:
   m_ObjectHideFlags: 0
@@ -6148,7 +6162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00024414062, y: -0.0005874634}
+  m_AnchoredPosition: {x: 0, y: -0.0005874634}
   m_SizeDelta: {x: -0.00042725, y: 0.0011597}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1871732193
