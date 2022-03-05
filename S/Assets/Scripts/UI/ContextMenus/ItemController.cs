@@ -11,7 +11,7 @@ public class ItemController : MonoBehaviour
     [SerializeField]
     protected List<ContextMenuItem> contextMenuItems;     // list of items in menu
     protected new Camera camera;
-    protected CollisionData nodeOrEdgeObj;
+    protected CollisionData rClickableObj;
 
     void Awake()
     {
@@ -23,18 +23,21 @@ public class ItemController : MonoBehaviour
 
     protected virtual void Start()
     {
-        nodeOrEdgeObj = gameObject.GetComponent<CollisionData>();
+        rClickableObj = gameObject.GetComponent<CollisionData>();
         contextMenuItems = new List<ContextMenuItem>();
-        if (nodeOrEdgeObj is NodeCollision)
-            contextMenuItems.Add(new ContextMenuItem("Delete", sampleButton, () => NodeManager.DeleteNode((nodeOrEdgeObj as NodeCollision).node)));
-        else if (nodeOrEdgeObj is EdgeCollision)
+        if (rClickableObj is NodeCollision)
+            contextMenuItems.Add(new ContextMenuItem("Delete", sampleButton, () => NodeManager.DeleteNode((rClickableObj as NodeCollision).node)));
+        else if (rClickableObj is EdgeCollision)
         {
-            var edge = (EdgeCollision)nodeOrEdgeObj;
+            var edge = (EdgeCollision)rClickableObj;
             contextMenuItems.Add(new("Delete edge", sampleButton, () => NodeManager.Disconnect(edge.from, edge.outIdx, edge.to, edge.inIdx)));
             contextMenuItems.Add(new("Split edge", sampleButton, () => NodeManager.SplitEdge(edge, GetMousePosition())));
         }
-        else
-            throw new Exception("wrong object for context menu");//[CHECK] this 
+        else if (rClickableObj is NodeTemplateCollision)
+        {
+            var id = (rClickableObj as NodeTemplateCollision).TemplateID;
+            contextMenuItems.Add(new ContextMenuItem("Remove from this list", sampleButton, () => PlayerController.Instance.ShowHideTemplateMenu(id)));
+        }
 
         //[TODO] copy node (moze nawet selected nodes)
     }

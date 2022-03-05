@@ -8,7 +8,7 @@ public class OutputIC : ItemController
     {
         base.Start();
 
-        var outnode = (nodeOrEdgeObj as OutputCollision).OutputNode;
+        var outnode = (rClickableObj as OutputCollision).OutputNode;
         if (outnode.Controlled || PlayerController.Instance.Mode == PlayerController.GameMode.Edit) 
             contextMenuItems.RemoveAt(0);
 

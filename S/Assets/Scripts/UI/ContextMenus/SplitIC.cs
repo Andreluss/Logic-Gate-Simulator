@@ -8,7 +8,7 @@ public class SplitIC : ItemController
     {
         base.Start();
 
-        var split = (nodeOrEdgeObj.Renderer as SplitRenderer).node as Split;
+        var split = (rClickableObj.Renderer as SplitRenderer).node as Split;
         if(split.ins[0].st != null) //zeby bylo co dissolvowac
             contextMenuItems.Add(new("Dissolve", sampleButton, () => NodeManager.DissolveSplit(split)));
     }

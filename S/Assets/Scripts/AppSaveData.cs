@@ -134,4 +134,11 @@ public static class AppSaveData
         Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
 
     }
+
+    internal static void HideTemplate(int id)
+    {
+        var t = GetTemplate(id);
+        t.DELETED = true;
+        UpdateGate(id, t);
+    }
 }

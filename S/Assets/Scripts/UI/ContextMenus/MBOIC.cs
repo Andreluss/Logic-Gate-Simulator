@@ -8,7 +8,7 @@ public class MBOIC : ItemController
     {
         base.Start();
 
-        var ctrl = (nodeOrEdgeObj as MBOCollision).node;
+        var ctrl = (rClickableObj as MBOCollision).node;
         contextMenuItems.Add(new ContextMenuItem("Switch Signed/Unsigned", sampleButton,
             () => (ctrl as MultibitControllerOutput).Signed = !(ctrl as MultibitControllerOutput).Signed));
     }

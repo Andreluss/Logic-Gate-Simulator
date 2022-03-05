@@ -26,6 +26,8 @@ public class GateTemplate
     public List<ValueTuple<int, string>> descriptions;
     public int templateId;
 
+    public bool DELETED = false;
+
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
     //(List of controlled nodes, position)

@@ -50,21 +50,23 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject SaveAsNewProjectMenu;
     [SerializeField]
-    private Toggle _SnapToGrid;
-    [SerializeField]
     private GameObject ChangeColorMenu;
     [SerializeField]
     private GameObject ChangeDescriptionMenu;
 
     [SerializeField]
     private GameObject EMSaveOnExitMenu;
+    [SerializeField]
+    private TextMeshProUGUI EMInfo;
 
     [SerializeField]
     private Canvas canvas;
     [SerializeField]
     private GameObject BottomBarContent;
+    [SerializeField]
+    private GameObject HideTemplateMenu;
 
-    //[SerializeField]
+    [HideInInspector]
     public ScreenShotManager screenShotManager;
 
 
@@ -130,6 +132,10 @@ public class PlayerController : Singleton<PlayerController>
                     var t = AppSaveData.GetTemplate(CurrentlyEditedBlockID);
                     t.BuildProjectFromTemplate(); //load block as project !! [BUG??]
                     NodeManager.UnsavedChanges = false;
+
+                    string html_col = ColorUtility.ToHtmlStringRGB(t.renderProperties.Color);
+                    EMInfo.text = $"Editing block: <color=#{html_col}>{t.defaultName}</color>";
+
                     break;
             }
         }
@@ -182,10 +188,10 @@ public class PlayerController : Singleton<PlayerController>
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            screenShotManager.SaveScreenShot(CurrentProjectID);
-        }
+        //if(Input.GetKeyDown(KeyCode.K))
+        //{
+        //    screenShotManager.SaveScreenShot(CurrentProjectID);
+        //}
 
 
         StateMachine.UpdateStateMachine();
@@ -352,8 +358,21 @@ public class PlayerController : Singleton<PlayerController>
         CurrentPopUpWindow = menu;
     }
 
+    public void ShowHideTemplateMenu(int id)
+    {
+        var menu = Instantiate(HideTemplateMenu, canvas.transform);
+        menu.GetComponent<HideTemplateMenuController>().whatTemplate = id;
+    }
 
     /* w³aœciwe operacje ju¿ po wyklikaniu opcji z menu */
+    public void HideTemplateForever(int id)
+    {
+        AppSaveData.HideTemplate(id);
+        if (Mode == GameMode.Edit)
+            LoadHUD(CurrentlyEditedBlockID);
+        else
+            LoadHUD();
+    }
     public void SaveAllAsNewTemplate(string name, RenderProperties rendprops)
     {
         NodeManager.SaveAllAsNewTemplate(name, rendprops);
@@ -813,6 +832,7 @@ public class PlayerController : Singleton<PlayerController>
         for (int i = (endGateID == int.MaxValue ? 0 : 8); i < Mathf.Min(AppSaveData.TemplateCnt, endGateID); i++)
         {
             var template = AppSaveData.GetTemplate(i);
+            if (template.DELETED) continue;
             var coll = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform).GetComponent<NodeTemplateCollision>();
             coll.TemplateID = i;
             coll.Color = template.renderProperties.Color;

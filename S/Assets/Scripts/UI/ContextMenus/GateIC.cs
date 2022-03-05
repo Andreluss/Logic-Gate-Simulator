@@ -8,7 +8,7 @@ public class GateIC : ItemController
     {
         base.Start();
 
-        var gateRend = nodeOrEdgeObj.Renderer as GateRenderer;
+        var gateRend = rClickableObj.Renderer as GateRenderer;
 
         contextMenuItems.Add(new ContextMenuItem("Change color", sampleButton,
             () =>  PlayerController.Instance.ShowChangeColorMenu(gateRend)));
@@ -17,7 +17,7 @@ public class GateIC : ItemController
         {
             if(PlayerController.Instance.Mode != PlayerController.GameMode.Edit)
             {
-                var id = (nodeOrEdgeObj as GateCollision).node.GetTemplateID();
+                var id = (rClickableObj as GateCollision).node.GetTemplateID();
                 contextMenuItems.Add(new ContextMenuItem("Edit", sampleButton,
                 () => PlayerController.Instance.SwitchToEditMode(id)));
             }
