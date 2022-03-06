@@ -187,6 +187,10 @@ public class PlayerController : Singleton<PlayerController>
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
         PlayerState = State.Idle;
 
+        PlayerController.Instance.Mode = PlayerController.GameMode.Menu;
+        NodeManager.UnsavedChangesInBlock = false;
+        NodeManager.UnsavedChangesInProject = false;
+
         //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
 
