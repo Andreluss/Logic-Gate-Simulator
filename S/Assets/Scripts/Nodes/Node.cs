@@ -220,7 +220,7 @@ public abstract class Node
     //public GameObject nodeRenderer = null;
 
     private bool hidden = true;
-    private Vector2 position;
+    protected Vector2 position;
     private string name;
     private string description;
 }

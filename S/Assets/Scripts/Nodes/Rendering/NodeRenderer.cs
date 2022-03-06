@@ -39,6 +39,14 @@ public class NodeRenderer : BaseRenderer
         }
     }
 
+    /// <summary>
+    /// Funkcja przesuwaj¹ca do brzegów ekranu klocki typu in/out 
+    /// </summary>
+    public virtual void HandlePinPosition()
+    {
+    }
+
+
     public virtual void UpdatePosition(Vector2 position, bool controlled = false)
     {
         //[DANGER] we assume the prefabs have a 'root structure'!

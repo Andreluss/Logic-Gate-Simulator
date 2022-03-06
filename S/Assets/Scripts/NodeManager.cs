@@ -254,6 +254,22 @@ public static class NodeManager //: Singleton<NodeManager>
         inputNodes.Clear();
         outputNodes.Clear();//na wszelki wypadek ale to i tak jest niby juz puste
     }
+
+    internal static void PinAll()
+    {
+        foreach (var node in inputNodes)
+            if(!node.Controlled)
+                node.GetRenderer().HandlePinPosition();
+        foreach (var node in outputNodes)
+            if (!node.Controlled)
+                node.GetRenderer().HandlePinPosition();
+
+        foreach(var c in controllers)
+            c.GetRenderer().HandlePinPosition();
+
+        CalculateAll();
+    }
+
     private static GateTemplate GetTemplateFromAll(bool saveInputVals = false)
     {
         GateTemplate template = new();

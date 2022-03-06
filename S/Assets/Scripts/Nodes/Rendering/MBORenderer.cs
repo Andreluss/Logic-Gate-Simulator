@@ -6,9 +6,11 @@ using TMPro;
 
 public class MBORenderer : NodeRenderer //to jest taki node ale bez inputow i outputow
 {                                       //moze jak sie uda zrefaktoryzowac kod to to jakos ogarne
+    RectTransform rt;
     private void Awake()
     {
         outline = transform.parent.GetChild(2).gameObject;
+        rt = transform.parent.GetComponent<RectTransform>();
     }
     public override void EnableOutline()
     {
@@ -64,5 +66,17 @@ public class MBORenderer : NodeRenderer //to jest taki node ale bez inputow i ou
                     outputNode.renderer.UpdatePosition(position, true);
             }
         }
+    }
+    public override void HandlePinPosition()
+    {
+        Vector3 stageBorders = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+        float nodeWidth = rt.rect.width;
+        float x = stageBorders.x;
+        var newPos = node.Position;
+
+        newPos.x = x - nodeWidth / 2 * 1.02f;
+
+        node.Position = newPos;
     }
 }

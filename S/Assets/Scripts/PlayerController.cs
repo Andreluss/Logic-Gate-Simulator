@@ -78,7 +78,7 @@ public class PlayerController : Singleton<PlayerController>
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
     public int CurrentlyEditedBlockID { get; set; }
-    public List<int> GatesInCurrentProject = Helper.BasicGates;
+    public List<int> GatesInCurrentProject = new() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
     public string CurrentlyEditedBlockName { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).defaultName; }
     public RenderProperties CurrentlyEditedBlockRendProps { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).renderProperties; }
@@ -221,11 +221,15 @@ public class PlayerController : Singleton<PlayerController>
                 c_Camera.orthographicSize = m_Camera.orthographicSize;
 
                 ContextMenu.Instance.DestroyContextMenu();
-               
+
                 //var pos = GetMousePosition();
                 //Vector3 newpos = new Vector3(pos.x, pos.y, m_Camera.transform.position.z);
-                
+
                 //m_Camera.transform.position = newpos;
+
+
+                if (AppSaveData.Settings.PinInOutToScreenEdges)
+                    NodeManager.PinAll();
             }
         }
     }
@@ -235,6 +239,15 @@ public class PlayerController : Singleton<PlayerController>
 
 
     /* Klikniêcia guzików */
+    public void OnTogglePinInOut()
+    {
+        AppSaveData.Settings.PinInOutToScreenEdges = !AppSaveData.Settings.PinInOutToScreenEdges;
+        if(AppSaveData.Settings.PinInOutToScreenEdges)
+        {
+            NodeManager.PinAll();
+        }
+        
+    }
     public void OnToggleAllGates()
     {
         AppSaveData.Settings.ShowAllGates = !AppSaveData.Settings.ShowAllGates;
@@ -258,10 +271,10 @@ public class PlayerController : Singleton<PlayerController>
 
         NodeManager.UnsavedChanges = true;
     }
-    public void OnTypeValue(MultibitController controller)
-    {
-        throw new System.NotImplementedException();
-    }
+    //public void OnTypeValue(MultibitController controller)
+    //{
+    //    throw new System.NotImplementedException();
+    //}
 
     // NormalMode
     public void OnSaveClick(bool andClose) //(Ctrl + S)
@@ -434,7 +447,7 @@ public class PlayerController : Singleton<PlayerController>
         if (id == -1)
         {
             NodeManager.UnsavedChangesInProject = true;
-            GatesInCurrentProject = Helper.BasicGates;
+            GatesInCurrentProject = new() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             ReloadHUD();
         }
         else
@@ -542,61 +555,6 @@ public class PlayerController : Singleton<PlayerController>
         {
             StateMachine.ChangeState(StateCameraPan);
         }
-
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    //Debug.Log(EventSystem.current.currentSelectedGameObject);
-        //    var obj = GetObjectUnderMouse();
-        //    if (obj == null)
-        //    {
-        //        ContextMenu.Instance.DestroyContextMenu();
-        //        ChangeSelectionTo(null);//[BUG?]
-        //    }
-        //    if (obj != null)
-        //    {
-        //        Debug.Log("clicked " + GetObjectUnderMouse());
-        //        ChangeSelectionTo(obj.GetComponent<CollisionData>());
-
-        //        if (selectedObject != null)
-        //            ContextMenu.Instance.DestroyContextMenu();
-        //        //InvokeNextFrame(ContextMenu.Instance.DestroyContextMenu);
-
-        //        if (selectedObject is NodeCollision)
-        //        {
-        //            selectedNode = (selectedObject as NodeCollision).node;
-        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeInteract));
-        //        }
-        //        else if (selectedObject is OutSocketCollision)
-        //        {
-        //            var info = selectedObject as OutSocketCollision;
-        //            edgeNewRend = EdgeRenderer.Make(info.sourceNode, info.outIdx, GetMousePosition());
-        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeNew));
-        //        }
-        //        else if (selectedObject is InSocketCollision)
-        //        {
-        //            inSocket = selectedObject as InSocketCollision;
-        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateEdgeOld));
-        //        }
-        //        else if (selectedObject is NodeTemplateCollision)
-        //        {
-        //            //...
-        //            newNodeTemplateID = (selectedObject as NodeTemplateCollision).TemplateID;
-        //            StateMachine.ChangeState(new StateMachine.PlayerState(StateNodeNew));
-        //        }
-        //    }
-        //}
-        //else if (Input.GetMouseButtonDown(1))
-        //{
-        //    var obj = GetObjectUnderMouse();
-        //    if (obj != null)
-        //    {
-        //        Debug.Log("[TODO] Tutaj bedzie menu kontekstowe -> opcje danej bramki/krawedzi...");
-        //    }
-        //}
-        //else if (Input.GetMouseButtonDown(2))
-        //{
-        //    StateMachine.ChangeState(StateCameraPan);
-        //}
     }
     private void StateIdleEnd()
     {
@@ -627,6 +585,8 @@ public class PlayerController : Singleton<PlayerController>
             var delta = GetMousePositionConstCamera() - mousePosStart;
             Debug.Log(delta);
             m_Camera.transform.position = cameraPosStart - (Vector3)delta;//reverse
+            if (AppSaveData.Settings.PinInOutToScreenEdges)
+                NodeManager.PinAll();
         }
     }
     private void StateCameraPanEnd()
@@ -673,6 +633,9 @@ public class PlayerController : Singleton<PlayerController>
             {
                 //git, tylko przesuwamy z powrotem
                 selectedNode.GetRenderer().MoveBehindUI();
+
+                if (AppSaveData.Settings.PinInOutToScreenEdges) 
+                    selectedNode.GetRenderer().HandlePinPosition();
 
                 //aktualizujemy bramki w aktualnym projekcie
                 if(/*Mode == GameMode.Normal && */!GatesInCurrentProject.Contains(newNodeTemplateID))
@@ -825,7 +788,11 @@ public class PlayerController : Singleton<PlayerController>
                 //Debug.Log(newPos);
             }
             
-            selectedNode.Position = newPos;//nodemanager.move()?/
+            selectedNode.Position = newPos;//nodemanager.move()?
+            
+            if (AppSaveData.Settings.PinInOutToScreenEdges)
+                selectedNode.GetRenderer().HandlePinPosition();
+
             NodeManager.UnsavedChanges = true;
 
         }
@@ -899,7 +866,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             List<int> gates;
             if(currentProjectID == -1)
-                gates = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                gates = new() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             else 
                 gates = AppSaveData.GetProject(currentProjectID).gatesAvailableInThisProject;
 
@@ -916,6 +883,7 @@ public class PlayerController : Singleton<PlayerController>
                 if (!(gateID < endGateID)) break;
                 var gateTemplate = AppSaveData.GetTemplate(gateID);
                 if(gateTemplate.DELETED) continue;
+
                 MakeTemplateKlocka(gateTemplate);
             }
         }

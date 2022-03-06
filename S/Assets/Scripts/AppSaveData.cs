@@ -116,11 +116,13 @@ public static class AppSaveData
                                              new RenderProperties(Color.white) };
             for (int i = 0; i < names.Length; i++)
             {
-                gateTemplates.Add(new GateTemplate());
-                gateTemplates[i].NodeType = types[i];
-                gateTemplates[i].defaultName = names[i];
-                gateTemplates[i].bitCount = bitc[i];
-                gateTemplates[i].renderProperties = rendprops[i];
+                var t = new GateTemplate();
+                t.NodeType = types[i];
+                t.defaultName = names[i];
+                t.bitCount = bitc[i];
+                t.renderProperties = rendprops[i];
+                t.templateId = i;
+                gateTemplates.Add(t);
             }
             gateTemplates.SaveClass(gatePath);
         }
@@ -132,8 +134,6 @@ public static class AppSaveData
             Projects = new();
         else 
             Projects = Helper.LoadClass<List<GateTemplate>>(projectPath);
-
-        Debug.Log($"App save data loaded succesfully from \"{Application.dataPath}\"");
 
     }
 

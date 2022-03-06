@@ -12,7 +12,7 @@ public class MBIIC : ItemController
         contextMenuItems.Add(new ContextMenuItem("Switch signed/unsigned", sampleButton,
             () => (ctrl as MultibitControllerInput).Signed = !(ctrl as MultibitControllerInput).Signed));
 
-        contextMenuItems.Add(new ContextMenuItem("Change value", sampleButton,
-            () => PlayerController.Instance.OnTypeValue(ctrl as MultibitControllerInput)));
+        //contextMenuItems.Add(new ContextMenuItem("Change value", sampleButton,
+        //    () => PlayerController.Instance.OnTypeValue(ctrl as MultibitControllerInput)));
     }
 }

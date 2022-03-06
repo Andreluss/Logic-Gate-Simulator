@@ -7,9 +7,11 @@ public class OutputRenderer : NodeRenderer
 {
     private TextMeshPro text;
     private TextMeshPro description;
+    RectTransform rt;
     private void Awake()
     {
         outline = transform.parent.GetChild(3).gameObject;
+        rt = transform.parent.GetComponent<RectTransform>();
     }
     public override void EnableOutline()
     {
@@ -59,5 +61,17 @@ public class OutputRenderer : NodeRenderer
         {
 
         }
+    }
+    public override void HandlePinPosition()
+    {
+        Vector3 stageBorders = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+        float x = stageBorders.x;
+        float nodeWidth = rt.rect.width;
+        var newPos = node.Position;
+
+        newPos.x = x - nodeWidth / 2 * 1.05f;
+
+        node.Position = newPos;
     }
 }
