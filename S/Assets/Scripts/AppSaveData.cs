@@ -70,8 +70,8 @@ public static class AppSaveData
     public static int OutputTemplateID = new OutputNode(true).GetTemplateID();
 
     private static List<GateTemplate> GateTemplates;
-    private static readonly string gatePath = Application.dataPath + "/GateTemplates.bin";
-    private static readonly string projectPath = Application.dataPath + "/Projects.bin";
+    private static readonly string gatePath = Application.dataPath + "/data/GateTemplates.bin";
+    private static readonly string projectPath = Application.dataPath + "/data/Projects.bin";
 
     internal static void UpdateGate(int id, GateTemplate newTemplateData)
     {
@@ -83,10 +83,10 @@ public static class AppSaveData
 
     public struct Settings
     {
-        public static bool SnapObjects = false;
+        public static bool SnapObjects = true;
         public static float SnapDistance = 0.5f;
         public static bool ShowAllGates = false;
-        public static bool PinInOutToScreenEdges = false;
+        public static bool PinInOutToScreenEdges = true;
     }
 
 
@@ -95,7 +95,8 @@ public static class AppSaveData
         /* Gate stuff */
         if (!File.Exists(gatePath)) // jesli nie istnieje to odtwarzamy 5 podstawowych bramek
         {
-            List<GateTemplate> gateTemplates = new();
+            System.IO.Directory.CreateDirectory(Application.dataPath + "/data");
+            List <GateTemplate> gateTemplates = new();
             string[] names = {"In", "In2bit", "In4bit", "In8bit",
                               "Out", "Out2bit", "Out4bit", "Out8bit",
                               "Split", "NOT", "AND"};

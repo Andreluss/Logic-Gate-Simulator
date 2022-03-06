@@ -267,6 +267,12 @@ public class PlayerController : Singleton<PlayerController>
         AppSaveData.Settings.SnapObjects = !AppSaveData.Settings.SnapObjects;
         //_SnapToGrid.isOn = AppSaveData.Settings.SnapObjects;
     }
+    public void OnToggleFullscreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+        
+        Debug.Log($"FULLSCREEN {Screen.fullScreen}");
+    }
     public void OnClear()
     {
         CurrentPopUpWindow = null;
@@ -463,6 +469,9 @@ public class PlayerController : Singleton<PlayerController>
             AppSaveData.GetProject(id).BuildProjectFromTemplate();
             ReloadHUD();
         }
+
+        if (AppSaveData.Settings.PinInOutToScreenEdges)
+            NodeManager.PinAll();
     }
 
     public void SaveChanges()

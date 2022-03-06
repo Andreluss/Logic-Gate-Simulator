@@ -6,7 +6,7 @@ public class ScreenShotManager : MonoBehaviour
 {
     public void SaveScreenShot(int projectID)
     {
-        StartCoroutine(Save(projectID));
+        //StartCoroutine(Save(projectID));
     }
     IEnumerator Save(int projectID)
     {
