@@ -85,6 +85,8 @@ public static class AppSaveData
     {
         public static bool SnapObjects = false;
         public static float SnapDistance = 0.5f;
+        public static bool ShowAllGates = false;
+        public static bool PinInOutToScreenEdges = false;
     }
 
 

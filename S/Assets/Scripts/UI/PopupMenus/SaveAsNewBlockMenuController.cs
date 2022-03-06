@@ -73,6 +73,6 @@ public class SaveAsNewBlockMenuController : MonoBehaviour
     public void Close()
     {
         Destroy(gameObject.transform.parent.gameObject);
-        PlayerController.Instance.LoadHUD();
+        PlayerController.Instance.ReloadHUD();
     }
 }

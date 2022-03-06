@@ -48,6 +48,6 @@ public class SaveAsNewProjectMenuController : MonoBehaviour
         if (SaveAndClose)
             PlayerController.Instance.Mode = PlayerController.GameMode.Menu;
         else
-            PlayerController.Instance.LoadHUD();
+            PlayerController.Instance.ReloadHUD();
     }
 }

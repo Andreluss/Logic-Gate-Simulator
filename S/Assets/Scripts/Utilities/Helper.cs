@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class Helper
 {
+    public readonly static List<int> BasicGates = new() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     public static Vector2 Rot90CCW(this Vector2 vector)
     {
         return new Vector2(-vector.y, vector.x);

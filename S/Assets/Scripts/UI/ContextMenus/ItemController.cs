@@ -33,45 +33,20 @@ public class ItemController : MonoBehaviour
             contextMenuItems.Add(new("Delete edge", sampleButton, () => NodeManager.Disconnect(edge.from, edge.outIdx, edge.to, edge.inIdx)));
             contextMenuItems.Add(new("Split edge", sampleButton, () => NodeManager.SplitEdge(edge, GetMousePosition())));
         }
-        else if (rClickableObj is NodeTemplateCollision)
-        {
-            var id = (rClickableObj as NodeTemplateCollision).TemplateID;
-            //contextMenuItems.Add(new ContextMenuItem("Remove from this list", sampleButton, () => PlayerController.Instance.ShowHideTemplateMenu(id)));
-
-            contextMenuItems.Add(new ContextMenuItem("Remove from list", sampleButton,
-            () => PlayerController.Instance.ShowHideTemplateMenu(id)));
-        }
-        else if (rClickableObj as ProjectButtonCollision)
-        {
-            var id = (rClickableObj as ProjectButtonCollision).ProjectID;
-
-            contextMenuItems.Add(new ContextMenuItem("Delete project", sampleButton,
-            () => PlayerController.Instance.ShowDeleteProjectMenu(id)));
-        }
 
         //[TODO] copy node (moze nawet selected nodes)
-    }
-
-
-    private bool syf = false;
-
-    public bool Syf { get => syf; set => syf = value; }
-
-    private void LateUpdate()
-    {
-        if(Syf)
-        {
-            CheckRMBClick();
-        }
     }
 
     public void CheckRMBClick()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            //Vector3 pos = transform.position;
-            Vector3 pos = GetMousePosition();
-            ContextMenu.Instance.CreateContextMenu(contextMenuItems, new Vector2(pos.x, pos.y));
+            if(contextMenuItems.Count > 0)
+            {
+                //Vector3 pos = transform.position;
+                Vector3 pos = GetMousePosition();
+                ContextMenu.Instance.CreateContextMenu(contextMenuItems, new Vector2(pos.x, pos.y));
+            }
         }
     }
 
