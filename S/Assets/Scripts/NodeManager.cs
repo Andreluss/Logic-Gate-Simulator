@@ -134,7 +134,7 @@ public static class NodeManager //: Singleton<NodeManager>
                 (node.GetRenderer() as GateRenderer).Color = color;
             }
         }
-        PlayerController.Instance.LoadHUD(); //chyba serio lepiej zreloadowac projekt
+        PlayerController.Instance.ReloadHUD(); //chyba serio lepiej zreloadowac projekt
     }
 
     public static void DeleteNode(Node node, bool recalc = true)
@@ -400,6 +400,7 @@ public static class NodeManager //: Singleton<NodeManager>
 
         newSave.defaultName = oldSave.defaultName;
         newSave.renderProperties = oldSave.renderProperties;
+        newSave.gatesAvailableInThisProject = PlayerController.Instance.GatesInCurrentProject;//no ok
 
         AppSaveData.UpdateProject(id, newSave);
 

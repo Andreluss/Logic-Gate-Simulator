@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-public class HideTemplateMenuController : MonoBehaviour
+public class HideTemplateFromProjectMenuController : MonoBehaviour
 {
     private int whatTemplate;
     [SerializeField]
@@ -15,14 +15,14 @@ public class HideTemplateMenuController : MonoBehaviour
         {
             whatTemplate = value;
             var t = AppSaveData.GetTemplate(WhatTemplate);
-            title.text = $"Do you really want to remove\nthe <color=#{ColorUtility.ToHtmlStringRGB(t.renderProperties.Color)}>{t.defaultName}</color> gate <b>completely</b>?";
+            title.text = $"Do you really want to remove\nthe <color=#{ColorUtility.ToHtmlStringRGB(t.renderProperties.Color)}>{t.defaultName}</color> gate from the list?";
         }
     }
 
-    public void HideTemplate()
+    public void RemoveTemplateFromProjectList()
     {
-        PlayerController.Instance.HideTemplateForever(WhatTemplate);
-        Debug.Log($"Template {AppSaveData.GetTemplate(WhatTemplate).defaultName} succesfully removed.");
+        PlayerController.Instance.RemoveTemplateFromProjectList(WhatTemplate);
+        Debug.Log($"Template {AppSaveData.GetTemplate(WhatTemplate).defaultName} succesfully removed from project's list.");
         Close();
     }
 

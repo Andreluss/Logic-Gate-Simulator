@@ -49,6 +49,7 @@ public class PlayerController : Singleton<PlayerController>
     private GameObject SaveOnExitEditModeMenu;//!
     [SerializeField]
     private GameObject SaveAsNewProjectMenu;
+
     [SerializeField]
     private GameObject ChangeColorMenu;
     [SerializeField]
@@ -66,6 +67,8 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private GameObject HideTemplateMenu;
     [SerializeField]
+    private GameObject HideTemplateFromProjectMenu;
+    [SerializeField]
     private GameObject DeleteProjectMenu;
 
     [HideInInspector]
@@ -75,6 +78,7 @@ public class PlayerController : Singleton<PlayerController>
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
     public int CurrentlyEditedBlockID { get; set; }
+    public List<int> GatesInCurrentProject = Helper.BasicGates;
     public string CurrentProjectName { get => CurrentProjectID == -1 ? "Untitled" : AppSaveData.GetProject(CurrentProjectID).defaultName;}
     public string CurrentlyEditedBlockName { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).defaultName; }
     public RenderProperties CurrentlyEditedBlockRendProps { get => AppSaveData.GetTemplate(CurrentlyEditedBlockID).renderProperties; }
@@ -123,7 +127,7 @@ public class PlayerController : Singleton<PlayerController>
                         TemporaryProjectSave = null;
                     }
                     NodeManager.UnsavedChangesInProject = changes;
-                    LoadHUD();
+                    ReloadHUD();
                     break;
 
                 case GameMode.Edit:
@@ -131,7 +135,7 @@ public class PlayerController : Singleton<PlayerController>
                     NodeManager.ClearAll();
 
                     ShowEditUI(true); Debug.Assert(CurrentlyEditedBlockID != -1);
-                    LoadHUD(CurrentlyEditedBlockID);
+                    ReloadHUD();
                     var t = AppSaveData.GetTemplate(CurrentlyEditedBlockID);
                     t.BuildProjectFromTemplate(); //load block as project !! [BUG??]
                     NodeManager.UnsavedChanges = false;
@@ -178,7 +182,7 @@ public class PlayerController : Singleton<PlayerController>
 
         AppSaveData.Load();
         AppSaveData.Settings.SnapObjects = false;//[CHANGE] on release
-        LoadHUD();
+        ReloadHUD();
         StateMachine = GetComponent<StateMachine>();
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
         PlayerState = State.Idle;
@@ -231,6 +235,11 @@ public class PlayerController : Singleton<PlayerController>
 
 
     /* Klikniêcia guzików */
+    public void OnToggleAllGates()
+    {
+        AppSaveData.Settings.ShowAllGates = !AppSaveData.Settings.ShowAllGates;
+        ReloadHUD();
+    }
     public void OnToggleDescriptions()
     {
         //ahh bo Unity nie widzi menegera
@@ -366,6 +375,13 @@ public class PlayerController : Singleton<PlayerController>
         var menu = Instantiate(HideTemplateMenu, canvas.transform);
         menu.transform.GetChild(0).GetComponent<HideTemplateMenuController>().WhatTemplate = id;
     }
+
+    internal void ShowHideTemplateFromProjectMenu(int id)
+    {
+        var menu = Instantiate(HideTemplateFromProjectMenu, canvas.transform);
+        menu.transform.GetChild(0).GetComponent<HideTemplateFromProjectMenuController>().WhatTemplate = id;
+    }
+
     internal void ShowDeleteProjectMenu(int id)
     {
         var menu = Instantiate(DeleteProjectMenu, canvas.transform);
@@ -377,16 +393,23 @@ public class PlayerController : Singleton<PlayerController>
     {
         AppSaveData.HideTemplate(id);
         if (Mode == GameMode.Edit)
-            LoadHUD(CurrentlyEditedBlockID);
+            ReloadHUD();
         else
-            LoadHUD();
+            ReloadHUD();
+    }
+    public void RemoveTemplateFromProjectList(int id)
+    {
+        GatesInCurrentProject.Remove(id);
+        NodeManager.UnsavedChangesInProject = true;
+        ReloadHUD();
     }
     public void SaveAllAsNewTemplate(string name, RenderProperties rendprops)
     {
-        NodeManager.SaveAllAsNewTemplate(name, rendprops);
+        GatesInCurrentProject.Add(NodeManager.SaveAllAsNewTemplate(name, rendprops).templateId);
+        NodeManager.UnsavedChangesInProject = true;//
         NodeManager.ClearAll();
         Debug.Log($"New block ({name}) has been succesfully saved.");
-        LoadHUD();
+        ReloadHUD();
     }
     public void SaveAsNewProject(string name, bool andClose)
     {
@@ -407,15 +430,22 @@ public class PlayerController : Singleton<PlayerController>
     {
         NodeManager.ClearAll();
         CurrentProjectID = id;
-        LoadHUD();
+        
         if (id == -1)
         {
             NodeManager.UnsavedChangesInProject = true;
-            return;
+            GatesInCurrentProject = Helper.BasicGates;
+            ReloadHUD();
         }
-
-        NodeManager.UnsavedChangesInProject = false;
-        AppSaveData.GetProject(id).BuildProjectFromTemplate();
+        else
+        {
+            NodeManager.UnsavedChangesInProject = false;
+        
+            var pt = AppSaveData.GetProject(id);
+            GatesInCurrentProject = pt.gatesAvailableInThisProject; 
+            AppSaveData.GetProject(id).BuildProjectFromTemplate();
+            ReloadHUD();
+        }
     }
 
     public void SaveChanges()
@@ -643,6 +673,14 @@ public class PlayerController : Singleton<PlayerController>
             {
                 //git, tylko przesuwamy z powrotem
                 selectedNode.GetRenderer().MoveBehindUI();
+
+                //aktualizujemy bramki w aktualnym projekcie
+                if(/*Mode == GameMode.Normal && */!GatesInCurrentProject.Contains(newNodeTemplateID))
+                {
+                    GatesInCurrentProject.Add(newNodeTemplateID);
+                    GatesInCurrentProject.Sort();
+                }
+
             }
             StateMachine.ChangeState(new StateMachine.PlayerState(StateIdle));
         }
@@ -831,20 +869,55 @@ public class PlayerController : Singleton<PlayerController>
 
 
     /* Pomocnicze funkcje odsyfiaj¹ce resztê kodu: */
-    public void LoadHUD(int endGateID = int.MaxValue)
+    private void MakeTemplateKlocka(GateTemplate t)
     {
+        var coll = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform).GetComponent<NodeTemplateCollision>();
+        coll.TemplateID = t.templateId;
+        coll.Color = t.renderProperties.Color;
+        coll.NodeName = t.defaultName;
+    }
+    public void ReloadHUD()
+    {
+        var endGateID = int.MaxValue;
+        if (Mode == GameMode.Edit)
+            endGateID = CurrentlyEditedBlockID;
+
         for (int i = 0; i < BottomBarContent.transform.childCount; i++)
         {
             Destroy(BottomBarContent.transform.GetChild(i).gameObject);
         }
-        for (int i = (endGateID == int.MaxValue ? 0 : 8); i < Mathf.Min(AppSaveData.TemplateCnt, endGateID); i++)
+        if(AppSaveData.Settings.ShowAllGates)
         {
-            var template = AppSaveData.GetTemplate(i);
-            if (template.DELETED) continue;
-            var coll = Instantiate(Resources.Load<GameObject>("Sprites/UI/Template Klocka"), BottomBarContent.transform).GetComponent<NodeTemplateCollision>();
-            coll.TemplateID = i;
-            coll.Color = template.renderProperties.Color;
-            coll.NodeName = template.defaultName;
+            for (int i = (endGateID == int.MaxValue ? 0 : 8); i < Mathf.Min(AppSaveData.TemplateCnt, endGateID); i++)
+            {
+                var template = AppSaveData.GetTemplate(i);
+                if (template.DELETED) continue;
+                MakeTemplateKlocka(template);
+            }
+        }
+        else //tylko bramki z tego projektu
+        {
+            List<int> gates;
+            if(currentProjectID == -1)
+                gates = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            else 
+                gates = AppSaveData.GetProject(currentProjectID).gatesAvailableInThisProject;
+
+            
+            if(GatesInCurrentProject != null && GatesInCurrentProject.Count > 10)
+                gates = GatesInCurrentProject;
+
+            //Debug.Assert(gates.SequenceEqual(GatesInCurrentProject));
+
+            var startGate = (Mode == GameMode.Normal ? 0 : 8);
+            foreach (var gateID in gates)
+            {
+                if (gateID < startGate) continue;
+                if (!(gateID < endGateID)) break;
+                var gateTemplate = AppSaveData.GetTemplate(gateID);
+                if(gateTemplate.DELETED) continue;
+                MakeTemplateKlocka(gateTemplate);
+            }
         }
     }
     private void ChangeSelectionTo(CollisionData curr)

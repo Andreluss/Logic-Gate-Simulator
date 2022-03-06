@@ -27,6 +27,7 @@ public class GateTemplate
     public int templateId;
 
     public bool DELETED = false;
+    public List<int> gatesAvailableInThisProject = Helper.BasicGates;
 
     //(Source_Node_ID, OutID), (Destination_Node_Id, InID)
     public Pair<Pair<int, int>, Pair<int, int>>[] edges;
