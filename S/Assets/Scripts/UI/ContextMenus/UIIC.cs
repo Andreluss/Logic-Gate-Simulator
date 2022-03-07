@@ -27,17 +27,16 @@ public class UIIC : ItemController, IPointerEnterHandler, IPointerExitHandler
                 {
                     contextMenuItems.Add(new ContextMenuItem("Remove from the list", sampleButton,
                     () => PlayerController.Instance.RemoveTemplateFromProjectList(id)));
-
                 }
             }
         }
-        else if (rClickableObj as ProjectButtonCollision)
-        {
-            var id = (rClickableObj as ProjectButtonCollision).ProjectID;
+        //else if (rClickableObj as ProjectButtonCollision)
+        //{
+        //    var id = (rClickableObj as ProjectButtonCollision).ProjectID;
 
-            contextMenuItems.Add(new ContextMenuItem("Delete project", sampleButton,
-            () => PlayerController.Instance.ShowDeleteProjectMenu(id)));
-        }
+        //    contextMenuItems.Add(new ContextMenuItem("Delete project", sampleButton,
+        //    () => PlayerController.Instance.ShowDeleteProjectMenu(id)));
+        //}
     }
 
     private bool isMouseOver = false;
