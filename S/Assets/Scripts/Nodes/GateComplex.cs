@@ -5,12 +5,12 @@ using UnityEngine;
 
 [Serializable] public class RenderProperties
 {
-    private float[] color = new float[] { 0.1f, 0.8f, 0.0f, 1 };
+    private readonly float[] color = new float[] { 0.1f, 0.8f, 0.0f, 1 };
     public float[] size = new float[] { 1, 2 };
     //public string name;
 
     public Color Color {
-        get => new Color(color[0], color[1], color[2], color[3]);
+        get => new(color[0], color[1], color[2], color[3]);
         set 
         {
             color[0] = value.r;
@@ -21,16 +21,15 @@ using UnityEngine;
     }
     public Vector2 Size
     {
-        get => new Vector2(size[0], size[1]);
+        get => new(size[0], size[1]);
         set => size = new float[2]{ value.x, value.y };
     }
     public RenderProperties()
     {
     }
-    public RenderProperties(Color color, Vector2 size)
+    public RenderProperties(Color color)
     {
         this.Color = color;
-        this.Size = size;
     }
     //...
 }
@@ -43,9 +42,10 @@ public class GateComplex : Gate
     public List<OutputNode> internalOuts;
     private int templateID;
     public GateComplex(int inputCount, int outputCount, string name, bool hidden, int templ)
-         : base(inputCount, outputCount, name, hidden)
+         : base(inputCount, outputCount, name, true)
     {
         templateID = templ;
+        Hidden = hidden;//ahh
         internalIns = new();
         internalOuts = new();
     }
@@ -67,7 +67,7 @@ public class GateComplex : Gate
             internalIns[i].SetValue(inVals[i]); 
         }
         
-        NodeSearch.RunSearchAndCalculateAllNodes(internalIns);
+        NodeSearch.RunSearchAndCalculateAllNodes(internalIns, null);
 
         if(outVals.Length != internalOuts.Count) 
             throw new Exception("invals and internalOuts have different sizes");
@@ -75,5 +75,8 @@ public class GateComplex : Gate
         {
             outVals[i] = internalOuts[i].GetValue();
         }
+
+        base.Calculate();
+
     }
 }

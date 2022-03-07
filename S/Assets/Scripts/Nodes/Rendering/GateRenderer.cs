@@ -5,13 +5,23 @@ using TMPro;
 
 public class GateRenderer : NodeRenderer
 {
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(2).gameObject;
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     public static GateRenderer Make(Gate forWho)
     {
-        Vector2 dim = new Vector2(2, 1.7f);//TODO: calculate this/get from templateID
         var gateRootGO = Instantiate(Resources.Load("Sprites/GateRoot")) as GameObject; 
         Debug.Log($"{gateRootGO.name} loaded");
         var gateGO = gateRootGO.transform.GetChild(0).gameObject;
-        gateGO.transform.localScale = dim;
         var gateRend = gateGO.GetComponent<GateRenderer>();
 
         //root (with TMP component)
@@ -21,11 +31,30 @@ public class GateRenderer : NodeRenderer
         //--outSocket0
         //...
 
-        var TMP = gateRootGO.GetComponent<TextMeshPro>();
+        var TMP = gateRootGO.GetComponentInChildren<TextMeshPro>();
         TMP.text = forWho.Name;//pierwszy chyba raz sie to przydaje (chociaz [TODO] i tak lepiej to brac z template'a)
-        var rt = gateRootGO.GetComponent<RectTransform>();
-        rt.sizeDelta = dim;
-        
+
+
+
+
+
+        /* ============ rendering part ============ */
+
+        int id = forWho.GetTemplateID();
+        var rendprops = AppSaveData.GetTemplate(id).renderProperties;
+        gateRend.Color = rendprops.Color;
+
+        int c = Mathf.Max(forWho.inCnt, forWho.outCnt);
+        float y = 1.2f + (c - 1) * 0.5f;
+        var dim = gateRend.transform.localScale = new Vector2(2, y);
+
+
+        gateRend.outline.transform.localScale = dim + (Vector3)Vector2.one * 0.05f;
+
+
+
+
+
         float width = dim.x;
         float height = dim.y;
         float distIn = height / (forWho.inCnt + 1);//odleglosc miedzy kolejnych socketami (OY)
@@ -36,12 +65,12 @@ public class GateRenderer : NodeRenderer
         gateRend.inSocketRends = new InSocketRenderer[forWho.inCnt];
         for (int i = 0; i < gateRend.inSocketRends.Length; i++)
         {
-            var socket = InSocketRenderer.Make(forWho, i);
+            var socket = InSocketRenderer.Make(forWho, i); int n = gateRend.inSocketRends.Length;
             //relative position
             socket.transform.SetParent(gateRootGO.transform, false);
             float zIndex = socket.transform.localPosition.z;
             socket.transform.localPosition = new Vector3(-width / 2,
-                                                         -height / 2 + distIn * (i + 1),
+                                                         height / 2 - distIn * (i + 1),//daaaaammmnnn ale bug (bylo -height / 2 + distIn * (i + 1))
                                                          zIndex);
             gateRend.inSocketRends[i] = socket;
         }
@@ -53,7 +82,7 @@ public class GateRenderer : NodeRenderer
             socket.transform.SetParent(gateRootGO.transform, false);
             float zIndex = socket.transform.localPosition.z;
             socket.transform.localPosition = new Vector3(width / 2,
-                                                         -height / 2 + distOut * (i + 1),
+                                                         height / 2 - distOut * (i + 1),//tak samo -height / 2 + distOut
                                                          zIndex);
             gateRend.outSocketRends[i] = socket;
         }
@@ -62,4 +91,7 @@ public class GateRenderer : NodeRenderer
         coll.node = forWho;
         return gateRend;
     }
+
+    private Color color;
+    public Color Color { get => color; set => color = transform.parent.GetChild(1).GetComponent<TextMeshPro>().color = value; }
 }

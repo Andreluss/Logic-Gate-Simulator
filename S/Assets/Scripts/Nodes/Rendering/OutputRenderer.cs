@@ -6,6 +6,21 @@ using UnityEngine;
 public class OutputRenderer : NodeRenderer
 {
     private TextMeshPro text;
+    private TextMeshPro description;
+    RectTransform rt;
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(3).gameObject;
+        rt = transform.parent.GetComponent<RectTransform>();
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     public static OutputRenderer Make(OutputNode forWho)
     {
         var outputRootGO = Instantiate(Resources.Load<GameObject>
@@ -23,6 +38,7 @@ public class OutputRenderer : NodeRenderer
         outputRend.inSocketRends = new InSocketRenderer[] { socket };
 
         outputRend.text = outputRootGO.GetComponentInChildren<TextMeshPro>();
+        outputRend.description = outputRootGO.transform.GetChild(2).GetComponent<TextMeshPro>();
 
         var coll = outputGO.GetComponent<OutputCollision>();
         coll.node = forWho;
@@ -30,6 +46,10 @@ public class OutputRenderer : NodeRenderer
         return outputRend;
     }
 
+    public void UpdateDescription()
+    {
+        description.text = Node.Description;
+    }
     internal void HandleValue(bool value)
     {
         text.text = value ? "1" : "0";
@@ -41,5 +61,17 @@ public class OutputRenderer : NodeRenderer
         {
 
         }
+    }
+    public override void HandlePinPosition()
+    {
+        Vector3 stageBorders = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+        float x = stageBorders.x;
+        float nodeWidth = rt.rect.width;
+        var newPos = node.Position;
+
+        newPos.x = x - nodeWidth / 2 * 1.05f;
+
+        node.Position = newPos;
     }
 }

@@ -8,10 +8,11 @@
     //Overrides
     public override int GetTemplateID()
     {
-        return 3;
+        return 10;
     }
     public override void Calculate()
     {
         outVals[0] = inVals[0] && inVals[1];
+        base.Calculate();
     }
 }

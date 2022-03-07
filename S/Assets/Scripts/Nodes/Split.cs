@@ -12,11 +12,12 @@ public class Split : Node
     //Overrides
     public override int GetTemplateID()
     {
-        return 2;
+        return 8;
     }
     public override void Calculate()
     {
         outVals[0] = inVals[0];
+        base.Calculate();
     }
     protected override void CreateRenderer()
     {

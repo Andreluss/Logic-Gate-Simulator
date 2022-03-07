@@ -8,11 +8,13 @@ public abstract class Node
     public int inCnt, outCnt;
     public Pair<Node, int>[] ins;
     public List<ValueTuple<Node, int>>[] outs; //wsm takie listy sasiedztwa
-    
+
     // NodeNet Search Data, troche syf ale niech na razie bedzie
     public int lastSearchId = -1, processedInCurrentSearch = 0;
     public int totalInputEdgesCount = 0;
-    public bool[] inVals, outVals; 
+    public bool[] inVals, outVals;
+    
+    public virtual string Description { get => description; set => description = value; }
 
     public Node(int inputCount, int outputCount, string name, bool hidden)
     {
@@ -49,10 +51,12 @@ public abstract class Node
     {
         totalInputEdgesCount -= 1;
         ins[inIdx].st = null;
+
+        inVals[inIdx] = false; //no bo przeciez juz prad nie plynie!
     }
     public virtual void ConnectTo(int outIdx, Node to, int inIdx)
     {
-        if(!Helper.InRange(outIdx, 0, outCnt) || !Helper.InRange(inIdx, 0, to.inCnt))
+        if (!Helper.InRange(outIdx, 0, outCnt) || !Helper.InRange(inIdx, 0, to.inCnt))
         {
             throw new Exception("In/out socket idx out of range");
         }
@@ -71,7 +75,7 @@ public abstract class Node
         //TODO: GUI - create edge and make a new edgeRenderer if not Hidden
         //( ## or do that in NodeManager???)
         outs[outIdx].Add(new ValueTuple<Node, int>(to, inIdx));
-        if(!hidden)
+        if (!hidden)
         {
             if (this.GetRenderer() == null || to.GetRenderer() == null)
                 throw new Exception("connected nodes don't have renderers");
@@ -96,7 +100,7 @@ public abstract class Node
         }
 
         outs[outIdx].Remove((with, inIdx));
-        if(!hidden)
+        if (!hidden)
         {
             Debug.Assert(this.GetRenderer() != null);
             GetRenderer().RemoveEdgeWith(outIdx, with, inIdx);
@@ -104,10 +108,21 @@ public abstract class Node
         with.HandleDeletedInputConnection(inIdx, this, outIdx);
     }
 
+    /// <summary>
+    /// Oblicza wartoœci wyjœciowe danej bramki, w sposób zale¿ny od jej typu (funkcja wirtualna)
+    /// </summary>
     public virtual void Calculate()
     {
-        //Same here
+        //no wiem ze to jest troche bad design aleeee
+        //na koncu:
+        var rend = GetRenderer();
+        if(rend != null)
+        {
+            rend.UpdateMaterials();
+        }
     }
+
+
     /// <summary>
     /// Usuwa dany wierzcholek i wszsystkie jego po³¹czenia z innymi
     /// </summary>
@@ -122,9 +137,9 @@ public abstract class Node
                 ins[i].st.DisconnectWith(outidx, this, i);
             }
         }
-        for(int i = 0; i < outCnt; i++)
+        for (int i = 0; i < outCnt; i++)
         {
-            while(outs[i].Count > 0)
+            while (outs[i].Count > 0)
             {
                 var (node, inidx) = outs[i][0];
                 this.DisconnectWith(i, node, inidx);
@@ -134,8 +149,8 @@ public abstract class Node
             //    this.DisconnectWith(i, node, inidx);
             //}
         }
-        
-        if(this.GetRenderer() != null)
+
+        if (this.GetRenderer() != null)
             DestroyRenderer();
     }
     protected virtual void CreateRenderer()
@@ -205,6 +220,7 @@ public abstract class Node
     //public GameObject nodeRenderer = null;
 
     private bool hidden = true;
-    private Vector2 position;
+    protected Vector2 position;
     private string name;
+    private string description;
 }

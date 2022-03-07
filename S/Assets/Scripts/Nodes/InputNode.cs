@@ -1,10 +1,27 @@
 ﻿using UnityEngine;
+using TMPro;
 public class InputNode : Node
 {
-    public InputNode(bool hidden=true) : base(0, 1, "Input", hidden)
+    public InputNode(bool hidden = true) : base(0, 1, "Input", hidden)
     {
     }
     private InputRenderer renderer;
+
+
+    private MultibitControllerInput controller;
+    public MultibitControllerInput Controller
+    {
+        get => controller;
+        set
+        {
+            controller = value;
+            Controlled = true;
+        }
+    }
+
+    public bool Controlled { get; private set; }
+
+
     //Overrides
     public override int GetTemplateID()
     {
@@ -14,6 +31,7 @@ public class InputNode : Node
     {
         Debug.Log("creating innode rend");
         renderer = InputRenderer.Make(this);
+        Description = renderer.transform.parent.GetChild(2).GetComponent<TextMeshPro>().text;
     }
     protected override void DestroyRenderer()
     {
@@ -23,12 +41,20 @@ public class InputNode : Node
     {
         return renderer;
     }
+    public override string Description { get => base.Description; set
+        {
+            base.Description = value;
+            var rend = GetRenderer() as InputRenderer;
+            if (rend != null)
+                rend.UpdateDescription();
+        }
+    }
 
     //Special functions of this type of node
     public void SetValue(bool value)
     {
         outVals[0] = value;
-        if(renderer != null)
+        if (renderer != null)
             renderer.HandleValue(value);
     }
     public void FlipValue()
@@ -37,6 +63,7 @@ public class InputNode : Node
         if (renderer)
             renderer.HandleValue(outVals[0]);
     }
+
     public bool GetValue()
     {
         return outVals[0];

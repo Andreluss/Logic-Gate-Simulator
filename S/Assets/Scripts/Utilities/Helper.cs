@@ -7,6 +7,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class Helper
 {
+    //public static List<int> BasicGates = new() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    public static Vector2 Rot90CCW(this Vector2 vector)
+    {
+        return new Vector2(-vector.y, vector.x);
+    }
+    public static Vector2 Rot90CW(this Vector2 vector)
+    {
+        return new Vector2(vector.y, -vector.x);
+    }
     public static bool InRange(int x, int a, int b) 
     {
         //czy x jest w przedziale [a, b)
@@ -19,6 +28,47 @@ public static class Helper
             array[i] = value;
         }
     }
+    public static readonly Vector2 zero2 = Vector2.zero;
+    public static Color Dim(this Color color, float amount)
+    {
+        Color newcolor = color * amount;
+        newcolor.a = 1f;
+        return newcolor;
+    }
+    public static Vector2 ToVector2(this (float, float) pair)
+    {
+        return new Vector2(pair.Item1, pair.Item2);
+    }
+    public static Vector2 ToVector2(this Vector3 vector3)
+    {
+        return new Vector2(vector3.x, vector3.y);
+    }
+    public static Vector3 ToVector3(this Vector2 vector2)
+    {
+        return new Vector3(vector2.x, vector2.y, 0);
+    }
+    public static Color ColorFromHex(int hex)
+    {
+        return new Color(((hex & 0xff0000) >> 16) / 255f,
+                         ((hex & 0x00ff00) >> 8) / 255f,
+                          (hex & 0x0000ff) / 255f);
+    }
+    public static (float, float) ToFloat2(this Vector2 vector)
+    {
+        return (vector.x, vector.y);
+    }
+    public static Texture2D LoadPNG(string filePath)
+    {
+        Texture2D texture2D = null;
+        if (File.Exists(filePath))
+        {
+            byte[] data = File.ReadAllBytes(filePath);
+            texture2D = new Texture2D(2, 2);
+            texture2D.LoadImage(data);
+        }
+        return texture2D;
+    }
+
     public static void SaveClass<T>(this T _Class, string FilePath)
     {
         FileStream fileStream = File.Create(FilePath);

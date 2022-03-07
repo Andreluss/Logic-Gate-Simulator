@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class SplitRenderer : NodeRenderer
 {
+    private void Awake()
+    {
+        outline = transform.parent.GetChild(1).gameObject;
+    }
+    public override void EnableOutline()
+    {
+        outline.SetActive(true);
+    }
+    public override void DisableOutline()
+    {
+        outline.SetActive(false);
+    }
     public static SplitRenderer Make(Split forWho)
     {
-        var rootGO = Resources.Load<GameObject>("Sprites/Split");
+        var rootGO = Instantiate(Resources.Load<GameObject>("Sprites/SplitRoot"));
         var splitGO = rootGO.transform.GetChild(0);
         var rend = splitGO.GetComponent<SplitRenderer>();
         rend.Node = forWho;
