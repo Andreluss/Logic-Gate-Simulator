@@ -74,12 +74,14 @@ public class PlayerController : Singleton<PlayerController>
     [HideInInspector]
     public ScreenShotManager screenShotManager;
 
-    [SerializeField]
-    private GameObject InputPanel;
-    private RectTransform Irect;
-    [SerializeField]
-    private GameObject OutputPanel;
-    private RectTransform Orect;
+    private Button sampleButton;
+
+    //[SerializeField]
+    //private GameObject InputPanel;
+    //private RectTransform Irect;
+    //[SerializeField]
+    //private GameObject OutputPanel;
+    //private RectTransform Orect;
 
 
     /* Dane aktualnego projektu */
@@ -197,10 +199,10 @@ public class PlayerController : Singleton<PlayerController>
         NodeManager.UnsavedChangesInBlock = false;
         NodeManager.UnsavedChangesInProject = false;
 
-        Irect = InputPanel.GetComponent<RectTransform>();
-        Orect = OutputPanel.GetComponent<RectTransform>();
+        //Irect = InputPanel.GetComponent<RectTransform>();
+        //Orect = OutputPanel.GetComponent<RectTransform>();
         RecalcIOPanels();
-
+        sampleButton = Resources.Load<Button>("Sprites/UI/ContextButton");
         //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
 
@@ -251,17 +253,17 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-    private float _deb_ = 880f;
-    private void _RecalcIOPanel(RectTransform rt)
-    {
-        var size = Irect.sizeDelta;
-        size.x = _deb_ / m_Camera.orthographicSize;
-        rt.sizeDelta = size;
-    }
+    //private float _deb_ = 880f;
+    //private void _RecalcIOPanel(RectTransform rt)
+    //{
+    //    var size = Irect.sizeDelta;
+    //    size.x = _deb_ / m_Camera.orthographicSize;
+    //    rt.sizeDelta = size;
+    //}
     private void RecalcIOPanels()
     {
-        _RecalcIOPanel(Irect);
-        _RecalcIOPanel(Orect);
+        //_RecalcIOPanel(Irect);
+        //_RecalcIOPanel(Orect);
     }
 
 
@@ -271,16 +273,16 @@ public class PlayerController : Singleton<PlayerController>
         AppSaveData.Settings.PinInOutToScreenEdges = !AppSaveData.Settings.PinInOutToScreenEdges;
         if(AppSaveData.Settings.PinInOutToScreenEdges)
         {
-            InputPanel.SetActive(true);
-            OutputPanel.SetActive(true);
-            RecalcIOPanels();
+            //InputPanel.SetActive(true);
+            //OutputPanel.SetActive(true);
+            //RecalcIOPanels();
 
             NodeManager.PinAll();
         }
         else
         {
-            InputPanel.SetActive(false);
-            OutputPanel.SetActive(false);
+            //InputPanel.SetActive(false);
+            //OutputPanel.SetActive(false);
         }
         
     }
@@ -564,6 +566,43 @@ public class PlayerController : Singleton<PlayerController>
             if (obj == null)
             {
                 ContextMenu.Instance.DestroyContextMenu();
+
+                if(Mode == GameMode.Normal && Input.GetMouseButtonDown(1))
+                {
+                    float x_left = m_Camera.ScreenToWorldPoint(new Vector3(Screen.width / 7f, 0, 0)).x;
+                    float x_right = m_Camera.ScreenToWorldPoint(new Vector3(Screen.width * 6f/7f, 0, 0)).x;
+
+                    Vector2 pos = GetMousePosition();
+
+                    if(pos.x < x_left)
+                    {
+                        List<ContextMenuItem> items = new();
+                        items.Add(new ContextMenuItem("Create 1Bit Input", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(0), pos)));
+                        items.Add(new ContextMenuItem("Create 2Bit Input", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(1), pos)));
+                        items.Add(new ContextMenuItem("Create 4Bit Input", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(2), pos)));
+                        items.Add(new ContextMenuItem("Create 8Bit Input", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(3), pos)));
+                        ContextMenu.Instance.CreateContextMenu(items, new Vector2(pos.x, pos.y));
+                    }
+                    else if(x_right < pos.x)
+                    {
+                        List<ContextMenuItem> items = new();
+                        items.Add(new ContextMenuItem("Create 1Bit Output", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(0), pos)));
+                        items.Add(new ContextMenuItem("Create 2Bit Output", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(1), pos)));
+                        items.Add(new ContextMenuItem("Create 4Bit Output", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(2), pos)));
+                        items.Add(new ContextMenuItem("Create 8Bit Output", sampleButton,
+                            () => NodeManager.CreateNode(AppSaveData.GetTemplate(3), pos)));
+                        ContextMenu.Instance.CreateContextMenu(items, new Vector2(pos.x, pos.y));
+                    }
+                }
+
+
                 ChangeSelectionTo(null);//[BUG?]
             }
             else if (obj != null)

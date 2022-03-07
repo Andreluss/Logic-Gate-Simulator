@@ -52,6 +52,9 @@ public static class NodeManager //: Singleton<NodeManager>
 
         RegisterNode(node);
 
+        if (AppSaveData.Settings.PinInOutToScreenEdges)
+            node.GetRenderer()?.HandlePinPosition();
+
         return node;
     }
 
