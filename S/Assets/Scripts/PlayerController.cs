@@ -74,6 +74,13 @@ public class PlayerController : Singleton<PlayerController>
     [HideInInspector]
     public ScreenShotManager screenShotManager;
 
+    [SerializeField]
+    private GameObject InputPanel;
+    private RectTransform Irect;
+    [SerializeField]
+    private GameObject OutputPanel;
+    private RectTransform Orect;
+
 
     /* Dane aktualnego projektu */
     public int CurrentProjectID { get => currentProjectID; set => currentProjectID = value; }
@@ -191,6 +198,9 @@ public class PlayerController : Singleton<PlayerController>
         NodeManager.UnsavedChangesInBlock = false;
         NodeManager.UnsavedChangesInProject = false;
 
+        Irect = InputPanel.GetComponent<RectTransform>();
+        Orect = OutputPanel.GetComponent<RectTransform>();
+
         //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
 
@@ -233,13 +243,26 @@ public class PlayerController : Singleton<PlayerController>
 
 
                 if (AppSaveData.Settings.PinInOutToScreenEdges)
+                {
                     NodeManager.PinAll();
+                    RecalcIOPanels();
+                }
             }
         }
     }
 
-
-
+    private float _deb_ = 880f;
+    private void _RecalcIOPanel(RectTransform rt)
+    {
+        var size = Irect.sizeDelta;
+        size.x = _deb_ / m_Camera.orthographicSize;
+        rt.sizeDelta = size;
+    }
+    private void RecalcIOPanels()
+    {
+        _RecalcIOPanel(Irect);
+        _RecalcIOPanel(Orect);
+    }
 
 
     /* Klikniêcia guzików */
@@ -248,7 +271,16 @@ public class PlayerController : Singleton<PlayerController>
         AppSaveData.Settings.PinInOutToScreenEdges = !AppSaveData.Settings.PinInOutToScreenEdges;
         if(AppSaveData.Settings.PinInOutToScreenEdges)
         {
+            InputPanel.SetActive(true);
+            OutputPanel.SetActive(true);
+            RecalcIOPanels();
+
             NodeManager.PinAll();
+        }
+        else
+        {
+            InputPanel.SetActive(false);
+            OutputPanel.SetActive(false);
         }
         
     }
@@ -270,7 +302,13 @@ public class PlayerController : Singleton<PlayerController>
     public void OnToggleFullscreen()
     {
         Screen.fullScreen = !Screen.fullScreen;
-        
+        if(Screen.fullScreen)
+        {
+            var resMax = Screen.resolutions.Last();
+            Screen.SetResolution(resMax.width, resMax.height, true);
+        }
+
+        Debug.Log(Screen.resolutions);
         Debug.Log($"FULLSCREEN {Screen.fullScreen}");
     }
     public void OnClear()
@@ -599,7 +637,10 @@ public class PlayerController : Singleton<PlayerController>
             Debug.Log(delta);
             m_Camera.transform.position = cameraPosStart - (Vector3)delta;//reverse
             if (AppSaveData.Settings.PinInOutToScreenEdges)
+            {
                 NodeManager.PinAll();
+            }
+
         }
     }
     private void StateCameraPanEnd()
