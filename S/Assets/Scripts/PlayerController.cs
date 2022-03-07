@@ -188,7 +188,6 @@ public class PlayerController : Singleton<PlayerController>
         screenShotManager = GetComponent<ScreenShotManager>();
 
         AppSaveData.Load();
-        AppSaveData.Settings.SnapObjects = false;//[CHANGE] on release
         ReloadHUD();
         StateMachine = GetComponent<StateMachine>();
         StateMachine.Initialize(new StateMachine.PlayerState(StateIdle));
@@ -200,6 +199,7 @@ public class PlayerController : Singleton<PlayerController>
 
         Irect = InputPanel.GetComponent<RectTransform>();
         Orect = OutputPanel.GetComponent<RectTransform>();
+        RecalcIOPanels();
 
         //UnityEngine.Assertions.Assert.raiseExceptions = true;
     }
@@ -228,7 +228,7 @@ public class PlayerController : Singleton<PlayerController>
             {
                 Debug.Log(Input.mouseScrollDelta);
                 var mouse1 = GetMousePosition();
-                m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 0.25f, 100000f);
+                m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize + delta * 0.75f, 1f, 100000f);
                 var mouse2 = GetMousePosition();
                 m_Camera.transform.position += (Vector3)(mouse1 - mouse2);
 
